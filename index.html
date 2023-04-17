@@ -1,10 +1,172 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>欢迎来到chatgpt应用市场</title>
+    <title>AI 应用市场</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      h1 {
+        text-align: center;
+        margin: 50px 0;
+      }
+      .apps-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 0 auto;
+        max-width: 1200px;
+      }
+      .app {
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        padding: 20px;
+        width: 320px;
+        overflow: hidden;
+      }
+      .app img {
+        max-width: 100%;
+        height: auto;
+      }
+      .app h3 {
+        margin: 20px 0 10px 0;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+      }
+      .app p {
+        margin: 10px 0;
+        font-size: 16px;
+        text-align: justify;
+      }
+      .tag {
+        display: inline-block;
+        margin: 5px;
+        padding: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+      }
+      .ai {
+        background-color: #ff9999;
+      }
+      .nlp {
+        background-color: #99ccff;
+      }
+      .vision {
+        background-color: #99ff99;
+      }
+      .recommendation {
+        background-color: #ffcc66;
+      }
+      .tag.active {
+        background-color: #444;
+        color: #fff;
+      }
+      @media (max-width: 767px) {
+        .app {
+          width: 100%;
+        }
+      }
+
+    </style>
 </head>
 <body>
-    欢迎来到chatgpt应用市场
-</body>
-</html>
+<h1>AI 应用市场</h1>
+<div>
+    <div class="tags-container" style="text-align:center">
+        <div class="tag ai active">人工智能</div>
+        <div class="tag nlp">自然语言处理</div>
+        <div class="tag vision">计算机视觉</div>
+        <div class="tag recommendation">推荐系统</div>
+    </div>
+    <div class="apps-container">
+        <div class="app">
+            <img src="https://via.placeholder.com/150x150" alt="应用1">
+            <h3>应用1</h3>
+            <p>应用1的描述。</p>
+            <div>
+                <div class="tag ai">人工智能</div>
+                <div class="tag recommendation">推荐系统</div>
+            </div>
+        </div>
+        <div class="app">
+            <img src="https://via.placeholder.com/150x150" alt="应用2">
+            <h3>应用2</h3>
+            <p>应用2的描述。</p>
+            <div>
+                <div class="tag nlp">自然语言处理</div>
+                <div class="tag vision">计算机视觉</div>
+            </div>
+        </div>
+        <div class="app">
+            <img src="https://via.placeholder.com/150x150" alt="应用3">
+            <h3>应用3</h3>
+            <p>应用3的描述。</p>
+            <div>
+                <div class="tag ai">人工智能</div>
+                <div class="tag recommendation">推荐系统</div>
+            </div>
+        </div>
+        <div class="app">
+            <img src="https://via.placeholder.com/150x150" alt="应用4">
+            <h3>应用4</h3>
+            <p>应用4的描述。</p>
+            <div>
+                <div class="tag nlp">自然语言处理</div>
+                <div class="tag vision">计算机视觉</div>
+            </div>
+        </div>
+        <div class="app">
+            <img src="https://via.placeholder.com/150x150" alt="应用5">
+            <h3>应用5</h3>
+            <p>应用5的描述。</p>
+            <div>
+                <div class="tag ai">人工智能</div>
+                <div class="tag vision">计算机视觉</div>
+            </div>
+        </div>
+        <div class="app">
+            <img src="https://via.placeholder.com/150x150" alt="应用5">
+            <h3>应用6</h3>
+            <p>应用6的描述。</p>
+            <div>
+                <div class="tag ai">人工智能</div>
+                <div class="tag vision">计算机视觉</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+  const tags = document.querySelectorAll('.tag');
+  const apps = document.querySelectorAll('.app');
+
+  tags.forEach(tag => {
+    tag.addEventListener('click', () => {
+      const activeTag = document.querySelector('.tag.active');
+      activeTag.classList.remove('active');
+      tag.classList.add('active');
+      const tagName = tag.innerText.toLowerCase();
+      apps.forEach(app => {
+        if (app.querySelector(`.tag.${tagName}`)) {
+          app.style.display = 'block';
+        } else {
+          app.style.display = 'none';
+        }
+      });
+    });
+  });
+
+    </script>
