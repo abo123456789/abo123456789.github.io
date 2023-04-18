@@ -155,23 +155,23 @@
     </div>
 </div>
 <script>
-  const tags = document.querySelectorAll('.tag');
-  const apps = document.querySelectorAll('.app');
+<!--  const tags = document.querySelectorAll('.tag');-->
+<!--  const apps = document.querySelectorAll('.app');-->
 
-  tags.forEach(tag => {
-    tag.addEventListener('click', () => {
-      const activeTag = document.querySelector('.tag.active');
-      activeTag.classList.remove('active');
-      tag.classList.add('active');
-      const tagName = tag.innerText.toLowerCase();
-      apps.forEach(app => {
-        if (app.querySelector(`.tag.${tagName}`)) {
-          app.style.display = 'block';
-        } else {
-          app.style.display = 'none';
-        }
-      });
-    });
-  });
+<!--  tags.forEach(tag => {-->
+<!--    tag.addEventListener('click', () => {-->
+<!--      const activeTag = document.querySelector('.tag.active');-->
+<!--      activeTag.classList.remove('active');-->
+<!--      tag.classList.add('active');-->
+<!--      const tagName = tag.innerText.toLowerCase();-->
+<!--      apps.forEach(app => {-->
+<!--        if (app.querySelector(`.tag.${tagName}`)) {-->
+<!--          app.style.display = 'block';-->
+<!--        } else {-->
+<!--          app.style.display = 'none';-->
+<!--        }-->
+<!--      });-->
+<!--    });-->
+<!--  });-->
 
     </script>
