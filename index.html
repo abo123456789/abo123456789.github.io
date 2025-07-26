@@ -2,925 +2,942 @@
 <html lang="zh-CN">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>元空智能数字人 - 专业AI数字人解决方案</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
-      line-height: 1.6;
-      color: #333;
-      scroll-behavior: smooth;
-    }
-
-    /* 导航栏 */
-    .navbar {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-      z-index: 1000;
-      transition: all 0.3s ease;
-    }
-
-    .nav-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-    }
-
-    .logo {
-      font-size: 1.8rem;
-      font-weight: bold;
-      color: #2563eb;
-      text-decoration: none;
-    }
-
-    .nav-menu {
-      display: flex;
-      list-style: none;
-      gap: 2rem;
-    }
-
-    .nav-link {
-      text-decoration: none;
-      color: #333;
-      font-weight: 500;
-      transition: color 0.3s ease;
-      padding: 0.5rem 1rem;
-      border-radius: 25px;
-    }
-
-    .nav-link:hover {
-      color: #2563eb;
-      background: rgba(37, 99, 235, 0.1);
-    }
-
-    /* 主页部分 */
-    .hero {
-      height: 100vh;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.05)" points="0,1000 1000,0 1000,1000"/></svg>');
-      background-size: cover;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 800px;
-      padding: 0 2rem;
-    }
-
-    .hero h1 {
-      font-size: 3.5rem;
-      margin-bottom: 1rem;
-      font-weight: 700;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    }
-
-    .hero p {
-      font-size: 1.3rem;
-      margin-bottom: 2rem;
-      opacity: 0.9;
-    }
-
-    .cta-button {
-      display: inline-block;
-      padding: 1rem 2rem;
-      background: #fff;
-      color: #667eea;
-      text-decoration: none;
-      border-radius: 50px;
-      font-weight: bold;
-      font-size: 1.1rem;
-      transition: all 0.3s ease;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    }
-
-    .cta-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-    }
-
-    /* 主页特色标签 */
-    .hero-features {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin: 2rem 0;
-      flex-wrap: wrap;
-    }
-
-    .hero-feature {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(255, 255, 255, 0.2);
-      padding: 0.8rem 1.5rem;
-      border-radius: 30px;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      transition: all 0.3s ease;
-    }
-
-    .hero-feature:hover {
-      background: rgba(255, 255, 255, 0.3);
-      transform: translateY(-2px);
-    }
-
-    .hero-feature i {
-      font-size: 1.2rem;
-      color: #fff;
-    }
-
-    .hero-feature span {
-      font-weight: 500;
-      color: #fff;
-      font-size: 0.95rem;
-    }
-
-    /* 核心技术优势部分 */
-    .core-advantages {
-      padding: 5rem 0;
-      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-    }
-
-    .advantages-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-      margin-top: 3rem;
-      max-width: 1200px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    @media (max-width: 1024px) {
-      .advantages-grid {
-        grid-template-columns: 1fr;
-        max-width: 600px;
-      }
-    }
-
-    @media (min-width: 1025px) and (max-width: 1199px) {
-      .advantages-grid {
-        gap: 1.5rem;
-      }
-    }
-
-    .advantage-card {
-      background: white;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-      border: 1px solid rgba(37, 99, 235, 0.1);
-    }
-
-    .advantage-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
-    }
-
-    .advantage-header {
-      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
-      color: white;
-      padding: 2rem;
-      text-align: center;
-      position: relative;
-    }
-
-    .advantage-header::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 0;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-top: 10px solid #3b82f6;
-    }
-
-    .advantage-icon {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-    }
-
-    .advantage-header h3 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin: 0;
-    }
-
-    .advantage-content {
-      padding: 2rem;
-    }
-
-    .advantage-content p {
-      color: #64748b;
-      margin-bottom: 1.5rem;
-      line-height: 1.6;
-    }
-
-    .advantage-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .advantage-list li {
-      padding: 0.5rem 0;
-      color: #475569;
-      position: relative;
-      padding-left: 1.5rem;
-    }
-
-    .advantage-list li::before {
-      content: '✓';
-      position: absolute;
-      left: 0;
-      color: #22c55e;
-      font-weight: bold;
-      font-size: 1.1rem;
-    }
-
-    /* 特色功能 */
-    .features {
-      padding: 5rem 0;
-      background: #f8fafc;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
-
-    .section-title {
-      text-align: center;
-      font-size: 2.5rem;
-      margin-bottom: 3rem;
-      color: #1e293b;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-    }
-
-    .feature-card {
-      background: white;
-      padding: 2rem;
-      border-radius: 15px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease;
-    }
-
-    .feature-card:hover {
-      transform: translateY(-10px);
-    }
-
-    .feature-icon {
-      font-size: 3rem;
-      color: #2563eb;
-      margin-bottom: 1rem;
-    }
-
-    .feature-card h3 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      color: #1e293b;
-    }
-
-    /* 样例展示部分 */
-    .examples {
-      padding: 5rem 0;
-      background: white;
-    }
-
-    .examples-subtitle {
-      text-align: center;
-      color: #64748b;
-      font-size: 1.1rem;
-      margin-bottom: 3rem;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .video-gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      margin-top: 3rem;
-      margin-bottom: 4rem;
-    }
-
-    .video-card {
-      background: white;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-      border: 1px solid rgba(37, 99, 235, 0.1);
-    }
-
-    .video-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
-    }
-
-    .video-container {
-      position: relative;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      aspect-ratio: 9/16;
-      /* 竖屏比例 */
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .video-container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      z-index: 1;
-      opacity: 1;
-      transition: opacity 0.5s ease;
-    }
-
-    .video-container.loaded::before {
-      opacity: 0;
-    }
-
-    .digital-human-video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border: none;
-      background: #000;
-      position: relative;
-      z-index: 2;
-    }
-
-    .digital-human-video::-webkit-media-controls {
-      display: none !important;
-    }
-
-    .digital-human-video::-webkit-media-controls-enclosure {
-      display: none !important;
-    }
-
-    .video-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 1;
-      transition: opacity 0.3s ease;
-      pointer-events: auto;
-      z-index: 3;
-    }
-
-    .video-card:hover .video-overlay {
-      opacity: 1;
-    }
-
-    .video-overlay.playing {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .play-button {
-      width: 80px;
-      height: 80px;
-      background: rgba(37, 99, 235, 0.9);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 2rem;
-      backdrop-filter: blur(10px);
-      transition: all 0.3s ease;
-    }
-
-    .play-button:hover {
-      background: rgba(37, 99, 235, 1);
-      transform: scale(1.1);
-    }
-
-    .video-info {
-      padding: 1.5rem;
-    }
-
-    .video-info h3 {
-      font-size: 1.3rem;
-      margin-bottom: 0.5rem;
-      color: #1e293b;
-    }
-
-    .video-info p {
-      color: #64748b;
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
-      line-height: 1.5;
-    }
-
-    .video-tags {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .tag {
-      background: linear-gradient(135deg, #2563eb, #3b82f6);
-      color: white;
-      padding: 0.3rem 0.8rem;
-      border-radius: 15px;
-      font-size: 0.75rem;
-      font-weight: 500;
-    }
-
-
-
-    /* 联系我们部分 */
-    .contact {
-      padding: 5rem 0;
-      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-      color: white;
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: center;
-    }
-
-    .contact-info h3 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .contact-item i {
-      font-size: 1.5rem;
-      margin-right: 1rem;
-      color: #60a5fa;
-      width: 30px;
-    }
-
-    .contact-form {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 2rem;
-      border-radius: 15px;
-      backdrop-filter: blur(10px);
-    }
-
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-    }
-
-    .form-group input,
-    .form-group textarea {
-      width: 100%;
-      padding: 0.8rem;
-      border: none;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.9);
-      font-size: 1rem;
-    }
-
-    .form-group textarea {
-      height: 120px;
-      resize: vertical;
-    }
-
-    .submit-btn {
-      width: 100%;
-      padding: 1rem;
-      background: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .submit-btn:hover {
-      background: #1d4ed8;
-    }
-
-    /* 页脚 */
-    .footer {
-      background: #0f172a;
-      color: white;
-      text-align: center;
-      padding: 2rem 0;
-    }
-
-    /* 响应式设计 */
-    @media (max-width: 768px) {
-      .nav-container {
-        padding: 1rem;
-      }
-
-      .nav-menu {
-        gap: 0.8rem;
-        font-size: 0.9rem;
-      }
-
-      .hero h1 {
-        font-size: 2.5rem;
-      }
-
-      .hero p {
-        font-size: 1.1rem;
-      }
-
-      .hero-features {
-        gap: 1rem;
-        margin: 1.5rem 0;
-      }
-
-      .hero-feature {
-        padding: 0.6rem 1rem;
-      }
-
-      .hero-feature span {
-        font-size: 0.85rem;
-      }
-
-      .advantages-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        max-width: 400px;
-      }
-
-      .advantage-card {
-        margin: 0 1rem;
-      }
-
-      .advantage-header {
-        padding: 1.5rem;
-      }
-
-      .advantage-content {
-        padding: 1.5rem;
-      }
-
-      .video-gallery {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        margin: 2rem 1rem;
-      }
-
-      .contact-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .section-title {
-        font-size: 2rem;
-      }
-    }
-
-    /* 滚动动画 */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.6s ease;
-    }
-
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>元空智能数字人 - 专业AI数字人解决方案</title>
+    <meta name="description"
+          content="元空智能提供专业的AI数字人解决方案，包括定制数字人、泛化数字人、声音克隆、超自然人声克隆技术。支持智能客服、虚拟主播、在线教育等多场景应用，云端和本地部署灵活选择。">
+    <meta name="keywords"
+          content="数字人,AI数字人,定制数字人,泛化数字人,声音克隆,超自然人声克隆,虚拟人,智能客服,虚拟主播,AI语音合成,数字人技术,人工智能,机器学习,深度学习">
+    <meta name="author" content="元空智能科技有限公司">
+
+    <!-- Open Graph标签 -->
+    <meta property="og:title" content="元空智能数字人 - 定制数字人|泛化数字人|声音克隆技术">
+    <meta property="og:description"
+          content="专业的AI数字人解决方案，定制数字人、泛化数字人、超自然人声克隆技术，支持多场景应用">
+    <meta property="og:site_name" content="元空智能数字人">
+
+    <!-- Twitter Card标签 -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="元空智能数字人 - 定制数字人|泛化数字人|声音克隆技术">
+    <meta name="twitter:description" content="专业的AI数字人解决方案，定制数字人、泛化数字人、超自然人声克隆技术">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+          line-height: 1.6;
+          color: #333;
+          scroll-behavior: smooth;
+        }
+
+        /* 导航栏 */
+        .navbar {
+          position: fixed;
+          top: 0;
+          width: 100%;
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+          z-index: 1000;
+          transition: all 0.3s ease;
+        }
+
+        .nav-container {
+          max-width: 1200px;
+          margin: 0 auto;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1rem 2rem;
+        }
+
+        .logo {
+          font-size: 1.8rem;
+          font-weight: bold;
+          color: #2563eb;
+          text-decoration: none;
+        }
+
+        .nav-menu {
+          display: flex;
+          list-style: none;
+          gap: 2rem;
+        }
+
+        .nav-link {
+          text-decoration: none;
+          color: #333;
+          font-weight: 500;
+          transition: color 0.3s ease;
+          padding: 0.5rem 1rem;
+          border-radius: 25px;
+        }
+
+        .nav-link:hover {
+          color: #2563eb;
+          background: rgba(37, 99, 235, 0.1);
+        }
+
+        /* 主页部分 */
+        .hero {
+          height: 100vh;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          text-align: center;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .hero::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.05)" points="0,1000 1000,0 1000,1000"/></svg>');
+          background-size: cover;
+        }
+
+        .hero-content {
+          position: relative;
+          z-index: 2;
+          max-width: 800px;
+          padding: 0 2rem;
+        }
+
+        .hero h1 {
+          font-size: 3.5rem;
+          margin-bottom: 1rem;
+          font-weight: 700;
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+          font-size: 1.3rem;
+          margin-bottom: 2rem;
+          opacity: 0.9;
+        }
+
+        .cta-button {
+          display: inline-block;
+          padding: 1rem 2rem;
+          background: #fff;
+          color: #667eea;
+          text-decoration: none;
+          border-radius: 50px;
+          font-weight: bold;
+          font-size: 1.1rem;
+          transition: all 0.3s ease;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 主页特色标签 */
+        .hero-features {
+          display: flex;
+          justify-content: center;
+          gap: 2rem;
+          margin: 2rem 0;
+          flex-wrap: wrap;
+        }
+
+        .hero-feature {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: rgba(255, 255, 255, 0.2);
+          padding: 0.8rem 1.5rem;
+          border-radius: 30px;
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          transition: all 0.3s ease;
+        }
+
+        .hero-feature:hover {
+          background: rgba(255, 255, 255, 0.3);
+          transform: translateY(-2px);
+        }
+
+        .hero-feature i {
+          font-size: 1.2rem;
+          color: #fff;
+        }
+
+        .hero-feature span {
+          font-weight: 500;
+          color: #fff;
+          font-size: 0.95rem;
+        }
+
+        /* 核心技术优势部分 */
+        .core-advantages {
+          padding: 5rem 0;
+          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        .advantages-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 2rem;
+          margin-top: 3rem;
+          max-width: 1200px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        @media (max-width: 1024px) {
+          .advantages-grid {
+            grid-template-columns: 1fr;
+            max-width: 600px;
+          }
+        }
+
+        @media (min-width: 1025px) and (max-width: 1199px) {
+          .advantages-grid {
+            gap: 1.5rem;
+          }
+        }
+
+        .advantage-card {
+          background: white;
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s ease;
+          border: 1px solid rgba(37, 99, 235, 0.1);
+        }
+
+        .advantage-card:hover {
+          transform: translateY(-10px);
+          box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .advantage-header {
+          background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+          color: white;
+          padding: 2rem;
+          text-align: center;
+          position: relative;
+        }
+
+        .advantage-header::after {
+          content: '';
+          position: absolute;
+          bottom: -10px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 0;
+          height: 0;
+          border-left: 10px solid transparent;
+          border-right: 10px solid transparent;
+          border-top: 10px solid #3b82f6;
+        }
+
+        .advantage-icon {
+          font-size: 3rem;
+          margin-bottom: 1rem;
+        }
+
+        .advantage-header h3 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .advantage-content {
+          padding: 2rem;
+        }
+
+        .advantage-content p {
+          color: #64748b;
+          margin-bottom: 1.5rem;
+          line-height: 1.6;
+        }
+
+        .advantage-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        .advantage-list li {
+          padding: 0.5rem 0;
+          color: #475569;
+          position: relative;
+          padding-left: 1.5rem;
+        }
+
+        .advantage-list li::before {
+          content: '✓';
+          position: absolute;
+          left: 0;
+          color: #22c55e;
+          font-weight: bold;
+          font-size: 1.1rem;
+        }
+
+        /* 特色功能 */
+        .features {
+          padding: 5rem 0;
+          background: #f8fafc;
+        }
+
+        .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 2rem;
+        }
+
+        .section-title {
+          text-align: center;
+          font-size: 2.5rem;
+          margin-bottom: 3rem;
+          color: #1e293b;
+        }
+
+        .features-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 2rem;
+        }
+
+        .feature-card {
+          background: white;
+          padding: 2rem;
+          border-radius: 15px;
+          text-align: center;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+          transform: translateY(-10px);
+        }
+
+        .feature-icon {
+          font-size: 3rem;
+          color: #2563eb;
+          margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+          font-size: 1.5rem;
+          margin-bottom: 1rem;
+          color: #1e293b;
+        }
+
+        /* 样例展示部分 */
+        .examples {
+          padding: 5rem 0;
+          background: white;
+        }
+
+        .examples-subtitle {
+          text-align: center;
+          color: #64748b;
+          font-size: 1.1rem;
+          margin-bottom: 3rem;
+          max-width: 600px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .video-gallery {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 2rem;
+          margin-top: 3rem;
+          margin-bottom: 4rem;
+        }
+
+        .video-card {
+          background: white;
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s ease;
+          border: 1px solid rgba(37, 99, 235, 0.1);
+        }
+
+        .video-card:hover {
+          transform: translateY(-10px);
+          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .video-container {
+          position: relative;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          aspect-ratio: 9/16;
+          /* 竖屏比例 */
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .video-container::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          z-index: 1;
+          opacity: 1;
+          transition: opacity 0.5s ease;
+        }
+
+        .video-container.loaded::before {
+          opacity: 0;
+        }
+
+        .digital-human-video {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border: none;
+          background: #000;
+          position: relative;
+          z-index: 2;
+        }
+
+        .digital-human-video::-webkit-media-controls {
+          display: none !important;
+        }
+
+        .digital-human-video::-webkit-media-controls-enclosure {
+          display: none !important;
+        }
+
+        .video-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.3);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 1;
+          transition: opacity 0.3s ease;
+          pointer-events: auto;
+          z-index: 3;
+        }
+
+        .video-card:hover .video-overlay {
+          opacity: 1;
+        }
+
+        .video-overlay.playing {
+          opacity: 0;
+          pointer-events: none;
+        }
+
+        .play-button {
+          width: 80px;
+          height: 80px;
+          background: rgba(37, 99, 235, 0.9);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 2rem;
+          backdrop-filter: blur(10px);
+          transition: all 0.3s ease;
+        }
+
+        .play-button:hover {
+          background: rgba(37, 99, 235, 1);
+          transform: scale(1.1);
+        }
+
+        .video-info {
+          padding: 1.5rem;
+        }
+
+        .video-info h3 {
+          font-size: 1.3rem;
+          margin-bottom: 0.5rem;
+          color: #1e293b;
+        }
+
+        .video-info p {
+          color: #64748b;
+          font-size: 0.9rem;
+          margin-bottom: 1rem;
+          line-height: 1.5;
+        }
+
+        .video-tags {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+        }
+
+        .tag {
+          background: linear-gradient(135deg, #2563eb, #3b82f6);
+          color: white;
+          padding: 0.3rem 0.8rem;
+          border-radius: 15px;
+          font-size: 0.75rem;
+          font-weight: 500;
+        }
+
+
+
+        /* 联系我们部分 */
+        .contact {
+          padding: 5rem 0;
+          background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+          color: white;
+        }
+
+        .contact-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 3rem;
+          align-items: center;
+        }
+
+        .contact-info h3 {
+          font-size: 2rem;
+          margin-bottom: 1rem;
+        }
+
+        .contact-item {
+          display: flex;
+          align-items: center;
+          margin-bottom: 1.5rem;
+        }
+
+        .contact-item i {
+          font-size: 1.5rem;
+          margin-right: 1rem;
+          color: #60a5fa;
+          width: 30px;
+        }
+
+        .contact-form {
+          background: rgba(255, 255, 255, 0.1);
+          padding: 2rem;
+          border-radius: 15px;
+          backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+          margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+          display: block;
+          margin-bottom: 0.5rem;
+          font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+          width: 100%;
+          padding: 0.8rem;
+          border: none;
+          border-radius: 8px;
+          background: rgba(255, 255, 255, 0.9);
+          font-size: 1rem;
+        }
+
+        .form-group textarea {
+          height: 120px;
+          resize: vertical;
+        }
+
+        .submit-btn {
+          width: 100%;
+          padding: 1rem;
+          background: #2563eb;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          font-size: 1.1rem;
+          font-weight: bold;
+          cursor: pointer;
+          transition: background 0.3s ease;
+        }
+
+        .submit-btn:hover {
+          background: #1d4ed8;
+        }
+
+        /* 页脚 */
+        .footer {
+          background: #0f172a;
+          color: white;
+          text-align: center;
+          padding: 2rem 0;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+          .nav-container {
+            padding: 1rem;
+          }
+
+          .nav-menu {
+            gap: 0.8rem;
+            font-size: 0.9rem;
+          }
+
+          .hero h1 {
+            font-size: 2.5rem;
+          }
+
+          .hero p {
+            font-size: 1.1rem;
+          }
+
+          .hero-features {
+            gap: 1rem;
+            margin: 1.5rem 0;
+          }
+
+          .hero-feature {
+            padding: 0.6rem 1rem;
+          }
+
+          .hero-feature span {
+            font-size: 0.85rem;
+          }
+
+          .advantages-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            max-width: 400px;
+          }
+
+          .advantage-card {
+            margin: 0 1rem;
+          }
+
+          .advantage-header {
+            padding: 1.5rem;
+          }
+
+          .advantage-content {
+            padding: 1.5rem;
+          }
+
+          .video-gallery {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin: 2rem 1rem;
+          }
+
+          .contact-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .section-title {
+            font-size: 2rem;
+          }
+        }
+
+        /* 滚动动画 */
+        .fade-in {
+          opacity: 0;
+          transform: translateY(30px);
+          transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+    </style>
 </head>
 
 <body>
-  <!-- 导航栏 -->
-  <nav class="navbar">
+<!-- 导航栏 -->
+<nav class="navbar">
     <div class="nav-container">
-      <a href="#home" class="logo">元空智能数字人</a>
-      <ul class="nav-menu">
-        <li><a href="#home" class="nav-link">主页</a></li>
-        <li><a href="#advantages" class="nav-link">核心优势</a></li>
-        <li><a href="#examples" class="nav-link">样例展示</a></li>
-        <li><a href="#contact" class="nav-link">联系我们</a></li>
-      </ul>
+        <a href="#home" class="logo">元空智能数字人</a>
+        <ul class="nav-menu">
+            <li><a href="#home" class="nav-link">主页</a></li>
+            <li><a href="#advantages" class="nav-link">核心优势</a></li>
+            <li><a href="#examples" class="nav-link">样例展示</a></li>
+            <li><a href="#contact" class="nav-link">联系我们</a></li>
+        </ul>
     </div>
-  </nav>
+</nav>
 
-  <!-- 主页 -->
-  <section id="home" class="hero">
+<!-- 主页 -->
+<section id="home" class="hero">
     <div class="hero-content">
-      <h1>AI数字人解决方案</h1>
-      <p>专业的人工智能数字人技术，为您的业务带来全新的交互体验。高度逼真、智能响应、24小时服务。</p>
-      <div class="hero-features">
-        <div class="hero-feature">
-          <i class="fas fa-brain"></i>
-          <span>定制训练数字人</span>
+        <h1>AI数字人解决方案</h1>
+        <p>专业的人工智能数字人技术，为您的业务带来全新的交互体验。高度逼真、智能响应、24小时服务。</p>
+        <div class="hero-features">
+            <div class="hero-feature">
+                <i class="fas fa-brain"></i>
+                <span>定制训练数字人</span>
+            </div>
+            <div class="hero-feature">
+                <i class="fas fa-magic"></i>
+                <span>泛化数字人技术</span>
+            </div>
+            <div class="hero-feature">
+                <i class="fas fa-rocket"></i>
+                <span>快速部署上线</span>
+            </div>
         </div>
-        <div class="hero-feature">
-          <i class="fas fa-magic"></i>
-          <span>泛化数字人技术</span>
-        </div>
-        <div class="hero-feature">
-          <i class="fas fa-rocket"></i>
-          <span>快速部署上线</span>
-        </div>
-      </div>
-      <a href="#examples" class="cta-button">查看案例</a>
+        <a href="#examples" class="cta-button">查看案例</a>
     </div>
-  </section>
+</section>
 
-  <!-- 核心技术优势 -->
-  <section id="advantages" class="core-advantages">
+<!-- 核心技术优势 -->
+<section id="advantages" class="core-advantages">
     <div class="container">
-      <h2 class="section-title fade-in">核心技术优势</h2>
-      <div class="advantages-grid">
-        <div class="advantage-card fade-in">
-          <div class="advantage-header">
-            <div class="advantage-icon">
-              <i class="fas fa-brain"></i>
+        <h2 class="section-title fade-in">核心技术优势</h2>
+        <div class="advantages-grid">
+            <div class="advantage-card fade-in">
+                <div class="advantage-header">
+                    <div class="advantage-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI数字人技术</h3>
+                </div>
+                <div class="advantage-content">
+                    <p>基于深度学习和大语言模型，集训练与泛化于一体的完整数字人解决方案</p>
+                    <ul class="advantage-list">
+                        <li>个性化形象定制</li>
+                        <li>跨领域知识迁移</li>
+                        <li>多模态交互能力</li>
+                        <li>零样本学习能力</li>
+                    </ul>
+                </div>
             </div>
-            <h3>AI数字人技术</h3>
-          </div>
-          <div class="advantage-content">
-            <p>基于深度学习和大语言模型，集训练与泛化于一体的完整数字人解决方案</p>
-            <ul class="advantage-list">
-              <li>个性化形象定制</li>
-              <li>跨领域知识迁移</li>
-              <li>多模态交互能力</li>
-              <li>零样本学习能力</li>
-            </ul>
-          </div>
-        </div>
 
-        <div class="advantage-card fade-in">
-          <div class="advantage-header">
-            <div class="advantage-icon">
-              <i class="fas fa-volume-up"></i>
+            <div class="advantage-card fade-in">
+                <div class="advantage-header">
+                    <div class="advantage-icon">
+                        <i class="fas fa-volume-up"></i>
+                    </div>
+                    <h3>超自然声音克隆</h3>
+                </div>
+                <div class="advantage-content">
+                    <p>革命性的声音克隆技术，完美还原真人声音特征和情感表达</p>
+                    <ul class="advantage-list">
+                        <li>高保真音质克隆</li>
+                        <li>情感语调模拟</li>
+                        <li>多语种声音转换</li>
+                        <li>实时语音合成</li>
+                    </ul>
+                </div>
             </div>
-            <h3>超自然声音克隆</h3>
-          </div>
-          <div class="advantage-content">
-            <p>革命性的声音克隆技术，完美还原真人声音特征和情感表达</p>
-            <ul class="advantage-list">
-              <li>高保真音质克隆</li>
-              <li>情感语调模拟</li>
-              <li>多语种声音转换</li>
-              <li>实时语音合成</li>
-            </ul>
-          </div>
-        </div>
 
-        <div class="advantage-card fade-in">
-          <div class="advantage-header">
-            <div class="advantage-icon">
-              <i class="fas fa-server"></i>
+            <div class="advantage-card fade-in">
+                <div class="advantage-header">
+                    <div class="advantage-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>灵活部署支持</h3>
+                </div>
+                <div class="advantage-content">
+                    <p>支持云端和本地两种部署模式，满足不同业务场景和安全需求</p>
+                    <ul class="advantage-list">
+                        <li>云端SaaS服务</li>
+                        <li>私有化本地部署</li>
+                        <li>混合云架构支持</li>
+                        <li>一键快速部署</li>
+                    </ul>
+                </div>
             </div>
-            <h3>灵活部署支持</h3>
-          </div>
-          <div class="advantage-content">
-            <p>支持云端和本地两种部署模式，满足不同业务场景和安全需求</p>
-            <ul class="advantage-list">
-              <li>云端SaaS服务</li>
-              <li>私有化本地部署</li>
-              <li>混合云架构支持</li>
-              <li>一键快速部署</li>
-            </ul>
-          </div>
         </div>
-      </div>
     </div>
-  </section>
+</section>
 
-  <!-- 特色功能 -->
-  <section class="features">
+<!-- 特色功能 -->
+<section class="features">
     <div class="container">
-      <h2 class="section-title fade-in">核心优势</h2>
-      <div class="features-grid">
-        <div class="feature-card fade-in">
-          <div class="feature-icon">
-            <i class="fas fa-robot"></i>
-          </div>
-          <h3>AI智能交互</h3>
-          <p>基于先进的自然语言处理技术，提供流畅自然的对话体验，支持多语言交流。</p>
+        <h2 class="section-title fade-in">核心优势</h2>
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>AI智能交互</h3>
+                <p>基于先进的自然语言处理技术，提供流畅自然的对话体验，支持多语言交流。</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h3>高度拟真</h3>
+                <p>采用最新3D建模和动画技术，创造逼真的数字人形象，表情动作自然流畅。</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3>24小时服务</h3>
+                <p>全天候在线服务，无需休息，为您的用户提供持续不断的专业咨询和支持。</p>
+            </div>
         </div>
-        <div class="feature-card fade-in">
-          <div class="feature-icon">
-            <i class="fas fa-user"></i>
-          </div>
-          <h3>高度拟真</h3>
-          <p>采用最新3D建模和动画技术，创造逼真的数字人形象，表情动作自然流畅。</p>
-        </div>
-        <div class="feature-card fade-in">
-          <div class="feature-icon">
-            <i class="fas fa-clock"></i>
-          </div>
-          <h3>24小时服务</h3>
-          <p>全天候在线服务，无需休息，为您的用户提供持续不断的专业咨询和支持。</p>
-        </div>
-      </div>
     </div>
-  </section>
+</section>
 
-  <!-- 样例展示 -->
-  <section id="examples" class="examples">
+<!-- 样例展示 -->
+<section id="examples" class="examples">
     <div class="container">
-      <h2 class="section-title fade-in">数字人视频展示</h2>
-      <p class="examples-subtitle fade-in">体验真实的AI数字人交互效果，点击视频查看详细演示</p>
+        <h2 class="section-title fade-in">数字人视频展示</h2>
+        <p class="examples-subtitle fade-in">体验真实的AI数字人交互效果，点击视频查看详细演示</p>
 
-      <div class="video-gallery">
-        <div class="video-card fade-in">
-          <div class="video-container">
-            <video class="digital-human-video" controls preload="metadata">
-              <source src="./dh01.mp4" type="video/mp4">
-              您的浏览器不支持视频播放，请升级浏览器或尝试其他浏览器。
-            </video>
-            <div class="video-overlay">
-              <div class="play-button">
-                <i class="fas fa-play"></i>
-              </div>
+        <div class="video-gallery">
+            <div class="video-card fade-in">
+                <div class="video-container">
+                    <video class="digital-human-video" controls preload="metadata">
+                        <source src="./dh01.mp4" type="video/mp4">
+                        您的浏览器不支持视频播放，请升级浏览器或尝试其他浏览器。
+                    </video>
+                    <div class="video-overlay">
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <h3>智能客服数字人</h3>
+                    <p>24小时在线客服，自然语言交互，专业问题解答,耐心解答每一位客户</p>
+                    <div class="video-tags">
+                        <span class="tag">智能对话</span>
+                        <span class="tag">情感表达</span>
+                        <span class="tag">多语言</span>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="video-info">
-            <h3>智能客服数字人</h3>
-            <p>24小时在线客服，自然语言交互，专业问题解答,耐心解答每一位客户</p>
-            <div class="video-tags">
-              <span class="tag">智能对话</span>
-              <span class="tag">情感表达</span>
-              <span class="tag">多语言</span>
+
+            <div class="video-card fade-in">
+                <div class="video-container">
+                    <video class="digital-human-video" controls preload="metadata">
+                        <source src="./dh02.mp4" type="video/mp4">
+                        您的浏览器不支持视频播放，请升级浏览器或尝试其他浏览器。
+                    </video>
+                    <div class="video-overlay">
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <h3>教育数字人</h3>
+                    <p>个性化教学助手，互动式学习体验，知识点精准讲解</p>
+                    <div class="video-tags">
+                        <span class="tag">个性教学</span>
+                        <span class="tag">互动学习</span>
+                        <span class="tag">知识问答</span>
+                    </div>
+                </div>
             </div>
-          </div>
+
+            <div class="video-card fade-in">
+                <div class="video-container">
+                    <video class="digital-human-video" controls preload="metadata">
+                        <source src="./dh03.mp4" type="video/mp4">
+                        您的浏览器不支持视频播放，请升级浏览器或尝试其他浏览器。
+                    </video>
+                    <div class="video-overlay">
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <h3>虚拟主播</h3>
+                    <p>专业新闻播报，直播带货助手，稳定输出优质内容</p>
+                    <div class="video-tags">
+                        <span class="tag">新闻播报</span>
+                        <span class="tag">直播带货</span>
+                        <span class="tag">内容创作</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
-
-        <div class="video-card fade-in">
-          <div class="video-container">
-            <video class="digital-human-video" controls preload="metadata">
-              <source src="./dh02.mp4" type="video/mp4">
-              您的浏览器不支持视频播放，请升级浏览器或尝试其他浏览器。
-            </video>
-            <div class="video-overlay">
-              <div class="play-button">
-                <i class="fas fa-play"></i>
-              </div>
-            </div>
-          </div>
-          <div class="video-info">
-            <h3>教育数字人</h3>
-            <p>个性化教学助手，互动式学习体验，知识点精准讲解</p>
-            <div class="video-tags">
-              <span class="tag">个性教学</span>
-              <span class="tag">互动学习</span>
-              <span class="tag">知识问答</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="video-card fade-in">
-          <div class="video-container">
-            <video class="digital-human-video" controls preload="metadata">
-              <source src="./dh03.mp4" type="video/mp4">
-              您的浏览器不支持视频播放，请升级浏览器或尝试其他浏览器。
-            </video>
-            <div class="video-overlay">
-              <div class="play-button">
-                <i class="fas fa-play"></i>
-              </div>
-            </div>
-          </div>
-          <div class="video-info">
-            <h3>虚拟主播</h3>
-            <p>专业新闻播报，直播带货助手，稳定输出优质内容</p>
-            <div class="video-tags">
-              <span class="tag">新闻播报</span>
-              <span class="tag">直播带货</span>
-              <span class="tag">内容创作</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
     </div>
-  </section>
+</section>
 
-  <!-- 联系我们 -->
-  <section id="contact" class="contact">
+<!-- 联系我们 -->
+<section id="contact" class="contact">
     <div class="container">
-      <h2 class="section-title fade-in">联系我们</h2>
-      <div class="contact-grid">
-        <div class="contact-info fade-in">
-          <h3>与我们取得联系</h3>
-          <p>我们期待与您合作，为您的业务提供最专业的数字人解决方案。</p>
+        <h2 class="section-title fade-in">联系我们</h2>
+        <div class="contact-grid">
+            <div class="contact-info fade-in">
+                <h3>与我们取得联系</h3>
+                <p>我们期待与您合作，为您的业务提供最专业的数字人解决方案。</p>
 
-          <div class="contact-item">
-            <!-- <i class="fas fa-phone"></i>
-            <span></span> -->
-          </div>
-          <div class="contact-item">
-            <i class="fas fa-envelope"></i>
-            <span>abcdef123456789chen@sohu.com</span>
-          </div>
-          <div class="contact-item">
-            <i class="fas fa-map-marker-alt"></i>
-            <span>广东省深圳市福田区下沙滨河大厦A座</span>
-          </div>
-          <div class="contact-item">
-            <i class="fas fa-clock"></i>
-            <span>工作时间：周一至周五 9:30-18:30</span>
-          </div>
+                <div class="contact-item">
+                    <!-- <i class="fas fa-phone"></i>
+                    <span></span> -->
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>abcdef123456789chen@sohu.com</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>广东省深圳市福田区下沙滨河大厦A座</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-clock"></i>
+                    <span>工作时间：周一至周五 9:30-18:30</span>
+                </div>
+            </div>
+
+            <form class="contact-form fade-in">
+                <div class="form-group">
+                    <label for="name">姓名</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">邮箱</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="company">公司</label>
+                    <input type="text" id="company" name="company">
+                </div>
+                <div class="form-group">
+                    <label for="message">需求描述</label>
+                    <textarea id="message" name="message" placeholder="请描述您的需求和项目详情..." required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">提交咨询</button>
+            </form>
         </div>
-
-        <form class="contact-form fade-in">
-          <div class="form-group">
-            <label for="name">姓名</label>
-            <input type="text" id="name" name="name" required>
-          </div>
-          <div class="form-group">
-            <label for="email">邮箱</label>
-            <input type="email" id="email" name="email" required>
-          </div>
-          <div class="form-group">
-            <label for="company">公司</label>
-            <input type="text" id="company" name="company">
-          </div>
-          <div class="form-group">
-            <label for="message">需求描述</label>
-            <textarea id="message" name="message" placeholder="请描述您的需求和项目详情..." required></textarea>
-          </div>
-          <button type="submit" class="submit-btn">提交咨询</button>
-        </form>
-      </div>
     </div>
-  </section>
+</section>
 
-  <!-- 页脚 -->
-  <footer class="footer">
+<!-- 页脚 -->
+<footer class="footer">
     <div class="container">
-      <p>&copy; 2025 元空智能科技有限公司. 保留所有权利.</p>
+        <p>&copy; 2025 元空智能科技有限公司. 保留所有权利.</p>
     </div>
-  </footer>
+</footer>
 
-  <script>
+<script>
     // 平滑滚动
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
@@ -1098,7 +1115,7 @@
         navbar.style.background = 'rgba(255, 255, 255, 0.95)';
       }
     });
-  </script>
+</script>
 </body>
 
 </html>
