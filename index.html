@@ -1116,10 +1116,14 @@
       }
     });
 
-    // 利用 once 保证只执行一次
-    document.body.addEventListener('touchstart', () => {
-      if (video.paused) video.play();
-    }, { once: true });
+   const video = document.querySelector('video');
+   video.muted = true;          // 必须静音
+   video.setAttribute('playsinline', true); // iOS 允许行内播放
+   video.setAttribute('webkit-playsinline', true);
+   video.play().catch(err => {
+      // 真正失败再提示
+      console.error('Autoplay failed:', err);
+   });
 </script>
 </body>
 
