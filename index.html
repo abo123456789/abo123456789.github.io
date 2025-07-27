@@ -1115,6 +1115,11 @@
         navbar.style.background = 'rgba(255, 255, 255, 0.95)';
       }
     });
+
+    // 利用 once 保证只执行一次
+    document.body.addEventListener('touchstart', () => {
+      if (video.paused) video.play();
+    }, { once: true });
 </script>
 </body>
 
