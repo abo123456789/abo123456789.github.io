@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>元空智能数字人 - 定制数字人|泛化数字人|声音克隆|超自然人声克隆技术</title>
+
+  <!-- SEO Meta标签 -->
+  <meta name="description"
+    content="元空智能提供专业的AI数字人解决方案，包括定制数字人、泛化数字人、声音克隆、超自然人声克隆技术。支持智能客服、虚拟主播、在线教育等多场景应用，云端和本地部署灵活选择。">
+  <meta name="keywords" content="数字人,AI数字人,定制数字人,泛化数字人,声音克隆,超自然人声克隆,虚拟人,智能客服,虚拟主播,AI语音合成,数字人技术,人工智能,机器学习,深度学习">
+  <meta name="author" content="元空智能数字人科技有限公司">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="zh-CN">
+
+  <!-- Open Graph标签 -->
+  <meta property="og:title" content="元空智能数字人 - 定制数字人|泛化数字人|声音克隆技术">
+  <meta property="og:description" content="专业的AI数字人解决方案，定制数字人、泛化数字人、超自然人声克隆技术，支持多场景应用">
+  <meta property="og:site_name" content="元空智能数字人">
+  <meta property="og:locale" content="zh_CN">
+
+  <!-- Twitter Card标签 -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="元空智能数字人 - 定制数字人|泛化数字人|声音克隆技术">
+  <meta name="twitter:description" content="专业的AI数字人解决方案，定制数字人、泛化数字人、超自然人声克隆技术">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      scroll-behavior: smooth;
+    }
+
+    /* 导航栏 */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #2563eb;
+      text-decoration: none;
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: color 0.3s ease;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+    }
+
+    .nav-link:hover {
+      color: #2563eb;
+      background: rgba(37, 99, 235, 0.1);
+    }
+
+    /* 主页部分 */
+    .hero {
+      height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.05)" points="0,1000 1000,0 1000,1000"/></svg>');
+      background-size: cover;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      padding: 0 2rem;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: #fff;
+      color: #667eea;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    /* 主页特色标签 */
+    .hero-features {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+
+    .hero-feature {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.8rem 1.5rem;
+      border-radius: 30px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .hero-feature:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .hero-feature i {
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    .hero-feature span {
+      font-weight: 500;
+      color: #fff;
+      font-size: 0.95rem;
+    }
+
+    /* 核心技术优势部分 */
+    .core-advantages {
+      padding: 5rem 0;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    }
+
+    .advantages-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (max-width: 1024px) {
+      .advantages-grid {
+        grid-template-columns: 1fr;
+        max-width: 600px;
+      }
+    }
+
+    @media (min-width: 1025px) and (max-width: 1199px) {
+      .advantages-grid {
+        gap: 1.5rem;
+      }
+    }
+
+    .advantage-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(37, 99, 235, 0.1);
+    }
+
+    .advantage-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    .advantage-header {
+      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .advantage-header::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 10px solid #3b82f6;
+    }
+
+    .advantage-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .advantage-header h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .advantage-content {
+      padding: 2rem;
+    }
+
+    .advantage-content p {
+      color: #64748b;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .advantage-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .advantage-list li {
+      padding: 0.5rem 0;
+      color: #475569;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .advantage-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #22c55e;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    /* 特色功能 */
+    .features {
+      padding: 5rem 0;
+      background: #f8fafc;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+      color: #1e293b;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      color: #2563eb;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #1e293b;
+    }
+
+    /* 样例展示部分 */
+    .examples {
+      padding: 5rem 0;
+      background: white;
+    }
+
+    .examples-subtitle {
+      text-align: center;
+      color: #64748b;
+      font-size: 1.1rem;
+      margin-bottom: 3rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .video-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+      margin-bottom: 4rem;
+    }
+
+    .video-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(37, 99, 235, 0.1);
+    }
+
+    .video-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    .video-container {
+      position: relative;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      aspect-ratio: 9/16;
+      /* 竖屏比例 */
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .video-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      z-index: 1;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+
+    .video-container.loaded::before {
+      opacity: 0;
+    }
+
+    .digital-human-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border: none;
+      background: #000;
+      position: relative;
+      z-index: 2;
+    }
+
+    .digital-human-video::-webkit-media-controls {
+      display: none !important;
+    }
+
+    .digital-human-video::-webkit-media-controls-enclosure {
+      display: none !important;
+    }
+
+    .video-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+      pointer-events: auto;
+      z-index: 3;
+    }
+
+    .video-card:hover .video-overlay {
+      opacity: 1;
+    }
+
+    .video-overlay.playing {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .play-button {
+      width: 80px;
+      height: 80px;
+      background: rgba(37, 99, 235, 0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .play-button:hover {
+      background: rgba(37, 99, 235, 1);
+      transform: scale(1.1);
+    }
+
+    .video-info {
+      padding: 1.5rem;
+    }
+
+    .video-info h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: #1e293b;
+    }
+
+    .video-info p {
+      color: #64748b;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .video-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 15px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+
+
+    /* 联系我们部分 */
+    .contact {
+      padding: 5rem 0;
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      color: white;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .contact-info h3 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-item i {
+      font-size: 1.5rem;
+      margin-right: 1rem;
+      color: #60a5fa;
+      width: 30px;
+    }
+
+    .contact-form {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      font-size: 1rem;
+    }
+
+    .form-group textarea {
+      height: 120px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 1rem;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background: #1d4ed8;
+    }
+
+    /* SEO内容区域 */
+    .seo-content {
+      background: #f8fafc;
+      padding: 4rem 0;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .seo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .seo-block {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .seo-block h3 {
+      color: #1e293b;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .seo-block p {
+      color: #64748b;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    /* 页脚 */
+    .footer {
+      background: #0f172a;
+      color: white;
+      padding: 3rem 0 1rem;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-info h4 {
+      color: #60a5fa;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-info p {
+      color: #cbd5e1;
+      line-height: 1.6;
+      font-size: 0.9rem;
+    }
+
+    .footer-keywords {
+      color: #cbd5e1;
+    }
+
+    .footer-keywords strong {
+      color: #60a5fa;
+    }
+
+    .footer-keywords p {
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid #334155;
+      color: #94a3b8;
+      font-size: 0.85rem;
+    }
+
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      .nav-container {
+        padding: 1rem;
+      }
+
+      .nav-menu {
+        gap: 0.8rem;
+        font-size: 0.9rem;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero p {
+        font-size: 1.1rem;
+      }
+
+      .hero-features {
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+
+      .hero-feature {
+        padding: 0.6rem 1rem;
+      }
+
+      .hero-feature span {
+        font-size: 0.85rem;
+      }
+
+      .advantages-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        max-width: 400px;
+      }
+
+      .advantage-card {
+        margin: 0 1rem;
+      }
+
+      .advantage-header {
+        padding: 1.5rem;
+      }
+
+      .advantage-content {
+        padding: 1.5rem;
+      }
+
+      .video-gallery {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin: 2rem 1rem;
+      }
+
+      .seo-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin: 1rem;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+    }
+
+    /* 滚动动画 */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 导航栏 -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="#home" class="logo">元空智能数字人</a>
+      <ul class="nav-menu">
+        <li><a href="#home" class="nav-link">主页</a></li>
+        <li><a href="#advantages" class="nav-link">核心优势</a></li>
+        <li><a href="#examples" class="nav-link">样例展示</a></li>
+        <li><a href="#contact" class="nav-link">联系我们</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- 主页 -->
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <h1>AI数字人解决方案</h1>
+      <p>专业的人工智能数字人技术，提供定制数字人、泛化数字人、声音克隆、超自然人声克隆服务。为您的业务带来全新的交互体验，高度逼真、智能响应、24小时在线服务。</p>
+      <div class="hero-features">
+        <div class="hero-feature">
+          <i class="fas fa-brain"></i>
+          <span>定制训练数字人</span>
+        </div>
+        <div class="hero-feature">
+          <i class="fas fa-magic"></i>
+          <span>泛化数字人技术</span>
+        </div>
+        <div class="hero-feature">
+          <i class="fas fa-rocket"></i>
+          <span>快速部署上线</span>
+        </div>
+      </div>
+      <a href="#examples" class="cta-button">查看案例</a>
+    </div>
+  </section>
+
+  <!-- 核心技术优势 -->
+  <section id="advantages" class="core-advantages">
+    <div class="container">
+      <h2 class="section-title fade-in">核心技术优势</h2>
+      <div class="advantages-grid">
+        <div class="advantage-card fade-in">
+          <div class="advantage-header">
+            <div class="advantage-icon">
+              <i class="fas fa-brain"></i>
+            </div>
+            <h3>定制数字人与泛化数字人技术</h3>
+          </div>
+          <div class="advantage-content">
+            <p>基于深度学习和大语言模型，提供定制数字人和泛化数字人完整解决方案，支持个性化训练和跨领域应用</p>
+            <ul class="advantage-list">
+              <li>定制数字人个性化形象设计</li>
+              <li>泛化数字人跨领域知识迁移</li>
+              <li>多模态交互能力</li>
+              <li>零样本学习和适应能力</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="advantage-card fade-in">
+          <div class="advantage-header">
+            <div class="advantage-icon">
+              <i class="fas fa-volume-up"></i>
+            </div>
+            <h3>超自然人声克隆技术</h3>
+          </div>
+          <div class="advantage-content">
+            <p>革命性的超自然人声克隆和声音克隆技术，完美还原真人声音特征和情感表达，支持多语种语音合成</p>
+            <ul class="advantage-list">
+              <li>超自然人声克隆高保真还原</li>
+              <li>声音克隆情感语调模拟</li>
+              <li>多语种声音克隆转换</li>
+              <li>实时AI语音合成</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="advantage-card fade-in">
+          <div class="advantage-header">
+            <div class="advantage-icon">
+              <i class="fas fa-server"></i>
+            </div>
+            <h3>灵活部署支持</h3>
+          </div>
+          <div class="advantage-content">
+            <p>支持云端和本地两种部署模式，满足不同业务场景和安全需求</p>
+            <ul class="advantage-list">
+              <li>云端SaaS服务</li>
+              <li>私有化本地部署</li>
+              <li>混合云架构支持</li>
+              <li>一键快速部署</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 特色功能 -->
+  <section class="features">
+    <div class="container">
+      <h2 class="section-title fade-in">AI数字人核心优势</h2>
+      <div class="features-grid">
+        <div class="feature-card fade-in">
+          <div class="feature-icon">
+            <i class="fas fa-robot"></i>
+          </div>
+          <h3>AI智能交互</h3>
+          <p>基于先进的自然语言处理技术，提供流畅自然的对话体验，支持多语言交流。</p>
+        </div>
+        <div class="feature-card fade-in">
+          <div class="feature-icon">
+            <i class="fas fa-user"></i>
+          </div>
+          <h3>高度拟真</h3>
+          <p>采用最新技术，创造逼真的2D,3D数字人形象，表情动作口型自然流畅。</p>
+        </div>
+        <div class="feature-card fade-in">
+          <div class="feature-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <h3>24小时服务</h3>
+          <p>全天候在线服务，无需休息，为您的用户提供持续不断的专业咨询和支持。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 样例展示 -->
+  <section id="examples" class="examples">
+    <div class="container">
+      <h2 class="section-title fade-in">数字人视频展示</h2>
+      <p class="examples-subtitle fade-in">体验真实的定制数字人、泛化数字人和超自然人声克隆交互效果，点击视频查看AI数字人技术演示</p>
+
+      <div class="video-gallery">
+        <div class="video-card fade-in">
+          <div class="video-container">
+            <video class="digital-human-video" controls preload="metadata" playsinline webkit-playsinline
+              crossorigin="anonymous">
+              <source src="./dh02.mp4" type="video/mp4">
+              您的浏览器不支持视频播放，请升级浏览器或尝试其他浏览器。
+            </video>
+            <div class="video-overlay">
+              <div class="play-button">
+                <i class="fas fa-play"></i>
+              </div>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3>泛化数字人教育助手</h3>
+            <p>基于泛化数字人技术的个性化教学助手，结合超自然人声克隆，提供互动式学习体验和知识点精准讲解</p>
+            <div class="video-tags">
+              <span class="tag">泛化数字人</span>
+              <span class="tag">超自然人声克隆</span>
+              <span class="tag">个性教学</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-card fade-in">
+          <div class="video-container">
+            <video class="digital-human-video" controls preload="metadata" playsinline webkit-playsinline
+              crossorigin="anonymous">
+              <source src="./dh03.mp4" type="video/mp4">
+              您的浏览器不支持视频播放，请升级浏览器或尝试其他浏览器。
+            </video>
+            <div class="video-overlay">
+              <div class="play-button">
+                <i class="fas fa-play"></i>
+              </div>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3>定制数字人虚拟主播</h3>
+            <p>采用定制数字人和声音克隆技术的专业虚拟主播，支持新闻播报、直播带货，稳定输出优质内容</p>
+            <div class="video-tags">
+              <span class="tag">定制数字人</span>
+              <span class="tag">声音克隆</span>
+              <span class="tag">虚拟主播</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-card fade-in">
+          <div class="video-container">
+            <video class="digital-human-video" controls preload="metadata" playsinline webkit-playsinline
+              crossorigin="anonymous">
+              <source src="./dh01.mp4" type="video/mp4">
+              您的浏览器不支持视频播放，请升级浏览器或尝试其他浏览器。
+            </video>
+            <div class="video-overlay">
+              <div class="play-button">
+                <i class="fas fa-play"></i>
+              </div>
+            </div>
+          </div>
+          <div class="video-info">
+            <h3>定制数字人智能客服</h3>
+            <p>基于定制数字人技术的24小时在线客服，结合声音克隆技术，自然语言交互，专业问题解答,耐心解答每一位客户</p>
+            <div class="video-tags">
+              <span class="tag">定制数字人</span>
+              <span class="tag">声音克隆</span>
+              <span class="tag">智能对话</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 联系我们 -->
+  <section id="contact" class="contact">
+    <div class="container">
+      <h2 class="section-title fade-in">联系我们</h2>
+      <div class="contact-grid">
+        <div class="contact-info fade-in">
+          <h3>与我们取得联系</h3>
+          <p>我们期待与您合作，为您的业务提供最专业的数字人解决方案。</p>
+
+          <div class="contact-item">
+            <!-- <i class="fas fa-phone"></i>
+            <span></span> -->
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <span>abcdef123456chen@sohu.com</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>广东省深圳市福田区下沙滨河大厦A座</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-clock"></i>
+            <span>工作时间：周一至周五 9:30-18:30</span>
+          </div>
+        </div>
+
+        <form class="contact-form fade-in" action="https://formspree.io/f/mwpqbvvy" method="POST">
+          <div class="form-group">
+            <label for="name">姓名</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">邮箱</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="company">公司</label>
+            <input type="text" id="company" name="company">
+          </div>
+          <div class="form-group">
+            <label for="message">需求描述</label>
+            <textarea id="message" name="message" placeholder="请描述您的需求和项目详情..." required></textarea>
+          </div>
+          <button type="submit" class="submit-btn">提交咨询</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2025 元空智能数字人科技有限公司. 保留所有权利.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // 滚动动画
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function (entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in').forEach(el => {
+      observer.observe(el);
+    });
+
+    // 表单提交
+    document.querySelector('.contact-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      var data = new FormData(event.target);
+      fetch(event.target.action, {
+        method: 'POST',
+        body: data,
+        headers: {
+            'Accept': 'application/json'
+        }
+      }).then(response => {
+        if (response.ok) {
+          alert("感谢您的咨询！我们会尽快与您联系。")
+        } else {
+          response.json().then(data => {
+            if (Object.hasOwn(data, 'errors')) {
+              alert("出错啦,请稍后重试。")
+            } else {
+              alert("出错啦,请稍后重试。")
+            }
+          })
+        }
+      }).catch(error => {
+        alert("出错啦,请稍后重试。")
+      });
+      this.reset();
+    });
+
+    // 网络状态检测
+    function checkNetworkStatus() {
+      return navigator.onLine && (navigator.connection ? navigator.connection.effectiveType !== 'slow-2g' : true);
+    }
+
+    // 视频播放控制
+    document.querySelectorAll('.video-container').forEach((container, index) => {
+      const video = container.querySelector('.digital-human-video');
+      const overlay = container.querySelector('.video-overlay');
+      const playButton = container.querySelector('.play-button');
+
+      let retryCount = 0;
+      const maxRetries = 3;
+      let loadingTimeout = null;
+
+      // 生成视频首帧作为封面
+      function generateThumbnail() {
+        try {
+          if (video.readyState >= 2) { // HAVE_CURRENT_DATA
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // 设置canvas尺寸为视频尺寸
+            canvas.width = video.videoWidth || 360;
+            canvas.height = video.videoHeight || 640;
+
+            // 绘制视频当前帧到canvas
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // 将canvas转换为data URL并设置为poster
+            const thumbnail = canvas.toDataURL('image/jpeg', 0.8);
+            video.poster = thumbnail;
+
+            // 标记容器为已加载状态
+            container.classList.add('loaded');
+
+            console.log(`视频 ${index + 1} 首帧封面生成成功`);
+          }
+        } catch (error) {
+          console.warn(`视频 ${index + 1} 缩略图生成失败:`, error);
+        }
+      }
+
+      // 重新加载视频
+      function reloadVideo() {
+        if (retryCount < maxRetries) {
+          retryCount++;
+          console.log(`视频 ${index + 1} 尝试重新加载 (${retryCount}/${maxRetries})`);
+
+          playButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+          playButton.style.background = 'rgba(255, 193, 7, 0.9)';
+
+          video.load();
+
+          // 设置加载超时
+          clearTimeout(loadingTimeout);
+          loadingTimeout = setTimeout(() => {
+            if (video.readyState < 2) {
+              console.error(`视频 ${index + 1} 加载超时`);
+              showError('网络加载超时，请检查网络连接');
+            }
+          }, 10000);
+        } else {
+          showError('视频加载失败，请刷新页面重试');
+        }
+      }
+
+      // 显示错误信息
+      function showError(message) {
+        playButton.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+        playButton.style.background = 'rgba(239, 68, 68, 0.9)';
+        playButton.title = message;
+        console.error(`视频 ${index + 1} ${message}`);
+      }
+
+      // 安全播放函数
+      async function safePlay() {
+        try {
+          // 检查网络状态
+          if (!checkNetworkStatus()) {
+            throw new Error('网络连接不稳定');
+          }
+
+          // 检查视频状态
+          if (video.readyState < 2) {
+            playButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            playButton.style.background = 'rgba(255, 193, 7, 0.9)';
+
+            // 等待视频准备就绪
+            await new Promise((resolve, reject) => {
+              const timeout = setTimeout(() => reject(new Error('视频加载超时')), 8000);
+
+              const onReady = () => {
+                clearTimeout(timeout);
+                video.removeEventListener('canplay', onReady);
+                video.removeEventListener('error', onError);
+                resolve();
+              };
+
+              const onError = (e) => {
+                clearTimeout(timeout);
+                video.removeEventListener('canplay', onReady);
+                video.removeEventListener('error', onError);
+                reject(new Error('视频加载失败'));
+              };
+
+              if (video.readyState >= 3) {
+                resolve();
+              } else {
+                video.addEventListener('canplay', onReady);
+                video.addEventListener('error', onError);
+              }
+            });
+          }
+
+          // 暂停其他所有视频
+          document.querySelectorAll('.digital-human-video').forEach(v => {
+            if (v !== video && !v.paused) {
+              v.pause();
+            }
+          });
+
+          // 播放视频
+          await video.play();
+          console.log(`视频 ${index + 1} 播放成功`);
+          retryCount = 0; // 播放成功后重置重试计数
+
+        } catch (error) {
+          console.error(`视频 ${index + 1} 播放失败:`, error);
+
+          // 根据错误类型处理
+          if (error.name === 'NotAllowedError') {
+            showError('请点击页面任意位置后再次尝试播放');
+          } else if (error.name === 'NotSupportedError') {
+            showError('浏览器不支持该视频格式');
+          } else if (error.message.includes('网络') || error.message.includes('超时')) {
+            reloadVideo();
+          } else {
+            showError('播放失败: ' + error.message);
+          }
+        }
+      }
+
+      // 视频加载事件
+      video.addEventListener('loadeddata', function () {
+        console.log(`视频 ${index + 1} 加载成功`);
+        clearTimeout(loadingTimeout);
+        retryCount = 0;
+        playButton.innerHTML = '<i class="fas fa-play"></i>';
+        playButton.style.background = 'rgba(37, 99, 235, 0.9)';
+        // 尝试生成缩略图
+        generateThumbnail();
+      });
+
+      video.addEventListener('loadedmetadata', function () {
+        console.log(`视频 ${index + 1} 元数据加载完成`);
+        // 延迟设置视频到0.1秒，避免云端加载问题
+        setTimeout(() => {
+          if (video.readyState >= 1) {
+            video.currentTime = 0.1;
+          }
+        }, 100);
+      });
+
+      video.addEventListener('seeked', function () {
+        // 当视频跳转到指定时间点后生成缩略图
+        if (video.currentTime <= 0.2) {
+          generateThumbnail();
+        }
+      });
+
+      video.addEventListener('error', function (e) {
+        console.error(`视频 ${index + 1} 加载失败:`, e, video.error);
+        clearTimeout(loadingTimeout);
+
+        const errorCode = video.error ? video.error.code : 0;
+        const errorMessages = {
+          1: '用户中止了视频加载',
+          2: '网络错误导致视频下载失败',
+          3: '视频解码失败',
+          4: '视频格式不支持或文件损坏'
+        };
+
+        const errorMessage = errorMessages[errorCode] || '未知错误';
+        console.error(`视频错误代码: ${errorCode}, 错误信息: ${errorMessage}`);
+
+        if (errorCode === 2) {
+          // 网络错误，尝试重新加载
+          reloadVideo();
+        } else {
+          showError(errorMessage);
+        }
+      });
+
+      video.addEventListener('loadstart', function () {
+        console.log(`视频 ${index + 1} 开始加载`);
+        playButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        playButton.style.background = 'rgba(255, 193, 7, 0.9)';
+      });
+
+      // 网络状态变化监听
+      video.addEventListener('waiting', function () {
+        console.log(`视频 ${index + 1} 缓冲中...`);
+        playButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        playButton.style.background = 'rgba(255, 193, 7, 0.9)';
+      });
+
+      video.addEventListener('canplay', function () {
+        console.log(`视频 ${index + 1} 可以播放`);
+        if (video.paused) {
+          playButton.innerHTML = '<i class="fas fa-play"></i>';
+          playButton.style.background = 'rgba(37, 99, 235, 0.9)';
+        }
+      });
+
+      // 点击播放按钮
+      playButton.addEventListener('click', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        if (video.paused) {
+          safePlay();
+        } else {
+          video.pause();
+        }
+      });
+
+      // 视频播放状态监听
+      video.addEventListener('play', function () {
+        overlay.classList.add('playing');
+        playButton.innerHTML = '<i class="fas fa-pause"></i>';
+        playButton.style.background = 'rgba(37, 99, 235, 0.9)';
+        console.log(`视频 ${index + 1} 开始播放`);
+      });
+
+      video.addEventListener('pause', function () {
+        overlay.classList.remove('playing');
+        playButton.innerHTML = '<i class="fas fa-play"></i>';
+        playButton.style.background = 'rgba(37, 99, 235, 0.9)';
+        console.log(`视频 ${index + 1} 暂停播放`);
+      });
+
+      video.addEventListener('ended', function () {
+        overlay.classList.remove('playing');
+        playButton.innerHTML = '<i class="fas fa-play"></i>';
+        playButton.style.background = 'rgba(37, 99, 235, 0.9)';
+        console.log(`视频 ${index + 1} 播放结束`);
+      });
+
+      // 点击视频区域播放/暂停
+      video.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (video.paused) {
+          safePlay();
+        } else {
+          video.pause();
+        }
+      });
+
+      // 页面可见性变化处理
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden && !video.paused) {
+          video.pause();
+        }
+      });
+    });
+
+
+
+    // 导航栏背景变化
+    window.addEventListener('scroll', function () {
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 100) {
+        navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+      } else {
+        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+      }
+    });
+  </script>
+</body>
+
+</html>
