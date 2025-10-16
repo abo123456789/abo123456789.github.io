@@ -55,29 +55,75 @@
       .tag {
         display: inline-block;
         margin: 5px;
-        padding: 5px;
+        padding: 8px 15px;
         font-size: 14px;
         font-weight: bold;
-        border-radius: 5px;
+        border-radius: 4px;
         cursor: pointer;
-        transition: background-color 0.2s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        border: 2px solid transparent;
+        user-select: none;
+      }
+      .all {
+        background-color: #cccccc;
+        border-color: #999999;
       }
       .ai {
         background-color: #ff9999;
+        border-color: #ff6666;
       }
       .nlp {
         background-color: #99ccff;
+        border-color: #66b3ff;
       }
       .vision {
         background-color: #99ff99;
+        border-color: #66ff66;
       }
       .recommendation {
         background-color: #ffcc66;
+        border-color: #ffb333;
+      }
+      .programming {
+        background-color: #99ff99;
+        border-color: #66ff66;
+      }
+      .travel {
+        background-color: #ff9999;
+        border-color: #ff6666;
+      }
+      .health {
+        background-color: #99ccff;
+        border-color: #6699ff;
+      }
+      .aigc {
+        background-color: #cc99ff;
+        border-color: #9966ff;
+      }
+      .tag:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       }
       .tag.active {
-        background-color: #444;
+        background-color: #333;
         color: #fff;
+        border-color: #333;
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
       }
+      
+      /* 添加淡入动画 */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
       @media (max-width: 767px) {
         .app {
           width: 100%;
@@ -95,10 +141,15 @@
 <h1>AI 应用市场</h1>
 <div>
     <div class="tags-container" style="text-align:center">
+        <div class="tag all">全部</div>
         <div class="tag ai">人工智能</div>
         <div class="tag nlp">自然语言处理</div>
         <div class="tag vision">计算机视觉</div>
         <div class="tag recommendation">智能金融</div>
+        <div class="tag travel">智能旅游</div>
+        <div class="tag health">智能健康</div>
+        <div class="tag aigc">AIGC</div>
+        <div class="tag programming">计算机编程</div>
     </div>
     <div class="apps-container">
         <div class="app">
@@ -116,7 +167,7 @@
             <p>AI能根据您的个人出行打算,帮您定制详细的攻略和预算规划</p>
             <div>
                 <div class="tag ai">人工智能</div>
-                <div class="tag recommendation">智能旅游</div>
+                <div class="tag travel">智能旅游</div>
             </div>
         </div>
         <div class="app">
@@ -134,7 +185,7 @@
             <p>支持根据您的增重和减重计划,自动帮你规划合适您的每日饮食计划</p>
             <div>
                 <div class="tag ai">人工智能</div>
-                <div class="tag vision">智能健康</div>
+                <div class="tag health">智能健康</div>
             </div>
         </div>
         <div class="app">
@@ -143,7 +194,7 @@
             <p>根据给出文本,生成资深运营级别的文案和创意,普通人也能写出好文案</p>
             <div>
                 <div class="tag ai">人工智能</div>
-                <div class="tag vision">AIGC</div>
+                <div class="tag aigc">AIGC</div>
             </div>
         </div>
         <div class="app">
@@ -152,7 +203,7 @@
             <p>支持根据已有代码自动解释代码,自动生成单元测试,自动发现安全问题,自动补全代码注释</p>
             <div>
                 <div class="tag ai">人工智能</div>
-                <div class="tag vision">计算机编程</div>
+                <div class="tag programming">计算机编程</div>
             </div>
         </div>
         <div class="app">
@@ -184,3 +235,80 @@
         })();
         </script>
  </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 获取所有标签和应用卡片
+    const filterTags = document.querySelectorAll('.tags-container .tag');
+    const apps = document.querySelectorAll('.app');
+    let activeFilter = null;
+
+    // 为每个筛选标签添加点击事件
+    filterTags.forEach(tag => {
+        tag.addEventListener('click', function() {
+            const tagText = this.textContent.trim();
+            
+            // 如果点击的是"全部"标签
+            if (tagText === '全部') {
+                // 移除其他标签的激活状态
+                filterTags.forEach(t => t.classList.remove('active'));
+                
+                // 激活"全部"标签
+                this.classList.add('active');
+                activeFilter = '全部';
+                
+                // 显示所有应用
+                apps.forEach(app => {
+                    app.style.display = 'block';
+                    app.style.animation = 'fadeIn 0.3s ease-in';
+                });
+                return;
+            }
+            
+            // 如果点击的是当前激活的标签，则取消筛选
+            if (activeFilter === tagText) {
+                // 取消筛选，显示所有应用
+                apps.forEach(app => {
+                    app.style.display = 'block';
+                });
+                this.classList.remove('active');
+                activeFilter = null;
+            } else {
+                // 移除其他标签的激活状态
+                filterTags.forEach(t => t.classList.remove('active'));
+                
+                // 激活当前标签
+                this.classList.add('active');
+                activeFilter = tagText;
+                
+                // 筛选应用
+                apps.forEach(app => {
+                    const appTags = app.querySelectorAll('.tag');
+                    let hasMatchingTag = false;
+                    
+                    appTags.forEach(appTag => {
+                        if (appTag.textContent.trim() === tagText) {
+                            hasMatchingTag = true;
+                        }
+                    });
+                    
+                    // 显示或隐藏应用
+                    if (hasMatchingTag) {
+                        app.style.display = 'block';
+                        app.style.animation = 'fadeIn 0.3s ease-in';
+                    } else {
+                        app.style.display = 'none';
+                    }
+                });
+            }
+        });
+    });
+    
+    // 默认激活"全部"标签
+    const allTag = document.querySelector('.tag.all');
+    if (allTag) {
+        allTag.classList.add('active');
+        activeFilter = '全部';
+    }
+});
+</script>
