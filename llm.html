@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM显存计算器</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 900px;
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      color: #667eea;
+      margin-bottom: 10px;
+      font-size: 2em;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #888;
+      margin-bottom: 30px;
+    }
+
+    .section {
+      background: #f8f9fa;
+      padding: 25px;
+      border-radius: 15px;
+      margin-bottom: 25px;
+    }
+
+    .section h2 {
+      color: #667eea;
+      margin-bottom: 20px;
+      font-size: 1.3em;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 10px;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th,
+    td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background: linear-gradient(145deg, #667eea, #764ba2);
+      color: white;
+      font-weight: bold;
+    }
+
+    tr:hover {
+      background: #f0f4ff;
+    }
+
+    .highlight {
+      background: #fff3cd !important;
+      font-weight: bold;
+    }
+
+    .calculator {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    select,
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1em;
+      transition: border-color 0.3s;
+    }
+
+    select:focus,
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .result {
+      background: linear-gradient(145deg, #c8e6c9, #a5d6a7);
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .result h3 {
+      color: #2e7d32;
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+
+    .result .vram {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #1b5e20;
+    }
+
+    .info-box {
+      background: #e3f2fd;
+      border-left: 4px solid #2196f3;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+    }
+
+    .warning-box {
+      background: #fff3e0;
+      border-left: 4px solid #ff9800;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+    }
+
+    .tips {
+      background: #f3e5f5;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    .tips h3 {
+      color: #7b1fa2;
+      margin-bottom: 15px;
+    }
+
+    .tips ul {
+      margin-left: 20px;
+    }
+
+    .tips li {
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 1.5em;
+      }
+
+      table {
+        font-size: 0.9em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>🖥️ LLM显存需求计算器</h1>
+    <p class="subtitle">不同规模大模型显存占用估算</p>
+
+    <div class="section">
+      <h2>🧮 自定义计算器</h2>
+      <div class="calculator">
+        <div class="input-group">
+          <label>模型参数量 (B):</label>
+          <input type="number" id="paramSize" value="9" min="1" max="1000" step="0.1">
+        </div>
+
+        <div class="input-group">
+          <label>精度类型:</label>
+          <select id="precision">
+            <option value="4">FP32 (全精度) - 4 bytes</option>
+            <option value="2">FP16 (半精度) - 2 bytes</option>
+            <option value="1" selected>INT8 (8位量化) - 1 byte</option>
+            <option value="0.5">INT4 (4位量化) - 0.5 bytes</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label>使用场景:</label>
+          <select id="scenario">
+            <option value="1.3" selected>推理 (1.3x开销)</option>
+            <option value="4">训练 (4x开销)</option>
+            <option value="2">微调 (2x开销)</option>
+          </select>
+        </div>
+
+        <div class="result">
+          <h3>预估显存需求</h3>
+          <div class="vram" id="vramResult">11.7 GB</div>
+          <p style="margin-top: 10px; color: #555; font-size: 1.1em;" id="recommendation"></p>
+
+          <div id="gpuRecommendations" style="margin-top: 20px; text-align: left;">
+            <h4 style="color: #667eea; margin-bottom: 10px;">💳 推荐显卡配置：</h4>
+            <div id="gpuList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>🧮 显存计算公式详解</h2>
+      <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+        <h3 style="color: #667eea; margin-bottom: 15px;">核心公式：</h3>
+        <div
+          style="background: #f0f4ff; padding: 20px; border-radius: 8px; margin-bottom: 15px; font-family: monospace; font-size: 1.1em;">
+          <strong>总显存 = 模型权重 + 激活值 + KV缓存 + 梯度（训练）+ 优化器状态（训练）</strong>
+        </div>
+
+        <h4 style="color: #764ba2; margin: 20px 0 10px 0;">1. 模型权重显存（必需）</h4>
+        <div style="background: #e8eaf6; padding: 15px; border-radius: 8px; font-family: monospace;">
+          权重显存 = 参数量(B) × 精度(bytes) × 10^9<br>
+          例如：9B × 1 byte (INT8) × 10^9 = 9 GB
+        </div>
+
+        <h4 style="color: #764ba2; margin: 20px 0 10px 0;">2. 推理额外开销（约30%）</h4>
+        <div style="background: #e8eaf6; padding: 15px; border-radius: 8px; font-family: monospace;">
+          推理显存 = 权重显存 × 1.3<br>
+          包含：激活值缓存 + KV缓存 + 输入输出buffer<br>
+          例如：9 GB × 1.3 = 11.7 GB
+        </div>
+
+        <h4 style="color: #764ba2; margin: 20px 0 10px 0;">3. 训练额外开销（约4倍）</h4>
+        <div style="background: #e8eaf6; padding: 15px; border-radius: 8px; font-family: monospace;">
+          训练显存 = 权重显存 × 4<br>
+          包含：模型权重 + 梯度 + 优化器状态(Adam需要2份) + 激活值<br>
+          例如：9 GB × 4 = 36 GB
+        </div>
+
+        <h4 style="color: #764ba2; margin: 20px 0 10px 0;">4. 完整公式</h4>
+        <div style="background: #fff3e0; padding: 15px; border-radius: 8px; font-family: monospace; font-weight: bold;">
+          显存(GB) = 参数(B) × 精度(bytes) × 场景系数 × 10^9 / 10^9<br><br>
+
+          场景系数：<br>
+          • 推理(Inference) = 1.3<br>
+          • 微调(LoRA) = 2.0<br>
+          • 全量训练(Full Training) = 4.0
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>📊 8B模型显存需求表</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>精度类型</th>
+              <th>每参数显存</th>
+              <th>模型权重</th>
+              <th>推理显存</th>
+              <th>训练显存</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>FP32 (全精度)</strong></td>
+              <td>4 bytes</td>
+              <td>32 GB</td>
+              <td>42 GB</td>
+              <td>128 GB</td>
+            </tr>
+            <tr>
+              <td><strong>FP16 (半精度)</strong></td>
+              <td>2 bytes</td>
+              <td>16 GB</td>
+              <td>21 GB</td>
+              <td>64 GB</td>
+            </tr>
+            <tr class="highlight">
+              <td><strong>INT8 (8位量化)</strong></td>
+              <td>1 byte</td>
+              <td>8 GB</td>
+              <td>10.4 GB</td>
+              <td>32 GB</td>
+            </tr>
+            <tr class="highlight">
+              <td><strong>INT4 (4位量化)</strong></td>
+              <td>0.5 bytes</td>
+              <td>4 GB</td>
+              <td>5.2 GB</td>
+              <td>16 GB</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box">
+        <strong>💡 推荐配置（8B模型）：</strong>
+        <ul style="margin-top: 10px; margin-left: 20px;">
+          <li><strong>RTX 3060 (12GB)</strong> - INT8量化，推理流畅 ✅</li>
+          <li><strong>RTX 4060 Ti (16GB)</strong> - INT8量化，推理舒适 ✅</li>
+          <li><strong>RTX 4060 (8GB)</strong> - INT4量化，勉强可用 ⚠️</li>
+        </ul>
+      </div>
+
+      <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-top: 15px;">
+        <strong>📐 计算示例（8B INT8推理）：</strong><br>
+        <code style="background: white; padding: 10px; display: block; margin-top: 10px; border-radius: 5px;">
+                    权重显存 = 8B × 1 byte = 8 GB<br>
+                    推理显存 = 8 GB × 1.3 = 10.4 GB<br>
+                    结论：至少需要 12GB 显存
+                </code>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>📊 9B模型显存需求表</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>精度类型</th>
+              <th>每参数显存</th>
+              <th>模型权重</th>
+              <th>推理显存</th>
+              <th>训练显存</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>FP32 (全精度)</strong></td>
+              <td>4 bytes</td>
+              <td>36 GB</td>
+              <td>47 GB</td>
+              <td>144 GB</td>
+            </tr>
+            <tr>
+              <td><strong>FP16 (半精度)</strong></td>
+              <td>2 bytes</td>
+              <td>18 GB</td>
+              <td>23 GB</td>
+              <td>72 GB</td>
+            </tr>
+            <tr class="highlight">
+              <td><strong>INT8 (8位量化)</strong></td>
+              <td>1 byte</td>
+              <td>9 GB</td>
+              <td>11.7 GB</td>
+              <td>36 GB</td>
+            </tr>
+            <tr class="highlight">
+              <td><strong>INT4 (4位量化)</strong></td>
+              <td>0.5 bytes</td>
+              <td>4.5 GB</td>
+              <td>5.9 GB</td>
+              <td>18 GB</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box">
+        <strong>💡 推荐配置（9B模型）：</strong>
+        <ul style="margin-top: 10px; margin-left: 20px;">
+          <li><strong>RTX 4060 Ti (16GB)</strong> - INT8量化，推理流畅 ✅</li>
+          <li><strong>RTX 3090/4090 (24GB)</strong> - INT8量化，推理舒适 ✅</li>
+          <li><strong>RTX 3060 (12GB)</strong> - INT4量化，紧张但可用 ⚠️</li>
+        </ul>
+      </div>
+
+      <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-top: 15px;">
+        <strong>📐 计算示例（9B INT8推理）：</strong><br>
+        <code style="background: white; padding: 10px; display: block; margin-top: 10px; border-radius: 5px;">
+                    权重显存 = 9B × 1 byte = 9 GB<br>
+                    推理显存 = 9 GB × 1.3 = 11.7 GB<br>
+                    结论：至少需要 16GB 显存
+                </code>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>📊 32B模型显存需求表</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>精度类型</th>
+              <th>每参数显存</th>
+              <th>模型权重</th>
+              <th>推理显存</th>
+              <th>训练显存</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>FP32 (全精度)</strong></td>
+              <td>4 bytes</td>
+              <td>128 GB</td>
+              <td>166 GB</td>
+              <td>512 GB</td>
+            </tr>
+            <tr>
+              <td><strong>FP16 (半精度)</strong></td>
+              <td>2 bytes</td>
+              <td>64 GB</td>
+              <td>83 GB</td>
+              <td>256 GB</td>
+            </tr>
+            <tr class="highlight">
+              <td><strong>INT8 (8位量化)</strong></td>
+              <td>1 byte</td>
+              <td>32 GB</td>
+              <td>41.6 GB</td>
+              <td>128 GB</td>
+            </tr>
+            <tr class="highlight">
+              <td><strong>INT4 (4位量化)</strong></td>
+              <td>0.5 bytes</td>
+              <td>16 GB</td>
+              <td>20.8 GB</td>
+              <td>64 GB</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warning-box">
+        <strong>⚠️ 推荐配置（32B模型）：</strong>
+        <ul style="margin-top: 10px; margin-left: 20px;">
+          <li><strong>A100 40GB</strong> - INT8量化，推理可用（紧张）</li>
+          <li><strong>A100 80GB</strong> - INT8量化，推理舒适 ✅</li>
+          <li><strong>H100 80GB</strong> - INT8量化，推理最佳 ✅</li>
+          <li><strong>RTX 4090 (24GB)</strong> - INT4量化，推理可用 ⚠️</li>
+          <li><strong>多卡方案</strong> - 2×RTX 4090 或 2×A6000</li>
+        </ul>
+      </div>
+
+      <div style="background: #fff3e0; padding: 15px; border-radius: 8px; margin-top: 15px;">
+        <strong>📐 计算示例（32B INT8推理）：</strong><br>
+        <code style="background: white; padding: 10px; display: block; margin-top: 10px; border-radius: 5px;">
+                    权重显存 = 32B × 1 byte = 32 GB<br>
+                    推理显存 = 32 GB × 1.3 = 41.6 GB<br>
+                    结论：至少需要 48GB 显存（推荐A100 80GB或双卡）
+                </code>
+      </div>
+
+      <div style="background: #ffebee; padding: 15px; border-radius: 8px; margin-top: 15px;">
+        <strong>🚫 不推荐配置：</strong><br>
+        消费级显卡（RTX 40/30系列）难以单卡运行32B模型<br>
+        即使INT4量化也需要约21GB显存，接近24GB上限，实际使用会频繁OOM
+      </div>
+    </div>
+
+    <!-- <div class="section">
+      <h2>🧮 自定义计算器</h2>
+      <div class="calculator">
+        <div class="input-group">
+          <label>模型参数量 (B):</label>
+          <input type="number" id="paramSize" value="9" min="1" max="1000" step="0.1">
+        </div>
+
+        <div class="input-group">
+          <label>精度类型:</label>
+          <select id="precision">
+            <option value="4">FP32 (全精度) - 4 bytes</option>
+            <option value="2">FP16 (半精度) - 2 bytes</option>
+            <option value="1" selected>INT8 (8位量化) - 1 byte</option>
+            <option value="0.5">INT4 (4位量化) - 0.5 bytes</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label>使用场景:</label>
+          <select id="scenario">
+            <option value="1.3" selected>推理 (1.3x开销)</option>
+            <option value="4">训练 (4x开销)</option>
+            <option value="2">微调 (2x开销)</option>
+          </select>
+        </div>
+
+        <div class="result">
+          <h3>预估显存需求</h3>
+          <div class="vram" id="vramResult">11.7 GB</div>
+          <p style="margin-top: 10px; color: #555;" id="recommendation"></p>
+        </div>
+      </div>
+    </div> -->
+
+    <div class="section">
+      <h2>📈 常见模型显存对比（含8B、9B、32B）</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>模型规模</th>
+              <th>INT8推理</th>
+              <th>INT4推理</th>
+              <th>推荐显卡</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>7B</td>
+              <td>9.1 GB</td>
+              <td>4.6 GB</td>
+              <td>RTX 3060 12GB+</td>
+            </tr>
+            <tr class="highlight">
+              <td>8B</td>
+              <td>10.4 GB</td>
+              <td>5.2 GB</td>
+              <td>RTX 3060 12GB+ ✅</td>
+            </tr>
+            <tr class="highlight">
+              <td>9B</td>
+              <td>11.7 GB</td>
+              <td>5.9 GB</td>
+              <td>RTX 4060 Ti 16GB+ ✅</td>
+            </tr>
+            <tr>
+              <td>13B</td>
+              <td>16.9 GB</td>
+              <td>8.5 GB</td>
+              <td>RTX 3090 24GB+</td>
+            </tr>
+            <tr class="highlight">
+              <td>32B</td>
+              <td>41.6 GB</td>
+              <td>20.8 GB</td>
+              <td>A100 80GB / RTX 4090×2 ⚠️</td>
+            </tr>
+            <tr>
+              <td>34B</td>
+              <td>44.2 GB</td>
+              <td>22.1 GB</td>
+              <td>A100 80GB</td>
+            </tr>
+            <tr>
+              <td>70B</td>
+              <td>91 GB</td>
+              <td>45.5 GB</td>
+              <td>A100 80GB×2 或 H100</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin-top: 15px;">
+        <strong>📊 计算公式应用示例：</strong>
+        <div
+          style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
+          <div style="background: white; padding: 15px; border-radius: 8px;">
+            <strong style="color: #1976d2;">8B模型 (INT8)</strong><br>
+            <code style="font-size: 0.9em;">
+                            8B × 1 × 1.3 = 10.4 GB
+                        </code>
+          </div>
+          <div style="background: white; padding: 15px; border-radius: 8px;">
+            <strong style="color: #1976d2;">9B模型 (INT8)</strong><br>
+            <code style="font-size: 0.9em;">
+                            9B × 1 × 1.3 = 11.7 GB
+                        </code>
+          </div>
+          <div style="background: white; padding: 15px; border-radius: 8px;">
+            <strong style="color: #1976d2;">32B模型 (INT8)</strong><br>
+            <code style="font-size: 0.9em;">
+                            32B × 1 × 1.3 = 41.6 GB
+                        </code>
+          </div>
+          <div style="background: white; padding: 15px; border-radius: 8px;">
+            <strong style="color: #1976d2;">32B模型 (INT4)</strong><br>
+            <code style="font-size: 0.9em;">
+                            32B × 0.5 × 1.3 = 20.8 GB
+                        </code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tips">
+      <h3>💡 优化建议</h3>
+      <ul>
+        <li><strong>使用量化：</strong>INT8可减少50%显存，INT4可减少75%显存，精度损失很小</li>
+        <li><strong>使用FlashAttention：</strong>可减少20-30%的推理显存占用</li>
+        <li><strong>减少batch size：</strong>如果显存不够，降低批次大小</li>
+        <li><strong>使用CPU offload：</strong>部分层放到CPU，牺牲速度换显存</li>
+        <li><strong>使用LoRA微调：</strong>训练时只需要原显存的1/10左右</li>
+        <li><strong>8-bit优化器：</strong>训练时使用bitsandbytes库可大幅降低显存</li>
+      </ul>
+    </div>
+
+    <div class="warning-box">
+      <strong>⚠️ 注意事项：</strong>
+      <ul style="margin-top: 10px; margin-left: 20px;">
+        <li>以上为理论估算，实际显存占用受框架、优化、上下文长度等影响</li>
+        <li>推理显存 = 模型权重 + 激活值 + KV缓存 + 输入输出缓冲</li>
+        <li>建议预留20-30%的显存余量，避免OOM错误</li>
+        <li>长文本推理时KV缓存会占用额外显存</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    function calculate() {
+      const paramSize = parseFloat(document.getElementById('paramSize').value);
+      const precision = parseFloat(document.getElementById('precision').value);
+      const scenario = parseFloat(document.getElementById('scenario').value);
+
+      const baseVRAM = paramSize * precision;
+      const totalVRAM = baseVRAM * scenario;
+
+      document.getElementById('vramResult').textContent = totalVRAM.toFixed(1) + ' GB';
+
+      let recommendation = '';
+      if (totalVRAM <= 8) {
+        recommendation = '✅ 入门级显卡即可满足';
+      } else if (totalVRAM <= 12) {
+        recommendation = '✅ 主流级显卡可以流畅运行';
+      } else if (totalVRAM <= 16) {
+        recommendation = '✅ 高端消费级显卡推荐';
+      } else if (totalVRAM <= 24) {
+        recommendation = '✅ 旗舰消费级显卡或专业卡';
+      } else if (totalVRAM <= 40) {
+        recommendation = '⚠️ 需要专业级数据中心显卡';
+      } else if (totalVRAM <= 80) {
+        recommendation = '⚠️ 需要顶级数据中心显卡';
+      } else {
+        recommendation = '⚠️ 需要多卡并行或云端部署';
+      }
+
+      document.getElementById('recommendation').textContent = recommendation;
+
+      // 生成显卡推荐列表
+      generateGPURecommendations(totalVRAM);
+    }
+
+    function generateGPURecommendations(vram) {
+      const gpuList = document.getElementById('gpuList');
+
+      // 定义显卡数据库
+      const gpus = [
+        // 消费级显卡
+        { name: 'RTX 4060', vram: 8, price: '¥2,499', type: 'consumer', performance: '⭐⭐' },
+        { name: 'RTX 3060', vram: 12, price: '¥2,299', type: 'consumer', performance: '⭐⭐⭐' },
+        { name: 'RTX 4060 Ti 16GB', vram: 16, price: '¥3,999', type: 'consumer', performance: '⭐⭐⭐' },
+        { name: 'RTX 4070 Ti', vram: 12, price: '¥6,499', type: 'consumer', performance: '⭐⭐⭐⭐' },
+        { name: 'RTX 3090', vram: 24, price: '¥6,999', type: 'consumer', performance: '⭐⭐⭐⭐⭐' },
+        { name: 'RTX 4080', vram: 16, price: '¥9,499', type: 'consumer', performance: '⭐⭐⭐⭐' },
+        { name: 'RTX 4090', vram: 24, price: '¥12,999', type: 'consumer', performance: '⭐⭐⭐⭐⭐' },
+
+        // 专业级显卡
+        { name: 'RTX A4000', vram: 16, price: '¥8,000', type: 'professional', performance: '⭐⭐⭐' },
+        { name: 'RTX A5000', vram: 24, price: '¥15,000', type: 'professional', performance: '⭐⭐⭐⭐' },
+        { name: 'RTX A6000', vram: 48, price: '¥35,000', type: 'professional', performance: '⭐⭐⭐⭐⭐' },
+        { name: 'A100 40GB', vram: 40, price: '¥50,000+', type: 'datacenter', performance: '⭐⭐⭐⭐⭐' },
+        { name: 'A100 80GB', vram: 80, price: '¥90,000+', type: 'datacenter', performance: '⭐⭐⭐⭐⭐' },
+        { name: 'H100 80GB', vram: 80, price: '¥200,000+', type: 'datacenter', performance: '⭐⭐⭐⭐⭐' },
+      ];
+
+      // 筛选合适的显卡（显存需要大于等于需求的1.2倍，留有余量）
+      const minVRAM = vram * 1.0; // 最低要求
+      const idealVRAM = vram * 1.2; // 理想显存（留20%余量）
+
+      const suitable = gpus.filter(gpu => gpu.vram >= minVRAM);
+      const ideal = gpus.filter(gpu => gpu.vram >= idealVRAM);
+
+      let html = '';
+
+      if (ideal.length > 0) {
+        // 推荐显卡（有余量）
+        html += '<div style="background: #e8f5e9; padding: 12px; border-radius: 8px; margin-bottom: 10px;">';
+        html += '<strong style="color: #2e7d32;">✅ 推荐配置（有余量，运行舒适）：</strong><br>';
+        ideal.slice(0, 3).forEach(gpu => {
+          const typeLabel = gpu.type === 'consumer' ? '消费级' : gpu.type === 'professional' ? '专业级' : '数据中心';
+          html += `<div style="margin: 8px 0; padding: 8px; background: white; border-radius: 5px;">`;
+          html += `<strong>${gpu.name}</strong> (${gpu.vram}GB) - ${typeLabel}<br>`;
+          html += `<span style="color: #666; font-size: 0.9em;">参考价格: ${gpu.price} | 性能: ${gpu.performance}</span>`;
+          html += `</div>`;
+        });
+        html += '</div>';
+      }
+
+      if (suitable.length > ideal.length) {
+        // 勉强够用的显卡
+        const tight = suitable.filter(gpu => gpu.vram < idealVRAM && gpu.vram >= minVRAM);
+        if (tight.length > 0) {
+          html += '<div style="background: #fff3e0; padding: 12px; border-radius: 8px; margin-bottom: 10px;">';
+          html += '<strong style="color: #e65100;">⚠️ 紧张但可用（建议降低batch size或序列长度）：</strong><br>';
+          tight.slice(0, 2).forEach(gpu => {
+            const typeLabel = gpu.type === 'consumer' ? '消费级' : gpu.type === 'professional' ? '专业级' : '数据中心';
+            html += `<div style="margin: 8px 0; padding: 8px; background: white; border-radius: 5px;">`;
+            html += `<strong>${gpu.name}</strong> (${gpu.vram}GB) - ${typeLabel}<br>`;
+            html += `<span style="color: #666; font-size: 0.9em;">参考价格: ${gpu.price} | 性能: ${gpu.performance}</span>`;
+            html += `</div>`;
+          });
+          html += '</div>';
+        }
+      }
+
+      if (suitable.length === 0) {
+        html += '<div style="background: #ffebee; padding: 12px; border-radius: 8px;">';
+        html += '<strong style="color: #c62828;">❌ 单卡难以满足，建议方案：</strong><br>';
+        html += '<ul style="margin: 10px 0 0 20px;">';
+        html += '<li>使用多卡并行（2-4张RTX 4090/A6000）</li>';
+        html += '<li>使用云端GPU服务（AWS/阿里云/腾讯云）</li>';
+        html += '<li>使用更激进的量化方案（INT4/INT3）</li>';
+        html += '<li>使用模型分片技术（DeepSpeed ZeRO等）</li>';
+        html += '</ul>';
+        html += '</div>';
+      }
+
+      // 添加性价比推荐
+      if (suitable.length > 0) {
+        const bestValue = suitable.filter(gpu => gpu.type === 'consumer')[0];
+        if (bestValue) {
+          html += '<div style="background: #f3e5f5; padding: 12px; border-radius: 8px; margin-top: 10px;">';
+          html += `<strong style="color: #7b1fa2;">💰 性价比之选：${bestValue.name}</strong><br>`;
+          html += `<span style="font-size: 0.9em;">对于个人用户，这是最具性价比的选择</span>`;
+          html += '</div>';
+        }
+      }
+
+      gpuList.innerHTML = html;
+    }
+
+    document.getElementById('paramSize').addEventListener('input', calculate);
+    document.getElementById('precision').addEventListener('change', calculate);
+    document.getElementById('scenario').addEventListener('change', calculate);
+
+    calculate();
+  </script>
+</body>
+
+</html>
