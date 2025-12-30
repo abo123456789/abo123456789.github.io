@@ -272,274 +272,279 @@
     </style>
 </head>
 <body>
-    <!-- 灯笼装饰 -->
-    <div class="lantern lantern-left"></div>
-    <div class="lantern lantern-right"></div>
+<!-- 灯笼装饰 -->
+<div class="lantern lantern-left"></div>
+<div class="lantern lantern-right"></div>
 
-    <!-- 烟花容器 -->
-    <div class="fireworks" id="fireworks"></div>
+<!-- 烟花容器 -->
+<div class="fireworks" id="fireworks"></div>
 
-    <!-- 弹幕容器 -->
-    <div class="danmaku-container" id="danmakuContainer"></div>
+<!-- 弹幕容器 -->
+<div class="danmaku-container" id="danmakuContainer"></div>
 
-    <!-- 主内容 -->
-    <div class="container">
-        <h1 class="title">🎊 2026新年倒计时 🎊</h1>
-        
-        <div class="countdown" id="countdown">
-            <div class="time-box">
-                <div class="time-value" id="days">00</div>
-                <div class="time-label">天</div>
-            </div>
-            <div class="time-box">
-                <div class="time-value" id="hours">00</div>
-                <div class="time-label">时</div>
-            </div>
-            <div class="time-box">
-                <div class="time-value" id="minutes">00</div>
-                <div class="time-label">分</div>
-            </div>
-            <div class="time-box">
-                <div class="time-value" id="seconds">00</div>
-                <div class="time-label">秒</div>
-            </div>
+<!-- 主内容 -->
+<div class="container">
+    <h1 class="title">🎊 2026新年倒计时 🎊</h1>
+
+    <div class="countdown" id="countdown">
+        <div class="time-box">
+            <div class="time-value" id="days">00</div>
+            <div class="time-label">天</div>
         </div>
-
-        <div class="new-year-arrived" id="newYearArrived">
-            🎆 新年快乐 🎆
+        <div class="time-box">
+            <div class="time-value" id="hours">00</div>
+            <div class="time-label">时</div>
         </div>
-
-        <p class="blessing" id="blessing">距离2026年还有...</p>
+        <div class="time-box">
+            <div class="time-value" id="minutes">00</div>
+            <div class="time-label">分</div>
+        </div>
+        <div class="time-box">
+            <div class="time-value" id="seconds">00</div>
+            <div class="time-label">秒</div>
+        </div>
     </div>
 
-    <!-- 弹幕输入 -->
-    <div class="danmaku-input">
-        <input type="text" id="danmakuInput" placeholder="发送新年祝福弹幕..." maxlength="50">
-        <button onclick="sendDanmaku()">发送祝福 🎉</button>
+    <div class="new-year-arrived" id="newYearArrived">
+        🎆 新年快乐 🎆
     </div>
 
-    <script>
-        // 目标时间：2026年1月1日 00:00:00
-        const targetDate = new Date('2026-01-01T00:00:00').getTime();
+    <p class="blessing" id="blessing">距离2026年还有...</p>
+</div>
 
-        // 预设弹幕
-        const presetDanmaku = [
-            '新年快乐！🎉', '2026发大财！💰', '万事如意！✨',
-            '身体健康！💪', '心想事成！🌟', '阖家幸福！👨‍👩‍👧‍👦',
-            '前程似锦！🚀', '恭喜发财！🧧', '马年大吉！🐉',
-            '福星高照！⭐', '好运连连！🍀', '事业有成！📈',
-            '学业进步！📚', '爱情甜蜜！💕', '友谊长存！🤝'
-        ];
+<!-- 弹幕输入 -->
+<div class="danmaku-input">
+    <input type="text" id="danmakuInput" placeholder="发送新年祝福弹幕..." maxlength="50">
+    <button onclick="sendDanmaku()">发送祝福 🎉</button>
+</div>
 
-        // 从 localStorage 加载用户弹幕
-        function loadUserDanmaku() {
-            const saved = localStorage.getItem('userDanmaku2026');
-            return saved ? JSON.parse(saved) : [];
-        }
+<script>
+    // 目标时间：2026年1月1日 00:00:00
+    const targetDate = new Date('2026-01-01T00:00:00').getTime();
 
-        // 保存用户弹幕到 localStorage
-        function saveUserDanmaku(text) {
-            const danmakuList = loadUserDanmaku();
-            danmakuList.push({
-                text: text,
-                time: Date.now()
-            });
-            // 最多保存100条
-            if (danmakuList.length > 100) {
-                danmakuList.shift();
-            }
-            localStorage.setItem('userDanmaku2026', JSON.stringify(danmakuList));
-        }
+    // 预设弹幕
+    const presetDanmaku = [
+        '新年快乐！🎉', '2026发大财！💰', '万事如意！✨',
+        '身体健康！💪', '心想事成！🌟', '阖家幸福！👨‍👩‍👧‍👦',
+        '前程似锦！🚀', '恭喜发财！🧧', '马年大吉！🐉',
+        '福星高照！⭐', '好运连连！🍀', '事业有成！📈',
+        '学业进步！📚', '爱情甜蜜！💕', '友谊长存！🤝',
+        '瑞雪丰年！❄️🌾','吉星高照！🌟','四季平安！🍀',
+        '八方来财！💎','步步高升！📊','笑口常开！😄',
+        '青春永驻！🌸','智慧满满！🧠','梦想成真！🌈',
+        '幸福安康！💝','喜气洋洋！🎊','福满人间！🙏',
+        '平安喜乐！🕊️','蒸蒸日上！🔥'
+    ];
 
-        // 用户弹幕队列（用于循环播放）
-        let userDanmakuQueue = [];
-        let userDanmakuIndex = 0;
-        let lastDisplayedTime = 0; // 记录最后显示的弹幕时间，避免重复
-        let activeDanmaku = new Set(); // 记录当前屏幕上正在显示的弹幕文本
+    // 从 localStorage 加载用户弹幕
+    function loadUserDanmaku() {
+        const saved = localStorage.getItem('userDanmaku2026');
+        return saved ? JSON.parse(saved) : [];
+    }
 
-        // 弹幕颜色
-        const danmakuColors = [
-            '#ff6b6b', '#ffd700', '#ff69b4', '#00ff7f', '#00bfff',
-            '#ff8c00', '#ff1493', '#7fff00', '#ff4500', '#ffff00',
-            '#ff6347', '#98fb98', '#dda0dd', '#f0e68c', '#87ceeb'
-        ];
-
-        // 更新倒计时
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-
-            if (distance > 0) {
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                document.getElementById('days').textContent = String(days).padStart(2, '0');
-                document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-                document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-                document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
-
-                document.getElementById('blessing').textContent = '🧨 距离2026年还有... 准备好你的新年愿望！🧨';
-            } else {
-                // 新年到达
-                document.getElementById('countdown').style.display = 'none';
-                document.getElementById('newYearArrived').style.display = 'block';
-                document.getElementById('blessing').textContent = '🎊 2026年来啦！祝大家新年快乐！🎊';
-                
-                // 疯狂放烟花
-                for (let i = 0; i < 20; i++) {
-                    setTimeout(() => createFirework(), i * 200);
-                }
-            }
-        }
-
-        // 发送弹幕
-        function sendDanmaku() {
-            const input = document.getElementById('danmakuInput');
-            const text = input.value.trim();
-            if (text) {
-                const timestamp = Date.now();
-                createDanmaku(text); // 立即显示一次
-                saveUserDanmaku(text); // 保存到 localStorage
-                userDanmakuQueue = loadUserDanmaku(); // 更新队列
-                lastDisplayedTime = timestamp; // 记录这次显示的时间
-                input.value = '';
-            }
-        }
-
-        // 创建弹幕
-        function createDanmaku(text) {
-            // 如果这条弹幕已经在屏幕上显示，跳过
-            if (activeDanmaku.has(text)) {
-                return;
-            }
-            
-            const container = document.getElementById('danmakuContainer');
-            const danmaku = document.createElement('div');
-            danmaku.className = 'danmaku';
-            danmaku.textContent = text;
-            
-            // 标记这条弹幕正在显示
-            activeDanmaku.add(text);
-            
-            // 随机颜色和位置
-            const color = danmakuColors[Math.floor(Math.random() * danmakuColors.length)];
-            const top = Math.random() * 60 + 5; // 5% - 65%
-            const duration = Math.random() * 5 + 8; // 8-13秒
-            const fontSize = Math.random() * 0.5 + 1.2; // 1.2-1.7rem
-
-            danmaku.style.color = color;
-            danmaku.style.top = top + '%';
-            danmaku.style.fontSize = fontSize + 'rem';
-            danmaku.style.animationDuration = duration + 's';
-
-            container.appendChild(danmaku);
-
-            // 动画结束后移除，并从活跃列表中删除
-            danmaku.addEventListener('animationend', () => {
-                danmaku.remove();
-                activeDanmaku.delete(text);
-            });
-        }
-
-        // 自动发送预设弹幕
-        function autoSendDanmaku() {
-            const text = presetDanmaku[Math.floor(Math.random() * presetDanmaku.length)];
-            createDanmaku(text);
-        }
-
-        // 播放用户保存的弹幕
-        function playUserDanmaku() {
-            if (userDanmakuQueue.length > 0) {
-                const item = userDanmakuQueue[userDanmakuIndex % userDanmakuQueue.length];
-                
-                // 避免重复显示刚发送的弹幕（2秒内的不重复显示）
-                if (Date.now() - lastDisplayedTime > 2000 || item.time !== lastDisplayedTime) {
-                    createDanmaku(item.text);
-                }
-                
-                userDanmakuIndex++;
-            }
-        }
-
-        // 创建烟花
-        function createFirework() {
-            const fireworks = document.getElementById('fireworks');
-            const x = Math.random() * window.innerWidth;
-            const y = Math.random() * window.innerHeight * 0.6;
-            const colors = ['#ff0000', '#ffd700', '#ff69b4', '#00ff00', '#00bfff', '#ff8c00'];
-
-            for (let i = 0; i < 30; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'firework';
-                particle.style.left = x + 'px';
-                particle.style.top = y + 'px';
-                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-                
-                const angle = (Math.PI * 2 * i) / 30;
-                const velocity = Math.random() * 80 + 40;
-                const dx = Math.cos(angle) * velocity;
-                const dy = Math.sin(angle) * velocity;
-                
-                particle.style.boxShadow = `0 0 6px ${particle.style.background}`;
-                particle.animate([
-                    { transform: 'translate(0, 0) scale(1)', opacity: 1 },
-                    { transform: `translate(${dx}px, ${dy}px) scale(0)`, opacity: 0 }
-                ], {
-                    duration: 1500,
-                    easing: 'ease-out'
-                });
-
-                fireworks.appendChild(particle);
-                setTimeout(() => particle.remove(), 1500);
-            }
-        }
-
-        // 创建飘落粒子
-        function createParticle() {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + 'vw';
-            particle.style.animationDuration = Math.random() * 3 + 4 + 's';
-            particle.style.opacity = Math.random() * 0.5 + 0.3;
-            particle.style.width = Math.random() * 8 + 4 + 'px';
-            particle.style.height = particle.style.width;
-            
-            const colors = ['#ffd700', '#ff6b6b', '#ff8c00', '#ffff00'];
-            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-            
-            document.body.appendChild(particle);
-            setTimeout(() => particle.remove(), 7000);
-        }
-
-        // 回车发送
-        document.getElementById('danmakuInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendDanmaku();
+    // 保存用户弹幕到 localStorage
+    function saveUserDanmaku(text) {
+        const danmakuList = loadUserDanmaku();
+        danmakuList.push({
+            text: text,
+            time: Date.now()
         });
-
-        // 初始化
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-        setInterval(autoSendDanmaku, 3000); // 每3秒自动弹幕
-        setInterval(createFirework, 2000); // 每2秒放烟花
-        setInterval(createParticle, 300); // 持续飘落粒子
-
-        // 加载用户弹幕队列
-        userDanmakuQueue = loadUserDanmaku();
-        
-        // 每5秒播放一条用户保存的弹幕
-        setInterval(playUserDanmaku, 5000);
-
-        // 初始弹幕
-        for (let i = 0; i < 5; i++) {
-            setTimeout(() => autoSendDanmaku(), i * 500);
+        // 最多保存100条
+        if (danmakuList.length > 100) {
+            danmakuList.shift();
         }
-        
-        // 页面加载时播放一条用户弹幕（如果有）
+        localStorage.setItem('userDanmaku2026', JSON.stringify(danmakuList));
+    }
+
+    // 用户弹幕队列（用于循环播放）
+    let userDanmakuQueue = [];
+    let userDanmakuIndex = 0;
+    let lastDisplayedTime = 0; // 记录最后显示的弹幕时间，避免重复
+    let activeDanmaku = new Set(); // 记录当前屏幕上正在显示的弹幕文本
+
+    // 弹幕颜色
+    const danmakuColors = [
+        '#ff6b6b', '#ffd700', '#ff69b4', '#00ff7f', '#00bfff',
+        '#ff8c00', '#ff1493', '#7fff00', '#ff4500', '#ffff00',
+        '#ff6347', '#98fb98', '#dda0dd', '#f0e68c', '#87ceeb'
+    ];
+
+    // 更新倒计时
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        if (distance > 0) {
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+
+            document.getElementById('blessing').textContent = '🧨 距离2026年还有... 准备好你的新年愿望！🧨';
+        } else {
+            // 新年到达
+            document.getElementById('countdown').style.display = 'none';
+            document.getElementById('newYearArrived').style.display = 'block';
+            document.getElementById('blessing').textContent = '🎊 2026年来啦！祝大家新年快乐！🎊';
+
+            // 疯狂放烟花
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => createFirework(), i * 200);
+            }
+        }
+    }
+
+    // 发送弹幕
+    function sendDanmaku() {
+        const input = document.getElementById('danmakuInput');
+        const text = input.value.trim();
+        if (text) {
+            const timestamp = Date.now();
+            createDanmaku(text); // 立即显示一次
+            saveUserDanmaku(text); // 保存到 localStorage
+            userDanmakuQueue = loadUserDanmaku(); // 更新队列
+            lastDisplayedTime = timestamp; // 记录这次显示的时间
+            input.value = '';
+        }
+    }
+
+    // 创建弹幕
+    function createDanmaku(text) {
+        // 如果这条弹幕已经在屏幕上显示，跳过
+        if (activeDanmaku.has(text)) {
+            return;
+        }
+
+        const container = document.getElementById('danmakuContainer');
+        const danmaku = document.createElement('div');
+        danmaku.className = 'danmaku';
+        danmaku.textContent = text;
+
+        // 标记这条弹幕正在显示
+        activeDanmaku.add(text);
+
+        // 随机颜色和位置
+        const color = danmakuColors[Math.floor(Math.random() * danmakuColors.length)];
+        const top = Math.random() * 60 + 5; // 5% - 65%
+        const duration = Math.random() * 5 + 8; // 8-13秒
+        const fontSize = Math.random() * 0.5 + 1.2; // 1.2-1.7rem
+
+        danmaku.style.color = color;
+        danmaku.style.top = top + '%';
+        danmaku.style.fontSize = fontSize + 'rem';
+        danmaku.style.animationDuration = duration + 's';
+
+        container.appendChild(danmaku);
+
+        // 动画结束后移除，并从活跃列表中删除
+        danmaku.addEventListener('animationend', () => {
+            danmaku.remove();
+            activeDanmaku.delete(text);
+        });
+    }
+
+    // 自动发送预设弹幕
+    function autoSendDanmaku() {
+        const text = presetDanmaku[Math.floor(Math.random() * presetDanmaku.length)];
+        createDanmaku(text);
+    }
+
+    // 播放用户保存的弹幕
+    function playUserDanmaku() {
         if (userDanmakuQueue.length > 0) {
-            setTimeout(() => playUserDanmaku(), 2000);
+            const item = userDanmakuQueue[userDanmakuIndex % userDanmakuQueue.length];
+
+            // 避免重复显示刚发送的弹幕（2秒内的不重复显示）
+            if (Date.now() - lastDisplayedTime > 2000 || item.time !== lastDisplayedTime) {
+                createDanmaku(item.text);
+            }
+
+            userDanmakuIndex++;
         }
-    </script>
+    }
+
+    // 创建烟花
+    function createFirework() {
+        const fireworks = document.getElementById('fireworks');
+        const x = Math.random() * window.innerWidth;
+        const y = Math.random() * window.innerHeight * 0.6;
+        const colors = ['#ff0000', '#ffd700', '#ff69b4', '#00ff00', '#00bfff', '#ff8c00'];
+
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'firework';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+            const angle = (Math.PI * 2 * i) / 30;
+            const velocity = Math.random() * 80 + 40;
+            const dx = Math.cos(angle) * velocity;
+            const dy = Math.sin(angle) * velocity;
+
+            particle.style.boxShadow = `0 0 6px ${particle.style.background}`;
+            particle.animate([
+                { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+                { transform: `translate(${dx}px, ${dy}px) scale(0)`, opacity: 0 }
+            ], {
+                duration: 1500,
+                easing: 'ease-out'
+            });
+
+            fireworks.appendChild(particle);
+            setTimeout(() => particle.remove(), 1500);
+        }
+    }
+
+    // 创建飘落粒子
+    function createParticle() {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + 'vw';
+        particle.style.animationDuration = Math.random() * 3 + 4 + 's';
+        particle.style.opacity = Math.random() * 0.5 + 0.3;
+        particle.style.width = Math.random() * 8 + 4 + 'px';
+        particle.style.height = particle.style.width;
+
+        const colors = ['#ffd700', '#ff6b6b', '#ff8c00', '#ffff00'];
+        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+        document.body.appendChild(particle);
+        setTimeout(() => particle.remove(), 7000);
+    }
+
+    // 回车发送
+    document.getElementById('danmakuInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendDanmaku();
+    });
+
+    // 初始化
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    setInterval(autoSendDanmaku, 3000); // 每3秒自动弹幕
+    setInterval(createFirework, 2000); // 每2秒放烟花
+    setInterval(createParticle, 300); // 持续飘落粒子
+
+    // 加载用户弹幕队列
+    userDanmakuQueue = loadUserDanmaku();
+
+    // 每5秒播放一条用户保存的弹幕
+    setInterval(playUserDanmaku, 5000);
+
+    // 初始弹幕
+    for (let i = 0; i < 5; i++) {
+        setTimeout(() => autoSendDanmaku(), i * 500);
+    }
+
+    // 页面加载时播放一条用户弹幕（如果有）
+    if (userDanmakuQueue.length > 0) {
+        setTimeout(() => playUserDanmaku(), 2000);
+    }
+</script>
 </body>
 </html>
