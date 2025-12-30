@@ -266,8 +266,19 @@
             .time-box { min-width: 80px; padding: 15px 20px; }
             .danmaku-input { flex-direction: column; width: 90%; }
             .danmaku-input input { width: 100%; }
-            .lantern { width: 40px; height: 55px; }
-            .lantern::before { font-size: 1rem; }
+            
+            /* 移动端隐藏马头装饰，避免与标题重合 */
+            .lantern {
+                display: none;
+            }
+        }
+        
+        /* 平板尺寸调整马头位置 */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .lantern-left { top: 30px; left: 20px; }
+            .lantern-right { top: 30px; right: 20px; }
+            .lantern { width: 60px; height: 65px; }
+            .lantern::after { font-size: 2.8rem; }
         }
     </style>
 </head>
