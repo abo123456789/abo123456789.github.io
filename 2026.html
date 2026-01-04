@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="./images/001.png">
-    <title>2026新年快乐 - 跨年倒计时</title>
+    <title>2026除夕倒计时 - 春节快乐</title>
     <style>
         * {
             margin: 0;
@@ -280,6 +280,90 @@
             .lantern { width: 60px; height: 65px; }
             .lantern::after { font-size: 2.8rem; }
         }
+
+        /* 鞭炮容器 */
+        .firecracker-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        /* 鞭炮串 */
+        .firecracker-string {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            animation: firecracker-swing 1s ease-in-out infinite;
+        }
+
+        @keyframes firecracker-swing {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+        }
+
+        /* 单个鞭炮 */
+        .firecracker {
+            width: 8px;
+            height: 20px;
+            background: linear-gradient(90deg, #ff0000 0%, #dc143c 50%, #8b0000 100%);
+            border-radius: 2px;
+            position: relative;
+            box-shadow: 0 0 3px rgba(255, 0, 0, 0.5);
+        }
+
+        .firecracker::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 3px;
+            background: #8b4513;
+        }
+
+        /* 鞭炮爆炸效果 */
+        .firecracker-explosion {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: #ff0000;
+            animation: explode 0.6s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* 鞭炮火花 */
+        .firecracker-spark {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #ffff00;
+            border-radius: 50%;
+            box-shadow: 0 0 4px #ffd700;
+        }
+
+        /* 移动端隐藏鞭炮 */
+        @media (max-width: 768px) {
+            .firecracker-string {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -290,12 +374,15 @@
 <!-- 烟花容器 -->
 <div class="fireworks" id="fireworks"></div>
 
+<!-- 鞭炮容器 -->
+<div class="firecracker-container" id="firecrackerContainer"></div>
+
 <!-- 弹幕容器 -->
 <div class="danmaku-container" id="danmakuContainer"></div>
 
 <!-- 主内容 -->
 <div class="container">
-    <h1 class="title">🎊 2026新年倒计时 🎊</h1>
+    <h1 class="title">🧧 2026除夕倒计时 🧧</h1>
 
     <div class="countdown" id="countdown">
         <div class="time-box">
@@ -317,34 +404,35 @@
     </div>
 
     <div class="new-year-arrived" id="newYearArrived">
-        🎆 新年快乐 🎆
+        🎆 除夕到啦 春节快乐 🎆
     </div>
 
-    <p class="blessing" id="blessing">距离2026年还有...</p>
+    <p class="blessing" id="blessing">距离除夕还有...</p>
 </div>
 
 <!-- 弹幕输入 -->
 <div class="danmaku-input">
-    <input type="text" id="danmakuInput" placeholder="发送新年祝福弹幕..." maxlength="50">
+    <input type="text" id="danmakuInput" placeholder="发送春节祝福弹幕..." maxlength="50">
     <button onclick="sendDanmaku()">发送祝福 🎉</button>
 </div>
 
 <script>
-    // 目标时间：2026年1月1日 00:00:00
-    const targetDate = new Date('2026-01-01T00:00:00').getTime();
+    // 目标时间：2026年2月16日 00:00:00（除夕）
+    const targetDate = new Date('2026-02-16T00:00:00').getTime();
 
     // 预设弹幕
     const presetDanmaku = [
-        '新年快乐！🎉', '2026发大财！💰', '万事如意！✨',
+        '除夕快乐！🎉', '春节快乐！🧧', '恭喜发财！💰', '万事如意！✨',
         '身体健康！💪', '心想事成！🌟', '阖家幸福！👨‍👩‍👧‍👦',
-        '前程似锦！🚀', '恭喜发财！🧧', '马年大吉！🐉',
+        '前程似锦！🚀', '红包拿来！🧧', '蛇年大吉！�',
         '福星高照！⭐', '好运连连！🍀', '事业有成！📈',
         '学业进步！📚', '爱情甜蜜！💕', '友谊长存！🤝',
-        '瑞雪丰年！❄️🌾','吉星高照！🌟','四季平安！🍀',
+        '年年有余！🐟','吉星高照！🌟','四季平安！🍀',
         '八方来财！💎','步步高升！📊','笑口常开！😄',
         '青春永驻！🌸','智慧满满！🧠','梦想成真！🌈',
         '幸福安康！💝','喜气洋洋！🎊','福满人间！🙏',
-        '平安喜乐！🕊️','蒸蒸日上！🔥'
+        '平安喜乐！🕊️','蒸蒸日上！🔥','团团圆圆！🥟',
+        '大吉大利！🎊','财源广进！💵','龙马精神！🐴'
     ];
 
     // 从 localStorage 加载用户弹幕
@@ -396,12 +484,12 @@
             document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
             document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
 
-            document.getElementById('blessing').textContent = '🧨 距离2026年还有... 准备好你的新年愿望！🧨';
+            document.getElementById('blessing').textContent = '🧨 距离除夕还有... 准备好你的春节愿望！�';
         } else {
-            // 新年到达
+            // 除夕到达
             document.getElementById('countdown').style.display = 'none';
             document.getElementById('newYearArrived').style.display = 'block';
-            document.getElementById('blessing').textContent = '🎊 2026年来啦！祝大家新年快乐！🎊';
+            document.getElementById('blessing').textContent = '🎊 除夕到啦！祝大家春节快乐，阖家团圆！🎊';
 
             // 疯狂放烟花
             for (let i = 0; i < 20; i++) {
@@ -529,6 +617,220 @@
         setTimeout(() => particle.remove(), 7000);
     }
 
+    // PC版两边自动放烟花特效
+    function createSideFirework() {
+        // 只在PC端（宽度大于768px）显示两边烟花
+        if (window.innerWidth <= 768) return;
+
+        const fireworks = document.getElementById('fireworks');
+        const side = Math.random() > 0.5 ? 'left' : 'right'; // 随机选择左边或右边
+        
+        // 设置烟花位置
+        let x, y;
+        if (side === 'left') {
+            x = Math.random() * 200 + 50; // 左边区域 50-250px
+        } else {
+            x = window.innerWidth - (Math.random() * 200 + 50); // 右边区域
+        }
+        y = Math.random() * (window.innerHeight * 0.5) + 100; // 垂直位置
+
+        const colors = ['#ff0000', '#ffd700', '#ff69b4', '#00ff00', '#00bfff', '#ff8c00', '#ff1493', '#7fff00', '#ffff00'];
+
+        // 创建烟花粒子
+        for (let i = 0; i < 35; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'firework';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+            const angle = (Math.PI * 2 * i) / 35;
+            const velocity = Math.random() * 90 + 60;
+            const dx = Math.cos(angle) * velocity;
+            const dy = Math.sin(angle) * velocity;
+
+            particle.style.boxShadow = `0 0 8px ${particle.style.background}`;
+            particle.animate([
+                { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+                { transform: `translate(${dx}px, ${dy}px) scale(0)`, opacity: 0 }
+            ], {
+                duration: 1800,
+                easing: 'ease-out'
+            });
+
+            fireworks.appendChild(particle);
+            setTimeout(() => particle.remove(), 1800);
+        }
+
+        // 添加中心闪光
+        const flash = document.createElement('div');
+        flash.style.position = 'fixed';
+        flash.style.left = x + 'px';
+        flash.style.top = y + 'px';
+        flash.style.width = '15px';
+        flash.style.height = '15px';
+        flash.style.borderRadius = '50%';
+        flash.style.background = 'radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,215,0,0.9) 40%, rgba(255,215,0,0) 100%)';
+        flash.style.transform = 'translate(-50%, -50%)';
+        flash.style.pointerEvents = 'none';
+        flash.style.zIndex = '999';
+        
+        document.body.appendChild(flash);
+        
+        flash.animate([
+            { transform: 'translate(-50%, -50%) scale(0)', opacity: 1 },
+            { transform: 'translate(-50%, -50%) scale(4)', opacity: 0 }
+        ], {
+            duration: 600,
+            easing: 'ease-out'
+        });
+        
+        setTimeout(() => flash.remove(), 600);
+    }
+
+    // 创建鞭炮串
+    function createFirecrackerString() {
+        // 只在PC端显示
+        if (window.innerWidth <= 768) return;
+
+        const container = document.getElementById('firecrackerContainer');
+        const firecrackerString = document.createElement('div');
+        firecrackerString.className = 'firecracker-string';
+
+        // 随机位置（左边或右边）
+        const side = Math.random() > 0.5 ? 'left' : 'right';
+        const x = side === 'left' ? Math.random() * 150 + 30 : window.innerWidth - (Math.random() * 150 + 30);
+        const y = Math.random() * 200 + 50;
+
+        firecrackerString.style.left = x + 'px';
+        firecrackerString.style.top = y + 'px';
+
+        // 创建鞭炮串（8-12个鞭炮）
+        const count = Math.floor(Math.random() * 5) + 8;
+        for (let i = 0; i < count; i++) {
+            const firecracker = document.createElement('div');
+            firecracker.className = 'firecracker';
+            firecrackerString.appendChild(firecracker);
+        }
+
+        container.appendChild(firecrackerString);
+
+        // 开始放鞭炮动画
+        setTimeout(() => {
+            explodeFirecrackers(firecrackerString, x, y);
+        }, 500);
+
+        // 3秒后移除
+        setTimeout(() => {
+            firecrackerString.remove();
+        }, 3000);
+    }
+
+    // 鞭炮爆炸动画
+    function explodeFirecrackers(stringElement, baseX, baseY) {
+        const firecrackers = stringElement.querySelectorAll('.firecracker');
+        
+        firecrackers.forEach((firecracker, index) => {
+            setTimeout(() => {
+                // 创建爆炸效果
+                const rect = firecracker.getBoundingClientRect();
+                const x = rect.left + rect.width / 2;
+                const y = rect.top + rect.height / 2;
+
+                // 隐藏鞭炮
+                firecracker.style.opacity = '0';
+
+                // 创建爆炸粒子
+                createFirecrackerExplosion(x, y);
+
+                // 创建火花
+                for (let i = 0; i < 8; i++) {
+                    createFirecrackerSpark(x, y);
+                }
+            }, index * 80); // 每个鞭炮间隔80ms爆炸
+        });
+    }
+
+    // 创建鞭炮爆炸粒子
+    function createFirecrackerExplosion(x, y) {
+        const container = document.getElementById('firecrackerContainer');
+        const colors = ['#ff0000', '#ff4500', '#ffd700', '#ffff00', '#ff6347'];
+
+        for (let i = 0; i < 12; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'firecracker-explosion';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+            const angle = (Math.PI * 2 * i) / 12;
+            const velocity = Math.random() * 40 + 20;
+            const dx = Math.cos(angle) * velocity;
+            const dy = Math.sin(angle) * velocity;
+
+            particle.animate([
+                { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+                { transform: `translate(${dx}px, ${dy}px) scale(0)`, opacity: 0 }
+            ], {
+                duration: 600,
+                easing: 'ease-out'
+            });
+
+            container.appendChild(particle);
+            setTimeout(() => particle.remove(), 600);
+        }
+
+        // 添加闪光
+        const flash = document.createElement('div');
+        flash.style.position = 'fixed';
+        flash.style.left = x + 'px';
+        flash.style.top = y + 'px';
+        flash.style.width = '10px';
+        flash.style.height = '10px';
+        flash.style.borderRadius = '50%';
+        flash.style.background = 'radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,215,0,1) 50%, rgba(255,0,0,0) 100%)';
+        flash.style.transform = 'translate(-50%, -50%)';
+        flash.style.pointerEvents = 'none';
+        flash.style.zIndex = '999';
+        
+        container.appendChild(flash);
+        
+        flash.animate([
+            { transform: 'translate(-50%, -50%) scale(0)', opacity: 1 },
+            { transform: 'translate(-50%, -50%) scale(3)', opacity: 0 }
+        ], {
+            duration: 300,
+            easing: 'ease-out'
+        });
+        
+        setTimeout(() => flash.remove(), 300);
+    }
+
+    // 创建鞭炮火花
+    function createFirecrackerSpark(x, y) {
+        const container = document.getElementById('firecrackerContainer');
+        const spark = document.createElement('div');
+        spark.className = 'firecracker-spark';
+        spark.style.left = x + 'px';
+        spark.style.top = y + 'px';
+
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = Math.random() * 60 + 30;
+        const dx = Math.cos(angle) * velocity;
+        const dy = Math.sin(angle) * velocity - 20; // 向上偏移
+
+        spark.animate([
+            { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+            { transform: `translate(${dx}px, ${dy}px) scale(0.3)`, opacity: 0 }
+        ], {
+            duration: 800,
+            easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+        });
+
+        container.appendChild(spark);
+        setTimeout(() => spark.remove(), 800);
+    }
+
     // 回车发送
     document.getElementById('danmakuInput').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') sendDanmaku();
@@ -540,6 +842,8 @@
     setInterval(autoSendDanmaku, 3000); // 每3秒自动弹幕
     setInterval(createFirework, 2000); // 每2秒放烟花
     setInterval(createParticle, 300); // 持续飘落粒子
+    setInterval(createSideFirework, 3500); // 每3.5秒在两边放烟花（仅PC端）
+    setInterval(createFirecrackerString, 4000); // 每4秒放鞭炮（仅PC端）
 
     // 加载用户弹幕队列
     userDanmakuQueue = loadUserDanmaku();
