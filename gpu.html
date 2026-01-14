@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英伟达显卡参数对比</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #76b900 0%, #00d4ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #b0b0b0;
+            font-size: 1.1em;
+        }
+
+        .filter-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .filter-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .filter-group label {
+            color: #76b900;
+            font-weight: 600;
+            min-width: 120px;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: rgba(118, 185, 0, 0.2);
+            border: 1px solid #76b900;
+            border-radius: 20px;
+            color: #76b900;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+
+        .filter-btn:hover {
+            background: rgba(118, 185, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: #76b900;
+            color: #000;
+        }
+
+        .clear-btn {
+            background: rgba(255, 59, 48, 0.2);
+            border-color: #ff3b30;
+            color: #ff3b30;
+        }
+
+        .clear-btn:hover {
+            background: rgba(255, 59, 48, 0.3);
+        }
+
+        .comparison-table {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow-x: auto;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+
+        thead {
+            background: linear-gradient(135deg, rgba(118, 185, 0, 0.3), rgba(0, 212, 255, 0.3));
+        }
+
+        th {
+            padding: 18px 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #fff;
+            border-bottom: 2px solid rgba(118, 185, 0, 0.5);
+            font-size: 0.95em;
+        }
+
+        td {
+            padding: 16px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.9em;
+        }
+
+        tbody tr {
+            transition: all 0.3s;
+        }
+
+        tbody tr:hover {
+            background: rgba(118, 185, 0, 0.1);
+        }
+
+        .gpu-name {
+            font-weight: 600;
+            color: #76b900;
+            font-size: 1.05em;
+        }
+
+        .spec-value {
+            color: #e0e0e0;
+        }
+
+        .highlight {
+            color: #00d4ff;
+            font-weight: 600;
+        }
+
+        .scenario-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            margin: 2px;
+            background: rgba(0, 212, 255, 0.2);
+            border: 1px solid #00d4ff;
+            border-radius: 12px;
+            font-size: 0.8em;
+            color: #00d4ff;
+        }
+
+        .legend {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .legend h3 {
+            color: #76b900;
+            margin-bottom: 15px;
+        }
+
+        .legend-item {
+            margin-bottom: 10px;
+            color: #b0b0b0;
+            line-height: 1.6;
+        }
+
+        .legend-item strong {
+            color: #00d4ff;
+        }
+
+        .china-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            background: rgba(255, 149, 0, 0.3);
+            border: 1px solid #ff9500;
+            border-radius: 8px;
+            font-size: 0.75em;
+            color: #ff9500;
+            margin-left: 8px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .filter-group label {
+                min-width: 100%;
+            }
+        }
+
+        .performance-bar {
+            display: inline-block;
+            height: 6px;
+            background: linear-gradient(90deg, #76b900, #00d4ff);
+            border-radius: 3px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 英伟达显卡参数对比</h1>
+            <p class="subtitle">专业级GPU性能对比 - 深度学习 & AI 加速</p>
+        </header>
+
+        <div class="filter-section">
+            <div class="filter-group">
+                <label>筛选系列:</label>
+                <button class="filter-btn active" onclick="filterSeries('all')">全部</button>
+                <button class="filter-btn" onclick="filterSeries('Hopper')">Hopper架构</button>
+                <button class="filter-btn" onclick="filterSeries('Ampere')">Ampere架构</button>
+                <button class="filter-btn" onclick="filterSeries('Blackwell')">Blackwell架构</button>
+                <button class="filter-btn" onclick="filterSeries('Ada')">Ada Lovelace架构</button>
+            </div>
+            <div class="filter-group">
+                <label>显卡型号 (多选):</label>
+                <div id="modelFilters" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <!-- 动态生成 -->
+                </div>
+                <button class="filter-btn clear-btn" onclick="clearModelFilters()">清除筛选</button>
+            </div>
+        </div>
+
+        <div class="comparison-table">
+            <table id="gpuTable">
+                <thead>
+                    <tr>
+                        <th>显卡型号</th>
+                        <th>架构</th>
+                        <th>显存容量</th>
+                        <th>显存位宽</th>
+                        <th>显存带宽</th>
+                        <th>FP16性能 (TFLOPS)</th>
+                        <th>FP8性能 (TFLOPS)</th>
+                        <th>CUDA核心 / SMs</th>
+                        <th>TDP (W)</th>
+                        <th>适用场景</th>
+                    </tr>
+                </thead>
+                <tbody id="gpuTableBody">
+                    <tr data-series="Hopper" data-model="NVIDIA H200">
+                        <td class="gpu-name">NVIDIA H200</td>
+                        <td class="spec-value">Hopper</td>
+                        <td class="spec-value">141GB HBM3e</td>
+                        <td class="spec-value">5120-bit</td>
+                        <td class="spec-value highlight">4.8 TB/s</td>
+                        <td class="spec-value highlight">1979 <span class="performance-bar" style="width: 100px;"></span></td>
+                        <td class="spec-value highlight">3958 <span class="performance-bar" style="width: 100px;"></span></td>
+                        <td class="spec-value">132 SMs</td>
+                        <td class="spec-value">700W</td>
+                        <td>
+                            <span class="scenario-tag">万亿参数LLM</span>
+                            <span class="scenario-tag">超大规模推理</span>
+                            <span class="scenario-tag">HPC计算</span>
+                        </td>
+                    </tr>
+                    <tr data-series="Hopper" data-model="NVIDIA H100 SXM5">
+                        <td class="gpu-name">NVIDIA H100 SXM5</td>
+                        <td class="spec-value">Hopper</td>
+                        <td class="spec-value">80GB HBM3</td>
+                        <td class="spec-value">5120-bit</td>
+                        <td class="spec-value">3.35 TB/s</td>
+                        <td class="spec-value highlight">1979 <span class="performance-bar" style="width: 100px;"></span></td>
+                        <td class="spec-value highlight">3958 <span class="performance-bar" style="width: 100px;"></span></td>
+                        <td class="spec-value">16896 / 132 SMs</td>
+                        <td class="spec-value">700W</td>
+                        <td>
+                            <span class="scenario-tag">大规模LLM训练</span>
+                            <span class="scenario-tag">GPT级模型</span>
+                            <span class="scenario-tag">数据中心</span>
+                        </td>
+                    </tr>
+                    <tr data-series="Hopper" data-model="NVIDIA H100 PCIe">
+                        <td class="gpu-name">NVIDIA H100 PCIe</td>
+                        <td class="spec-value">Hopper</td>
+                        <td class="spec-value">80GB HBM3</td>
+                        <td class="spec-value">5120-bit</td>
+                        <td class="spec-value">2.0 TB/s</td>
+                        <td class="spec-value highlight">1513 <span class="performance-bar" style="width: 76px;"></span></td>
+                        <td class="spec-value highlight">3026 <span class="performance-bar" style="width: 76px;"></span></td>
+                        <td class="spec-value">14592 / 114 SMs</td>
+                        <td class="spec-value">350W</td>
+                        <td>
+                            <span class="scenario-tag">企业AI训练</span>
+                            <span class="scenario-tag">推理服务</span>
+                            <span class="scenario-tag">多模态模型</span>
+                        </td>
+                    </tr>
+                    <tr data-series="Ampere" data-model="NVIDIA A100 SXM4 80GB">
+                        <td class="gpu-name">NVIDIA A100 SXM4 80GB</td>
+                        <td class="spec-value">Ampere</td>
+                        <td class="spec-value">80GB HBM2e</td>
+                        <td class="spec-value">5120-bit</td>
+                        <td class="spec-value">2.0 TB/s</td>
+                        <td class="spec-value">312 <span class="performance-bar" style="width: 31px;"></span></td>
+                        <td class="spec-value">-</td>
+                        <td class="spec-value">6912 / 108 SMs</td>
+                        <td class="spec-value">400W</td>
+                        <td>
+                            <span class="scenario-tag">中大型模型训练</span>
+                            <span class="scenario-tag">科学计算</span>
+                            <span class="scenario-tag">数据中心</span>
+                        </td>
+                    </tr>
+                    <tr data-series="Ampere" data-model="NVIDIA A100 PCIe 40GB">
+                        <td class="gpu-name">NVIDIA A100 PCIe 40GB</td>
+                        <td class="spec-value">Ampere</td>
+                        <td class="spec-value">40GB HBM2e</td>
+                        <td class="spec-value">5120-bit</td>
+                        <td class="spec-value">1.6 TB/s</td>
+                        <td class="spec-value">312 <span class="performance-bar" style="width: 31px;"></span></td>
+                        <td class="spec-value">-</td>
+                        <td class="spec-value">6912 / 108 SMs</td>
+                        <td class="spec-value">250W</td>
+                        <td>
+                            <span class="scenario-tag">深度学习研发</span>
+                            <span class="scenario-tag">模型微调</span>
+                            <span class="scenario-tag">中等规模推理</span>
+                        </td>
+                    </tr>
+                    <tr data-series="Blackwell" data-model="GeForce RTX 5090">
+                        <td class="gpu-name">GeForce RTX 5090</td>
+                        <td class="spec-value">Blackwell</td>
+                        <td class="spec-value">32GB GDDR7</td>
+                        <td class="spec-value">512-bit</td>
+                        <td class="spec-value">1792 GB/s</td>
+                        <td class="spec-value">318 <span class="performance-bar" style="width: 32px;"></span></td>
+                        <td class="spec-value">-</td>
+                        <td class="spec-value">21760 / 170 SMs</td>
+                        <td class="spec-value">575W</td>
+                        <td>
+                            <span class="scenario-tag">高端AI开发</span>
+                            <span class="scenario-tag">本地大模型</span>
+                            <span class="scenario-tag">专业创作</span>
+                            <span class="scenario-tag">4K/8K游戏</span>
+                        </td>
+                    </tr>
+                    <tr data-series="Blackwell" data-model="GeForce RTX 5090D">
+                        <td class="gpu-name">GeForce RTX 5090D <span class="china-badge">中国版</span></td>
+                        <td class="spec-value">Blackwell</td>
+                        <td class="spec-value">32GB GDDR7</td>
+                        <td class="spec-value">512-bit</td>
+                        <td class="spec-value">1792 GB/s</td>
+                        <td class="spec-value">318 <span class="performance-bar" style="width: 32px;"></span></td>
+                        <td class="spec-value">-</td>
+                        <td class="spec-value">21760 / 170 SMs</td>
+                        <td class="spec-value">575W</td>
+                        <td>
+                            <span class="scenario-tag">AI应用开发</span>
+                            <span class="scenario-tag">模型训练</span>
+                            <span class="scenario-tag">游戏渲染</span>
+                        </td>
+                    </tr>
+                    <tr data-series="Blackwell" data-model="GeForce RTX 5090D V2">
+                        <td class="gpu-name">GeForce RTX 5090D V2 <span class="china-badge">中国版V2</span></td>
+                        <td class="spec-value">Blackwell</td>
+                        <td class="spec-value">24GB GDDR7</td>
+                        <td class="spec-value">384-bit</td>
+                        <td class="spec-value">1344 GB/s</td>
+                        <td class="spec-value">318 <span class="performance-bar" style="width: 32px;"></span></td>
+                        <td class="spec-value">-</td>
+                        <td class="spec-value">21760 / 170 SMs</td>
+                        <td class="spec-value">575W</td>
+                        <td>
+                            <span class="scenario-tag">AI开发</span>
+                            <span class="scenario-tag">游戏</span>
+                            <span class="scenario-tag">内容创作</span>
+                        </td>
+                    </tr>
+                    <tr data-series="Ada" data-model="GeForce RTX 4090">
+                        <td class="gpu-name">GeForce RTX 4090</td>
+                        <td class="spec-value">Ada Lovelace</td>
+                        <td class="spec-value">24GB GDDR6X</td>
+                        <td class="spec-value">384-bit</td>
+                        <td class="spec-value">1008 GB/s</td>
+                        <td class="spec-value">165 <span class="performance-bar" style="width: 17px;"></span></td>
+                        <td class="spec-value">-</td>
+                        <td class="spec-value">16384 / 128 SMs</td>
+                        <td class="spec-value">450W</td>
+                        <td>
+                            <span class="scenario-tag">个人AI研究</span>
+                            <span class="scenario-tag">小型模型训练</span>
+                            <span class="scenario-tag">本地推理</span>
+                            <span class="scenario-tag">内容创作</span>
+                        </td>
+                    </tr>
+                    <tr data-series="Ada" data-model="GeForce RTX 4090D">
+                        <td class="gpu-name">GeForce RTX 4090D <span class="china-badge">中国版</span></td>
+                        <td class="spec-value">Ada Lovelace</td>
+                        <td class="spec-value">24GB GDDR6X</td>
+                        <td class="spec-value">384-bit</td>
+                        <td class="spec-value">1008 GB/s</td>
+                        <td class="spec-value">148 <span class="performance-bar" style="width: 15px;"></span></td>
+                        <td class="spec-value">-</td>
+                        <td class="spec-value">14592 / 114 SMs</td>
+                        <td class="spec-value">425W</td>
+                        <td>
+                            <span class="scenario-tag">AI开发</span>
+                            <span class="scenario-tag">深度学习</span>
+                            <span class="scenario-tag">游戏渲染</span>
+                        </td>
+                    </tr>
+                    <tr data-series="Ada" data-model="GeForce RTX 4080">
+                        <td class="gpu-name">GeForce RTX 4080</td>
+                        <td class="spec-value">Ada Lovelace</td>
+                        <td class="spec-value">16GB GDDR6X</td>
+                        <td class="spec-value">256-bit</td>
+                        <td class="spec-value">716 GB/s</td>
+                        <td class="spec-value">121 <span class="performance-bar" style="width: 12px;"></span></td>
+                        <td class="spec-value">-</td>
+                        <td class="spec-value">9728 / 76 SMs</td>
+                        <td class="spec-value">320W</td>
+                        <td>
+                            <span class="scenario-tag">模型开发</span>
+                            <span class="scenario-tag">图像生成</span>
+                            <span class="scenario-tag">视频处理</span>
+                        </td>
+                    </tr>
+                    <tr data-series="Ampere" data-model="NVIDIA A30">
+                        <td class="gpu-name">NVIDIA A30</td>
+                        <td class="spec-value">Ampere</td>
+                        <td class="spec-value">24GB HBM2</td>
+                        <td class="spec-value">3072-bit</td>
+                        <td class="spec-value">933 GB/s</td>
+                        <td class="spec-value">165 <span class="performance-bar" style="width: 17px;"></span></td>
+                        <td class="spec-value">-</td>
+                        <td class="spec-value">3584 / 56 SMs</td>
+                        <td class="spec-value">165W</td>
+                        <td>
+                            <span class="scenario-tag">边缘AI推理</span>
+                            <span class="scenario-tag">企业推理</span>
+                            <span class="scenario-tag">轻量级训练</span>
+                        </td>
+                    </tr>
+                    <tr data-series="Ada" data-model="RTX 6000 Ada Generation">
+                        <td class="gpu-name">RTX 6000 Ada Generation</td>
+                        <td class="spec-value">Ada Lovelace</td>
+                        <td class="spec-value">48GB GDDR6</td>
+                        <td class="spec-value">384-bit</td>
+                        <td class="spec-value">960 GB/s</td>
+                        <td class="spec-value">182 <span class="performance-bar" style="width: 18px;"></span></td>
+                        <td class="spec-value">-</td>
+                        <td class="spec-value">18176 / 142 SMs</td>
+                        <td class="spec-value">300W</td>
+                        <td>
+                            <span class="scenario-tag">专业可视化</span>
+                            <span class="scenario-tag">大显存任务</span>
+                            <span class="scenario-tag">工作站AI</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="legend">
+            <h3>📊 参数说明与选购建议</h3>
+            <div class="legend-item">
+                <strong>架构对比:</strong> Blackwell(最新) > Hopper(数据中心旗舰) > Ada Lovelace(消费级旗舰) > Ampere(上一代)
+            </div>
+            <div class="legend-item">
+                <strong>显存带宽:</strong> H200的4.8TB/s HBM3e是目前最快,远超消费级显卡的GDDR6X/GDDR7
+            </div>
+            <div class="legend-item">
+                <strong>FP8性能:</strong> 仅Hopper架构支持,专为Transformer模型和大语言模型优化,性能是FP16的2倍
+            </div>
+            <div class="legend-item">
+                <strong>中国版说明:</strong> D版本为符合美国出口管制要求的特供版,性能略低于标准版但价格相同
+            </div>
+            <div class="legend-item">
+                <strong>选购建议:</strong> H200/H100适合千亿级大模型训练;A100适合百亿级模型和科研;RTX 5090适合本地AI开发和高端创作;RTX 4090/4090D是性价比之选
+            </div>
+            <div class="legend-item">
+                <strong>数据来源:</strong> 基于NVIDIA官方规格和权威技术文档,截至2026年1月
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedModels = new Set();
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            initModelFilters();
+        });
+        
+        function initModelFilters() {
+            const rows = document.querySelectorAll('#gpuTableBody tr');
+            const models = new Set();
+            
+            rows.forEach(row => {
+                const model = row.getAttribute('data-model');
+                if (model) models.add(model);
+            });
+            
+            const filterContainer = document.getElementById('modelFilters');
+            filterContainer.innerHTML = '';
+            
+            Array.from(models).sort().forEach(model => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn model-filter';
+                btn.textContent = model;
+                btn.onclick = () => toggleModelFilter(model, btn);
+                filterContainer.appendChild(btn);
+            });
+        }
+        
+        function toggleModelFilter(model, button) {
+            if (selectedModels.has(model)) {
+                selectedModels.delete(model);
+                button.classList.remove('active');
+            } else {
+                selectedModels.add(model);
+                button.classList.add('active');
+            }
+            
+            applyFilters();
+        }
+        
+        function clearModelFilters() {
+            selectedModels.clear();
+            document.querySelectorAll('.model-filter').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            applyFilters();
+        }
+        
+        function applyFilters() {
+            const rows = document.querySelectorAll('#gpuTableBody tr');
+            
+            rows.forEach(row => {
+                const model = row.getAttribute('data-model');
+                
+                if (selectedModels.size === 0) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = selectedModels.has(model) ? '' : 'none';
+                }
+            });
+        }
+        
+        function filterSeries(series) {
+            const buttons = document.querySelectorAll('.filter-group button:not(.model-filter):not(.clear-btn)');
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            clearModelFilters();
+            
+            const rows = document.querySelectorAll('#gpuTableBody tr');
+            
+            rows.forEach(row => {
+                if (series === 'all') {
+                    row.style.display = '';
+                } else {
+                    const rowSeries = row.getAttribute('data-series');
+                    row.style.display = rowSeries === series ? '' : 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
