@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/x-icon" href="./images/001.png">
-  <title>2026年除夕倒计时</title>
+  <title>除夕倒计时</title>
   <style>
     :root {
       --bg-0: #240000;
@@ -859,7 +859,7 @@
   </svg>
 
   <div class="stage">
-    <div class="card" role="application" aria-label="2026年除夕倒计时">
+    <div class="card" role="application" aria-label="除夕倒计时">
       <div class="paper-cut" aria-hidden="true">
         <svg viewBox="0 0 200 200" role="presentation" focusable="false">
           <defs>
@@ -901,7 +901,7 @@
 
       <div class="top">
         <div class="brand">
-          <h1 class="title">2026年除夕倒计时</h1>
+          <h1 class="title">除夕倒计时</h1>
           <div class="sub">
             <div class="badge"  style="display: none;"><span class="dot"></span><span id="targetText">目标：2026-02-15
                 23:59</span></div>
@@ -953,7 +953,7 @@
             <h2>年味小卡</h2>
             <div class="k">
               <div class="l">生肖</div>
-              <div class="r">丙午 · 马年</div>
+              <div class="r" id="zodiacText">--</div>
             </div>
             <div class="k">
               <div class="l">节气氛围</div>
@@ -992,7 +992,103 @@
   </div>
 
   <script>
-    const target = new Date(2026, 1, 16, 23, 59, 59, 999);
+    function pad2(n) { return String(n).padStart(2, "0"); }
+
+    const chineseDtf = (() => {
+      try {
+        return new Intl.DateTimeFormat("en-u-ca-chinese", { month: "numeric", day: "numeric" });
+      } catch {
+        return null;
+      }
+    })();
+
+    function getChineseCalendarMonthDay(date) {
+      if (!chineseDtf) return null;
+      try {
+        const parts = chineseDtf.formatToParts(date);
+        const monthRaw = parts.find(p => p.type === "month")?.value ?? "";
+        const dayRaw = parts.find(p => p.type === "day")?.value ?? "";
+        const month = Number.parseInt(String(monthRaw).match(/\d+/)?.[0] ?? "", 10);
+        const day = Number.parseInt(String(dayRaw).match(/\d+/)?.[0] ?? "", 10);
+        if (!Number.isFinite(month) || !Number.isFinite(day)) return null;
+        return { month, day };
+      } catch {
+        return null;
+      }
+    }
+
+    function findNextLunarNewYearDay(fromDate) {
+      const start = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate());
+      for (let i = 0; i <= 420; i += 1) {
+        const d = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
+        const md = getChineseCalendarMonthDay(d);
+        if (!md) break;
+        if (md.month === 1 && md.day === 1) return d;
+      }
+      return null;
+    }
+
+    function findNextLunarNewYearDayFallback(fromDate) {
+      const cny = {
+        2023: [1, 22],
+        2024: [2, 10],
+        2025: [1, 29],
+        2026: [2, 17],
+        2027: [2, 6],
+        2028: [1, 26],
+        2029: [2, 13],
+        2030: [2, 3],
+        2031: [1, 23],
+        2032: [2, 11],
+        2033: [1, 31],
+        2034: [2, 19],
+        2035: [2, 8],
+      };
+
+      let year = fromDate.getFullYear();
+      for (let i = 0; i < 3; i += 1) {
+        const md = cny[year];
+        if (md) {
+          const d = new Date(year, md[0] - 1, md[1]);
+          if (d.getTime() > fromDate.getTime()) return d;
+          year += 1;
+          continue;
+        }
+        year += 1;
+      }
+      return null;
+    }
+
+    function safeMod(n, m) {
+      return ((n % m) + m) % m;
+    }
+
+    function getGanzhiAndZodiac(lunarYear) {
+      const stems = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"];
+      const branches = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"];
+      const animals = ["鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊", "猴", "鸡", "狗", "猪"];
+      const idx60 = safeMod(lunarYear - 1984, 60);
+      const idx12 = safeMod(lunarYear - 1984, 12);
+      return { ganzhi: stems[idx60 % 10] + branches[idx12], zodiac: animals[idx12] };
+    }
+
+    function getNextChuxiInfo(now = new Date()) {
+      const lunarNewYearDay = findNextLunarNewYearDay(now);
+      const resolved = lunarNewYearDay ?? findNextLunarNewYearDayFallback(now);
+      if (resolved) {
+        const target = new Date(resolved.getTime() - 1);
+        const year = resolved.getFullYear();
+        return { target, year, ...getGanzhiAndZodiac(year) };
+      }
+
+      const y = now.getFullYear();
+      const fallbackLunarNewYear = new Date(y + 1, 1, 6);
+      const fallbackTarget = new Date(fallbackLunarNewYear.getTime() - 1);
+      return { target: fallbackTarget, year: fallbackLunarNewYear.getFullYear(), ...getGanzhiAndZodiac(fallbackLunarNewYear.getFullYear()) };
+    }
+
+    const chuxi = getNextChuxiInfo(new Date());
+    let target = chuxi.target;
     const $ = (id) => document.getElementById(id);
 
     const els = {
@@ -1008,6 +1104,7 @@
       moodText: $("moodText"),
       coupletLeft: $("coupletLeft"),
       coupletRight: $("coupletRight"),
+      zodiacText: $("zodiacText"),
       rings: document.querySelectorAll(".ring"),
     };
 
@@ -1091,10 +1188,18 @@
     applyRandomCouplet();
     applyRandomMood();
 
+    const titleText = `${chuxi.year}年除夕倒计时`;
+    document.title = titleText;
+    try {
+      const titleEl = document.querySelector(".title");
+      if (titleEl) titleEl.textContent = titleText;
+      const cardEl = document.querySelector(".card");
+      if (cardEl) cardEl.setAttribute("aria-label", titleText);
+    } catch { }
+
+    if (els.zodiacText) els.zodiacText.textContent = `${chuxi.ganzhi} · ${chuxi.zodiac}年`;
     els.targetText.textContent = "目标：" + formatDate(target);
     try { $("tzText").textContent = ""; } catch { }
-
-    function pad2(n) { return String(n).padStart(2, "0"); }
 
     function formatDate(d) {
       const yyyy = d.getFullYear();
