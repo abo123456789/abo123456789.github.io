@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>脑筋急转弯</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+            max-width: 700px;
+            width: 100%;
+            padding: 50px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .title {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .question-card {
+            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .question-number {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .question-text {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            text-align: center;
+            line-height: 1.8;
+            font-weight: 500;
+        }
+        
+        .answer-card {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            min-height: 120px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(67, 233, 123, 0.3);
+        }
+        
+        .answer-card.show {
+            display: flex;
+            animation: slideDown 0.5s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .answer-text {
+            font-size: 1.3rem;
+            color: white;
+            text-align: center;
+            line-height: 1.8;
+            font-weight: 500;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            padding: 18px 40px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-update {
+            background: linear-gradient(135deg, #ffa751 0%, #ffe259 100%);
+            color: white;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.3s;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .modal-body {
+            margin-bottom: 20px;
+        }
+        
+        .input-area {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            resize: vertical;
+            background: #f8f9fa;
+        }
+        
+        .input-area:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .help-text {
+            color: #666;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .btn-small {
+            padding: 12px 25px;
+            font-size: 1rem;
+        }
+        
+        .current-count {
+            text-align: center;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: #1565c0;
+            font-weight: bold;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 30px 20px; }
+            .title { font-size: 2rem; }
+            .question-text { font-size: 1.2rem; }
+            .button-group { flex-direction: column; }
+            .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🧠 脑筋急转弯</h1>
+            <p class="subtitle">挑战你的思维，开动你的脑筋！</p>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number" id="questionNumber">第 1 题</div>
+            <div class="question-text" id="questionText">点击"换一个"开始挑战</div>
+        </div>
+
+        <div class="answer-card" id="answerCard">
+            <div class="answer-text" id="answerText"></div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="nextQuestion()">🔄 换一个</button>
+            <button class="btn btn-success" onclick="toggleAnswer()" id="answerBtn">👁️ 查看答案</button>
+        </div>
+
+        <div class="button-group">
+            <button class="btn btn-update" onclick="showUpdateModal()">📥 更新题库</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value" id="totalCount">0</div>
+                <div class="stat-label">已查看</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="answerCount">0</div>
+                <div class="stat-label">查看答案</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 更新题库弹窗 -->
+    <div class="modal" id="updateModal">
+        <div class="modal-content">
+            <div class="modal-header">📥 更新题库</div>
+            <div class="current-count">
+                当前题库共有 <span id="currentCount">30</span> 道题
+            </div>
+            <div class="modal-body">
+                <textarea class="input-area" id="newRiddles" placeholder='请输入新题目，每行一个，格式：问题|答案&#10;例如：&#10;什么东西越洗越脏？|水&#10;什么门永远关不上？|球门&#10;&#10;或者粘贴 JSON 格式：&#10;[&#10;  {"q": "问题1", "a": "答案1"},&#10;  {"q": "问题2", "a": "答案2"}&#10;]'></textarea>
+                <div class="help-text">
+                    💡 支持两种格式：<br>
+                    1. 简单格式：每行一个，用 | 分隔问题和答案<br>
+                    2. JSON 格式：[{"q": "问题", "a": "答案"}]
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-primary btn-small" onclick="updateRiddles()">✅ 更新</button>
+                <button class="btn btn-success btn-small" onclick="addRiddles()">➕ 追加</button>
+                <button class="btn btn-update btn-small" onclick="closeModal()">❌ 取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const riddles = [
+            { q: "什么东西越洗越脏？", a: "水" },
+            { q: "什么门永远关不上？", a: "球门" },
+            { q: "什么书买不到？", a: "遗书" },
+            { q: "什么车寸步难行？", a: "风车" },
+            { q: "什么动物最容易贴在墙壁上？", a: "海豹（海报）" },
+            { q: "什么东西有头无脚？", a: "砖头" },
+            { q: "什么帽不能戴？", a: "螺帽" },
+            { q: "什么书谁也没见过？", a: "天书" },
+            { q: "什么东西人们都不喜欢吃？", a: "吃亏" },
+            { q: "什么水永远用不完？", a: "口水" },
+            { q: "什么东西天气越热，它爬得越高？", a: "温度计" },
+            { q: "什么路最窄？", a: "冤家路窄" },
+            { q: "一个人从飞机上掉下来，为什么没摔死？", a: "飞机停在地上" },
+            { q: "一年四季都盛开的花是什么花？", a: "塑料花" },
+            { q: "孔子是我国最伟大的什么家？", a: "老人家" },
+            { q: "睡美人最怕的是什么？", a: "失眠" },
+            { q: "什么官不仅不领工资，还要自掏腰包？", a: "新郎官" },
+            { q: "有一个字，人人见了都会念错。这是什么字？", a: "错字" },
+            { q: "什么情况一山可容二虎？", a: "一公一母" },
+            { q: "什么东西愈生气，它便愈大？", a: "脾气" },
+            { q: "医生手术为何带口罩？", a: "怕人认出来" },
+            { q: "比细菌还小的是什么？", a: "细菌的儿子" },
+            { q: "文文在洗衣服，但洗了半天，她的衣服还是脏的，为什么？", a: "她在洗别人的衣服" },
+            { q: "香港生活的人，是不是可以埋葬在广州呢？", a: "活人不能埋葬" },
+            { q: "小明知道试卷的答案，为什么还频频看同学的？", a: "小明是老师" },
+            { q: "什么事你明明没有做却要受罚？", a: "做作业" },
+            { q: "报纸上登的消息不一定百分之百是真的，但什么消息绝对假不了？", a: "报纸上的年、月、日" },
+            { q: "什么东西使人哭笑不得？", a: "口罩" },
+            { q: "什么时候四减一会等于五？", a: "四个角的东西切去一个角" },
+            { q: "狐狸精最擅长迷惑男人，那么什么精男女一起迷？", a: "酒精" }
+        ];
+
+        let currentIndex = 0;
+        let totalViewed = 0;
+        let answersViewed = 0;
+        let isAnswerShown = false;
+        let usedIndices = [];
+
+        function getRandomIndex() {
+            if (usedIndices.length === riddles.length) {
+                usedIndices = [];
+            }
+            let index;
+            do {
+                index = Math.floor(Math.random() * riddles.length);
+            } while (usedIndices.includes(index));
+            usedIndices.push(index);
+            return index;
+        }
+
+        function nextQuestion() {
+            currentIndex = getRandomIndex();
+            const riddle = riddles[currentIndex];
+            
+            document.getElementById('questionText').textContent = riddle.q;
+            document.getElementById('answerText').textContent = '💡 ' + riddle.a;
+            
+            totalViewed++;
+            document.getElementById('totalCount').textContent = totalViewed;
+            document.getElementById('questionNumber').textContent = '第 ' + totalViewed + ' 题';
+            
+            document.getElementById('answerCard').classList.remove('show');
+            document.getElementById('answerBtn').textContent = '👁️ 查看答案';
+            isAnswerShown = false;
+        }
+
+        function toggleAnswer() {
+            const answerCard = document.getElementById('answerCard');
+            const answerBtn = document.getElementById('answerBtn');
+            
+            if (isAnswerShown) {
+                answerCard.classList.remove('show');
+                answerBtn.textContent = '👁️ 查看答案';
+                isAnswerShown = false;
+            } else {
+                answerCard.classList.add('show');
+                answerBtn.textContent = '🙈 隐藏答案';
+                isAnswerShown = true;
+                answersViewed++;
+                document.getElementById('answerCount').textContent = answersViewed;
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleAnswer();
+            } else if (e.key === 'ArrowRight' || e.key === 'n') {
+                e.preventDefault();
+                nextQuestion();
+            }
+        });
+
+        // 显示更新弹窗
+        function showUpdateModal() {
+            document.getElementById('updateModal').classList.add('show');
+            document.getElementById('currentCount').textContent = riddles.length;
+        }
+
+        // 关闭弹窗
+        function closeModal() {
+            document.getElementById('updateModal').classList.remove('show');
+            document.getElementById('newRiddles').value = '';
+        }
+
+        // 解析输入的题目
+        function parseInput(input) {
+            const trimmed = input.trim();
+            let newRiddles = [];
+
+            // 尝试解析 JSON 格式
+            if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
+                try {
+                    const parsed = JSON.parse(trimmed);
+                    const array = Array.isArray(parsed) ? parsed : [parsed];
+                    newRiddles = array.filter(item => item.q && item.a);
+                    if (newRiddles.length > 0) {
+                        return newRiddles;
+                    }
+                } catch (e) {
+                    // JSON 解析失败，继续尝试简单格式
+                }
+            }
+
+            // 解析简单格式（每行一个，用 | 分隔）
+            const lines = trimmed.split('\n');
+            for (let line of lines) {
+                line = line.trim();
+                if (line && line.includes('|')) {
+                    const parts = line.split('|');
+                    if (parts.length >= 2) {
+                        newRiddles.push({
+                            q: parts[0].trim(),
+                            a: parts[1].trim()
+                        });
+                    }
+                }
+            }
+
+            return newRiddles;
+        }
+
+        // 更新题库（替换）
+        function updateRiddles() {
+            const input = document.getElementById('newRiddles').value;
+            if (!input.trim()) {
+                alert('请输入题目！');
+                return;
+            }
+
+            const newRiddles = parseInput(input);
+            if (newRiddles.length === 0) {
+                alert('没有找到有效的题目！请检查格式。');
+                return;
+            }
+
+            if (confirm(`确定要替换题库吗？将用 ${newRiddles.length} 道新题替换现有的 ${riddles.length} 道题。`)) {
+                riddles.length = 0;
+                riddles.push(...newRiddles);
+                usedIndices = [];
+                totalViewed = 0;
+                answersViewed = 0;
+                document.getElementById('totalCount').textContent = '0';
+                document.getElementById('answerCount').textContent = '0';
+                
+                alert(`题库更新成功！现在共有 ${riddles.length} 道题。`);
+                closeModal();
+                nextQuestion();
+            }
+        }
+
+        // 追加题库
+        function addRiddles() {
+            const input = document.getElementById('newRiddles').value;
+            if (!input.trim()) {
+                alert('请输入题目！');
+                return;
+            }
+
+            const newRiddles = parseInput(input);
+            if (newRiddles.length === 0) {
+                alert('没有找到有效的题目！请检查格式。');
+                return;
+            }
+
+            const oldCount = riddles.length;
+            riddles.push(...newRiddles);
+            
+            alert(`成功追加 ${newRiddles.length} 道题！题库现在共有 ${riddles.length} 道题。`);
+            closeModal();
+        }
+
+        // 点击弹窗外部关闭
+        document.getElementById('updateModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
