@@ -384,15 +384,6 @@
                 link: "https://claude.ai"
             },
             {
-                name: "Gemini",
-                category: "chat",
-                icon: "♊",
-                description: "Google开发的多模态大模型，具有强大的理解和推理能力，深度集成Google生态",
-                tags: ["对话", "Google", "多模态"],
-                rating: "⭐⭐⭐⭐⭐",
-                link: "https://gemini.google.com"
-            },
-            {
                 name: "文心一言",
                 category: "chat",
                 icon: "🇨🇳",
@@ -727,7 +718,7 @@
         function renderTools(filteredTools = tools) {
             const grid = document.getElementById('toolsGrid');
             grid.innerHTML = filteredTools.map(tool => `
-                <div class="tool-card" data-category="${tool.category}" onclick="window.open('${tool.link}', '_blank')">
+                <div class="tool-card" data-category="${tool.category}" onclick="openSafe('${tool.link}')">
                     <div class="tool-header">
                         <div class="tool-icon">${tool.icon}</div>
                         <div class="tool-info">
@@ -740,11 +731,16 @@
                         ${tool.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                     </div>
                     <div class="tool-footer">
-                        <a href="${tool.link}" class="tool-link" target="_blank" onclick="event.stopPropagation()">访问 →</a>
+                        <a href="${tool.link}" class="tool-link" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">访问 →</a>
                         <span class="tool-rating">${tool.rating}</span>
                     </div>
                 </div>
             `).join('');
+        }
+
+        function openSafe(url) {
+            const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+            if (newWindow) newWindow.opener = null;
         }
 
         // 获取分类名称
