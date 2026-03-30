@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人所得税计算器 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .calculator-container {
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .input-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .input-label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-unit {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 1rem;
+        }
+
+        .deduction-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .deduction-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .deduction-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .deduction-item label {
+            cursor: pointer;
+            color: #555;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .result-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 30px;
+            border-radius: 20px;
+            color: white;
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .result-section.show {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-main {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .result-main h2 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .result-main .amount {
+            font-size: 3rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .detail-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .detail-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .tax-table {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 20px;
+        }
+
+        .tax-table h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: #f0f0f0;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            color: #1565c0;
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-container {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .result-main .amount {
+                font-size: 2.5rem;
+            }
+
+            .deduction-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <div class="header">
+            <h1>💰 个人所得税计算器</h1>
+            <p>基于2026年中国最新税收政策</p>
+        </div>
+
+        <div class="input-section">
+            <div class="input-group">
+                <label class="input-label">月工资收入（税前）</label>
+                <div class="input-wrapper">
+                    <input type="number" id="salary" class="input-field" placeholder="请输入月工资" value="10000">
+                    <span class="input-unit">元</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">五险一金（个人缴纳部分）</label>
+                <div class="input-wrapper">
+                    <input type="number" id="insurance" class="input-field" placeholder="请输入五险一金金额" value="2000">
+                    <span class="input-unit">元</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">专项附加扣除</label>
+                <div class="deduction-grid">
+                    <div class="deduction-item">
+                        <input type="checkbox" id="children" value="2000">
+                        <label for="children">子女教育 (2000元/月)</label>
+                    </div>
+                    <div class="deduction-item">
+                        <input type="checkbox" id="education" value="400">
+                        <label for="education">继续教育 (400元/月)</label>
+                    </div>
+                    <div class="deduction-item">
+                        <input type="checkbox" id="medical" value="2000">
+                        <label for="medical">大病医疗 (2000元/月)</label>
+                    </div>
+                    <div class="deduction-item">
+                        <input type="checkbox" id="housing" value="1500">
+                        <label for="housing">住房贷款 (1500元/月)</label>
+                    </div>
+                    <div class="deduction-item">
+                        <input type="checkbox" id="rent" value="1500">
+                        <label for="rent">住房租金 (1500元/月)</label>
+                    </div>
+                    <div class="deduction-item">
+                        <input type="checkbox" id="elderly" value="3000">
+                        <label for="elderly">赡养老人 (3000元/月)</label>
+                    </div>
+                    <div class="deduction-item">
+                        <input type="checkbox" id="infant" value="2000">
+                        <label for="infant">3岁以下婴幼儿 (2000元/月)</label>
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-btn" onclick="calculateTax()">🧮 计算税额</button>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <div class="result-main">
+                <h2>应缴个人所得税</h2>
+                <div class="amount" id="taxAmount">¥ 0.00</div>
+            </div>
+
+            <div class="result-details">
+                <div class="detail-item">
+                    <div class="detail-label">税前工资</div>
+                    <div class="detail-value" id="grossSalary">¥ 0</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">应纳税所得额</div>
+                    <div class="detail-value" id="taxableIncome">¥ 0</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">税后工资</div>
+                    <div class="detail-value" id="netSalary">¥ 0</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">实际税率</div>
+                    <div class="detail-value" id="effectiveRate">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tax-table">
+            <h3>📊 个人所得税税率表（综合所得适用）</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>级数</th>
+                        <th>全年应纳税所得额</th>
+                        <th>税率</th>
+                        <th>速算扣除数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>不超过36,000元</td>
+                        <td>3%</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>36,000元 - 144,000元</td>
+                        <td>10%</td>
+                        <td>2,520</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>144,000元 - 300,000元</td>
+                        <td>20%</td>
+                        <td>16,920</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>300,000元 - 420,000元</td>
+                        <td>25%</td>
+                        <td>31,920</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>420,000元 - 660,000元</td>
+                        <td>30%</td>
+                        <td>52,920</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>660,000元 - 960,000元</td>
+                        <td>35%</td>
+                        <td>85,920</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>超过960,000元</td>
+                        <td>45%</td>
+                        <td>181,920</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box">
+                <strong>💡 说明：</strong>
+                本计算器采用累计预扣法计算月度个人所得税。基本减除费用标准为5000元/月（60000元/年）。
+                专项附加扣除金额根据2026年最新政策标准设定。
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 2026年个人所得税税率表（年度）
+        const taxBrackets = [
+            { limit: 36000, rate: 0.03, deduction: 0 },
+            { limit: 144000, rate: 0.10, deduction: 2520 },
+            { limit: 300000, rate: 0.20, deduction: 16920 },
+            { limit: 420000, rate: 0.25, deduction: 31920 },
+            { limit: 660000, rate: 0.30, deduction: 52920 },
+            { limit: 960000, rate: 0.35, deduction: 85920 },
+            { limit: Infinity, rate: 0.45, deduction: 181920 }
+        ];
+
+        // 基本减除费用（起征点）
+        const BASIC_DEDUCTION = 5000;
+
+        function calculateTax() {
+            // 获取输入值
+            const salary = parseFloat(document.getElementById('salary').value) || 0;
+            const insurance = parseFloat(document.getElementById('insurance').value) || 0;
+
+            // 计算专项附加扣除
+            let specialDeduction = 0;
+            const checkboxes = document.querySelectorAll('.deduction-item input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    specialDeduction += parseFloat(checkbox.value);
+                }
+            });
+
+            // 计算月度应纳税所得额
+            const monthlyTaxableIncome = salary - BASIC_DEDUCTION - insurance - specialDeduction;
+
+            // 计算年度应纳税所得额（用于确定税率）
+            const annualTaxableIncome = monthlyTaxableIncome * 12;
+
+            // 根据年度应纳税所得额确定税率和速算扣除数
+            let taxRate = 0;
+            let quickDeduction = 0;
+
+            for (let bracket of taxBrackets) {
+                if (annualTaxableIncome <= bracket.limit) {
+                    taxRate = bracket.rate;
+                    quickDeduction = bracket.deduction;
+                    break;
+                }
+            }
+
+            // 计算年度应纳税额
+            const annualTax = Math.max(0, annualTaxableIncome * taxRate - quickDeduction);
+
+            // 计算月度应纳税额（平均分摊）
+            const monthlyTax = annualTax / 12;
+
+            // 计算税后工资
+            const netSalary = salary - insurance - monthlyTax;
+
+            // 计算实际税率
+            const effectiveRate = salary > 0 ? (monthlyTax / salary * 100) : 0;
+
+            // 显示结果
+            displayResults(salary, Math.max(0, monthlyTaxableIncome), monthlyTax, netSalary, effectiveRate);
+        }
+
+        function displayResults(gross, taxable, tax, net, rate) {
+            document.getElementById('grossSalary').textContent = `¥ ${gross.toFixed(2)}`;
+            document.getElementById('taxableIncome').textContent = `¥ ${taxable.toFixed(2)}`;
+            document.getElementById('taxAmount').textContent = `¥ ${tax.toFixed(2)}`;
+            document.getElementById('netSalary').textContent = `¥ ${net.toFixed(2)}`;
+            document.getElementById('effectiveRate').textContent = `${rate.toFixed(2)}%`;
+
+            document.getElementById('resultSection').classList.add('show');
+        }
+
+        // 互斥选择：住房贷款和住房租金
+        document.getElementById('housing').addEventListener('change', function() {
+            if (this.checked) {
+                document.getElementById('rent').checked = false;
+            }
+        });
+
+        document.getElementById('rent').addEventListener('change', function() {
+            if (this.checked) {
+                document.getElementById('housing').checked = false;
+            }
+        });
+
+        // 页面加载时自动计算一次
+        window.addEventListener('load', function() {
+            calculateTax();
+        });
+
+        // 输入框回车键触发计算
+        document.querySelectorAll('.input-field').forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    calculateTax();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

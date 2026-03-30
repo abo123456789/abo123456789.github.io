@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="./images/001.png">
+    <title>AI工具导航 - 发现最好的AI工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        /* 顶部导航 */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: opacity 0.3s;
+        }
+
+        .nav-menu a:hover {
+            opacity: 0.8;
+        }
+
+        /* 搜索区域 */
+        .search-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .search-title {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .search-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .search-box {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 18px 60px 18px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* 主要内容区 */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* 分类标签 */
+        .category-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .category-tab {
+            padding: 12px 25px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .category-tab:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .category-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* 工具卡片网格 */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        } 
+
+        .tool-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .tool-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tool-info {
+            flex: 1;
+        }
+
+        .tool-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .tool-category {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .tool-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .tool-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            padding: 4px 12px;
+            background: #f0f0f0;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .tool-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .tool-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .tool-rating {
+            color: #ffa500;
+            font-size: 0.9rem;
+        }
+
+        /* 页脚 */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .search-title {
+                font-size: 1.8rem;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .category-tabs {
+                justify-content: flex-start;
+                overflow-x: auto;
+                flex-wrap: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <span>🤖</span>
+                <span>AI工具导航</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">首页</a></li>
+                <li><a href="#tools">工具</a></li>
+                <li><a href="#about">关于</a></li>
+                <li><a href="#submit">提交工具</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- 搜索区域 -->
+    <section class="search-section">
+        <h1 class="search-title">发现最好的AI工具</h1>
+        <p class="search-subtitle">精选全球优质AI工具，提升工作效率</p>
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="搜索AI工具..." id="searchInput">
+            <button class="search-btn" onclick="searchTools()">搜索</button>
+        </div>
+    </section>
+
+    <!-- 主要内容 -->
+    <main class="main-container">
+        <!-- 分类标签 -->
+        <div class="category-tabs">
+            <div class="category-tab active" onclick="filterCategory('all')">全部</div>
+            <div class="category-tab" onclick="filterCategory('chat')">AI对话</div>
+            <div class="category-tab" onclick="filterCategory('writing')">AI写作</div>
+            <div class="category-tab" onclick="filterCategory('image')">AI绘画</div>
+            <div class="category-tab" onclick="filterCategory('video')">AI视频</div>
+            <div class="category-tab" onclick="filterCategory('code')">AI编程</div>
+            <div class="category-tab" onclick="filterCategory('audio')">AI音频</div>
+            <div class="category-tab" onclick="filterCategory('office')">办公助手</div>
+        </div>
+
+        <!-- 工具卡片网格 -->
+        <div class="tools-grid" id="toolsGrid"></div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#privacy">隐私政策</a>
+                <a href="#terms">使用条款</a>
+                <a href="#contact">联系我们</a>
+                <a href="#feedback">反馈建议</a>
+            </div>
+            <p>&copy; 2026 AI工具导航. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 工具数据
+        const tools = [
+            // AI对话
+            {
+                name: "ChatGPT",
+                category: "chat",
+                icon: "💬",
+                description: "OpenAI开发的强大AI对话助手，支持多轮对话、代码生成、文案创作等",
+                tags: ["对话", "GPT-4", "多功能"],
+                rating: "⭐⭐⭐⭐⭐",
+                link: "https://chat.openai.com"
+            },
+            {
+                name: "Claude",
+                category: "chat",
+                icon: "🤖",
+                description: "Anthropic开发的AI助手，擅长长文本处理和深度分析",
+                tags: ["对话", "长文本", "安全"],
+                rating: "⭐⭐⭐⭐⭐",
+                link: "https://claude.ai"
+            },
+            {
+                name: "文心一言",
+                category: "chat",
+                icon: "🇨🇳",
+                description: "百度推出的AI对话助手，中文理解能力强",
+                tags: ["中文", "百度", "对话"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://yiyan.baidu.com"
+            },
+            {
+                name: "讯飞星火",
+                category: "chat",
+                icon: "✨",
+                description: "科大讯飞推出的认知大模型，多领域知识问答",
+                tags: ["中文", "讯飞", "知识"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://xinghuo.xfyun.cn"
+            },
+            {
+                name: "智谱清言",
+                category: "chat",
+                icon: "🎓",
+                description: "清华大学技术成果转化，基于GLM模型的AI助手",
+                tags: ["中文", "清华", "GLM"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://chatglm.cn"
+            },
+            {
+                name: "豆包",
+                category: "chat",
+                icon: "🎒",
+                description: "字节跳动推出的AI对话助手，年轻化交互体验",
+                tags: ["中文", "字节", "年轻"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://www.doubao.com"
+            },
+            {
+                name: "Kimi",
+                category: "chat",
+                icon: "🌙",
+                description: "月之暗面推出的AI助手，支持超长文本对话",
+                tags: ["中文", "长文本", "联网"],
+                rating: "⭐⭐⭐⭐⭐",
+                link: "https://kimi.moonshot.cn"
+            },
+            {
+                name: "天工AI",
+                category: "chat",
+                icon: "🔧",
+                description: "昆仑万维推出的AI助手，支持搜索和创作",
+                tags: ["中文", "搜索", "创作"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://www.tiangong.cn"
+            },
+            {
+                name: "商量",
+                category: "chat",
+                icon: "💼",
+                description: "商汤科技推出的AI对话助手，多模态交互",
+                tags: ["中文", "商汤", "多模态"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://chat.sensetime.com"
+            },
+            {
+                name: "腾讯混元",
+                category: "chat",
+                icon: "🐧",
+                description: "腾讯推出的大语言模型，集成在多个腾讯产品中",
+                tags: ["中文", "腾讯", "集成"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://hunyuan.tencent.com"
+            },
+            {
+                name: "360智脑",
+                category: "chat",
+                icon: "🛡️",
+                description: "360推出的AI大模型，注重安全和实用",
+                tags: ["中文", "360", "安全"],
+                rating: "⭐⭐⭐",
+                link: "https://ai.360.com"
+            },
+            {
+                name: "DeepSeek",
+                category: "chat",
+                icon: "🔍",
+                description: "深度求索推出的AI对话助手，强大的推理和编程能力",
+                tags: ["中文", "编程", "推理"],
+                rating: "⭐⭐⭐⭐⭐",
+                link: "https://chat.deepseek.com"
+            },
+            {
+                name: "Qwen",
+                category: "chat",
+                icon: "🌐",
+                description: "阿里云通义千问系列模型，开源可商用",
+                tags: ["中文", "开源", "阿里"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://chat.qwen.ai"
+            },
+            
+            // AI写作
+            {
+                name: "Notion AI",
+                category: "writing",
+                icon: "📝",
+                description: "集成在Notion中的AI写作助手，帮助快速生成和优化内容",
+                tags: ["写作", "笔记", "协作"],
+                rating: "⭐⭐⭐⭐⭐",
+                link: "https://notion.so"
+            },
+            {
+                name: "Jasper",
+                category: "writing",
+                icon: "✍️",
+                description: "专业的AI营销文案生成工具，支持多种内容类型",
+                tags: ["营销", "文案", "SEO"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://jasper.ai"
+            },
+            {
+                name: "Copy.ai",
+                category: "writing",
+                icon: "📄",
+                description: "AI驱动的文案生成工具，快速创建营销内容",
+                tags: ["文案", "营销", "快速"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://copy.ai"
+            },
+            {
+                name: "秘塔写作猫",
+                category: "writing",
+                icon: "🐱",
+                description: "AI写作助手，支持文章改写、续写、扩写等功能",
+                tags: ["中文", "写作", "改写"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://xiezuocat.com"
+            },
+
+            // AI绘画
+            {
+                name: "Midjourney",
+                category: "image",
+                icon: "🎨",
+                description: "顶级AI绘画工具，生成高质量艺术作品",
+                tags: ["绘画", "艺术", "高质量"],
+                rating: "⭐⭐⭐⭐⭐",
+                link: "https://midjourney.com"
+            },
+            {
+                name: "Stable Diffusion",
+                category: "image",
+                icon: "🖼️",
+                description: "开源AI绘画模型，可本地部署，自由度高",
+                tags: ["开源", "本地", "可控"],
+                rating: "⭐⭐⭐⭐⭐",
+                link: "https://stability.ai"
+            },
+            {
+                name: "DALL·E 3",
+                category: "image",
+                icon: "🎭",
+                description: "OpenAI的AI图像生成工具，理解能力强",
+                tags: ["OpenAI", "精准", "创意"],
+                rating: "⭐⭐⭐⭐⭐",
+                link: "https://openai.com/dall-e-3"
+            },
+            {
+                name: "文心一格",
+                category: "image",
+                icon: "🖌️",
+                description: "百度推出的AI艺术创作平台，中文提示词友好",
+                tags: ["中文", "百度", "艺术"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://yige.baidu.com"
+            },
+
+            // AI视频
+            {
+                name: "Runway",
+                category: "video",
+                icon: "🎬",
+                description: "AI视频编辑和生成工具，支持文本生成视频",
+                tags: ["视频编辑", "生成", "特效"],
+                rating: "⭐⭐⭐⭐⭐",
+                link: "https://runwayml.com"
+            },
+            {
+                name: "Pika",
+                category: "video",
+                icon: "⚡",
+                description: "AI视频生成工具，快速创建短视频内容",
+                tags: ["视频生成", "快速", "创意"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://pika.art"
+            },
+            {
+                name: "HeyGen",
+                category: "video",
+                icon: "👤",
+                description: "AI数字人视频生成平台，支持多语言配音",
+                tags: ["数字人", "配音", "多语言"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://heygen.com"
+            },
+            {
+                name: "剪映",
+                category: "video",
+                icon: "✂️",
+                description: "抖音旗下视频编辑工具，集成AI剪辑功能",
+                tags: ["视频编辑", "中文", "易用"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://www.capcut.cn"
+            },
+
+            // AI编程
+            {
+                name: "GitHub Copilot",
+                category: "code",
+                icon: "🚀",
+                description: "由OpenAI驱动的AI编程助手，实时提供代码建议",
+                tags: ["代码补全", "GitHub", "多语言"],
+                rating: "⭐⭐⭐⭐⭐",
+                link: "https://github.com/features/copilot"
+            },
+            {
+                name: "Cursor",
+                category: "code",
+                icon: "✨",
+                description: "AI驱动的代码编辑器，支持自然语言编程",
+                tags: ["编辑器", "AI生成", "智能"],
+                rating: "⭐⭐⭐⭐⭐",
+                link: "https://cursor.sh"
+            },
+            {
+                name: "Codeium",
+                category: "code",
+                icon: "💡",
+                description: "免费的AI代码加速工具，支持70+编程语言",
+                tags: ["免费", "多语言", "快速"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://codeium.com"
+            },
+            {
+                name: "Tabnine",
+                category: "code",
+                icon: "🔮",
+                description: "基于深度学习的代码补全工具，支持多种IDE",
+                tags: ["代码补全", "本地", "隐私"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://tabnine.com"
+            },
+
+            // AI音频
+            {
+                name: "ElevenLabs",
+                category: "audio",
+                icon: "🎙️",
+                description: "AI语音合成工具，生成逼真的人声",
+                tags: ["语音合成", "多语言", "高质量"],
+                rating: "⭐⭐⭐⭐⭐",
+                link: "https://elevenlabs.io"
+            },
+            {
+                name: "Murf AI",
+                category: "audio",
+                icon: "🎵",
+                description: "AI配音工具，适合视频和播客制作",
+                tags: ["配音", "多音色", "专业"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://murf.ai"
+            },
+            {
+                name: "Suno",
+                category: "audio",
+                icon: "🎶",
+                description: "AI音乐生成工具，根据文本创作歌曲",
+                tags: ["音乐生成", "创作", "原创"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://suno.ai"
+            },
+            {
+                name: "讯飞配音",
+                category: "audio",
+                icon: "🔊",
+                description: "科大讯飞推出的AI配音工具，中文效果好",
+                tags: ["中文", "配音", "讯飞"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://peiyin.xunfei.cn"
+            },
+
+            // 办公助手
+            {
+                name: "WPS AI",
+                category: "office",
+                icon: "📊",
+                description: "集成在WPS中的AI助手，辅助文档编辑和数据分析",
+                tags: ["办公", "文档", "中文"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://ai.wps.cn"
+            },
+            {
+                name: "Gamma",
+                category: "office",
+                icon: "📑",
+                description: "AI演示文稿生成工具，快速创建精美PPT",
+                tags: ["PPT", "演示", "设计"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://gamma.app"
+            },
+            {
+                name: "Beautiful.ai",
+                category: "office",
+                icon: "🎯",
+                description: "AI驱动的演示文稿设计工具，自动优化布局",
+                tags: ["PPT", "设计", "自动"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://beautiful.ai"
+            },
+            {
+                name: "Fireflies.ai",
+                category: "office",
+                icon: "🎤",
+                description: "AI会议记录工具，自动转录和总结会议内容",
+                tags: ["会议", "转录", "总结"],
+                rating: "⭐⭐⭐⭐",
+                link: "https://fireflies.ai"
+            }
+        ];
+
+        let currentCategory = 'all';
+
+        // 渲染工具卡片
+        function renderTools(filteredTools = tools) {
+            const grid = document.getElementById('toolsGrid');
+            grid.innerHTML = filteredTools.map(tool => `
+                <div class="tool-card" data-category="${tool.category}" onclick="openSafe('${tool.link}')">
+                    <div class="tool-header">
+                        <div class="tool-icon">${tool.icon}</div>
+                        <div class="tool-info">
+                            <div class="tool-name">${tool.name}</div>
+                            <div class="tool-category">${getCategoryName(tool.category)}</div>
+                        </div>
+                    </div>
+                    <div class="tool-description">${tool.description}</div>
+                    <div class="tool-tags">
+                        ${tool.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                    <div class="tool-footer">
+                        <a href="${tool.link}" class="tool-link" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">访问 →</a>
+                        <span class="tool-rating">${tool.rating}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openSafe(url) {
+            const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+            if (newWindow) newWindow.opener = null;
+        }
+
+        // 获取分类名称
+        function getCategoryName(category) {
+            const names = {
+                'chat': 'AI对话',
+                'writing': 'AI写作',
+                'image': 'AI绘画',
+                'video': 'AI视频',
+                'code': 'AI编程',
+                'audio': 'AI音频',
+                'office': '办公助手'
+            };
+            return names[category] || '其他';
+        }
+
+        // 分类筛选
+        function filterCategory(category) {
+            currentCategory = category;
+            
+            // 更新标签样式
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // 筛选工具
+            const filtered = category === 'all' 
+                ? tools 
+                : tools.filter(tool => tool.category === category);
+            
+            renderTools(filtered);
+        }
+
+        // 搜索功能
+        function searchTools() {
+            const keyword = document.getElementById('searchInput').value.toLowerCase();
+            if (!keyword) {
+                renderTools();
+                return;
+            }
+
+            const filtered = tools.filter(tool => 
+                tool.name.toLowerCase().includes(keyword) ||
+                tool.description.toLowerCase().includes(keyword) ||
+                tool.tags.some(tag => tag.toLowerCase().includes(keyword))
+            );
+
+            renderTools(filtered);
+        }
+
+        // 回车搜索
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchTools();
+            }
+        });
+
+        // 初始化
+        renderTools();
+    </script>
+</body>
+</html>
