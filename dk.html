@@ -4,52 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>贷款利息计算器 - 2026年最新银行利率</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="./images/001.png">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
         }
-        
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
             min-height: 100vh;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        
+
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
+            width: 100%;
+            max-width: 1100px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-top: 20px;
+            margin-bottom: 40px;
         }
-        
-        .header {
-            text-align: center;
+
+        header {
+            background: linear-gradient(to right, #4b6cb7, #182848);
             color: white;
-            margin-bottom: 30px;
+            padding: 30px;
+            text-align: center;
         }
-        
-        .header h1 {
+
+        h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
         }
-        
-        .header p {
+
+        .subtitle {
             font-size: 1.1rem;
             opacity: 0.9;
+            font-weight: 300;
         }
-        
+
         .update-info {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: 15px;
         }
         
         .badge {
@@ -58,29 +68,216 @@
             border-radius: 20px;
             font-size: 0.9rem;
         }
-        
-        .lpr-banner {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+
+        .calculator-container {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0;
+        }
+
+        .input-section {
+            flex: 1.2;
+            min-width: 350px;
+            padding: 30px;
+            background-color: #f9fafc;
+            border-right: 1px solid #eaeaea;
+        }
+
+        .result-section {
+            flex: 1;
+            min-width: 350px;
+            padding: 30px;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+            font-size: 1.1rem;
+        }
+
+        .input-with-icon {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .icon {
+            position: absolute;
+            left: 15px;
+            color: #4b6cb7;
+            font-size: 1.2rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            background-color: white;
+            color: #333;
         }
         
-        .lpr-content {
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234b6cb7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 15px;
+        }
+
+        input:focus, select:focus {
+            border-color: #4b6cb7;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(75, 108, 183, 0.1);
+        }
+
+        .slider-container {
+            margin-top: 10px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: #4b6cb7;
+        }
+
+        .slider-value {
+            text-align: center;
+            font-weight: 600;
+            color: #4b6cb7;
+            margin-top: 5px;
+            font-size: 1.1rem;
+        }
+
+        .calc-type-selector {
+            display: flex;
+            margin-top: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #e0e0e0;
+        }
+
+        .calc-type {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            background-color: #f0f0f0;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .calc-type.active {
+            background-color: #4b6cb7;
+            color: white;
+        }
+
+        /* Results styling */
+        .results-container {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .result-card {
+            background: linear-gradient(to right, #f8f9ff, #f0f3ff);
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #4b6cb7;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .result-card.highlight {
+            background: linear-gradient(to right, #fdf8e9, #fffcf3);
+            border-left-color: #f5a623;
+        }
+
+        .result-title {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .result-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #182848;
+        }
+        
+        .result-card.highlight .result-value {
+            color: #d35400;
+        }
+
+        .result-details {
+            color: #666;
+            font-size: 1rem;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px dashed #ddd;
+            padding-top: 10px;
+        }
+
+        .explanation {
+            background-color: #f0f7ff;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 0.95rem;
+            color: #444;
+            line-height: 1.7;
+            margin-top: auto;
+        }
+
+        .explanation h3 {
+            color: #182848;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Bank list and LPR banner */
+        .lpr-banner {
+            background: linear-gradient(135deg, #f8f9ff 0%, #eef1f8 100%);
+            border: 1px solid #dce4f5;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 15px;
+        }
+        
+        .lpr-title {
+            font-weight: 600;
+            color: #182848;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .lpr-rates {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            flex: 1;
+            display: flex;
+            gap: 30px;
         }
         
         .lpr-item {
@@ -89,267 +286,35 @@
         }
         
         .lpr-label {
-            font-size: 0.9rem;
-            opacity: 0.8;
+            font-size: 0.85rem;
+            color: #666;
         }
         
         .lpr-value {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-top: 5px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #4b6cb7;
         }
         
         .refresh-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 10px;
+            background-color: white;
+            border: 1px solid #dce4f5;
+            color: #4b6cb7;
+            padding: 8px 16px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
         
         .refresh-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: translateY(-2px);
-        }
-        
-        .refresh-btn.loading {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        
-        .main-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-        }
-        
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-        }
-        
-        .card h2 {
-            font-size: 1.8rem;
-            margin-bottom: 25px;
-            color: #333;
-        }
-        
-        .form-group {
-            margin-bottom: 25px;
-        }
-        
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            color: #555;
-            margin-bottom: 10px;
-            font-size: 0.95rem;
-        }
-        
-        .form-group input[type="number"],
-        .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-        
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        .form-group input[type="range"] {
-            width: 100%;
-            margin-top: 10px;
-        }
-        
-        .button-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        
-        .btn {
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-        
-        .btn-secondary {
-            background: #e0e0e0;
-            color: #666;
-        }
-        
-        .btn-primary:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
-        }
-        
-        .btn-secondary:hover {
-            background: #d0d0d0;
-        }
-        
-        .btn.active {
-            background: #667eea;
-            color: white;
-        }
-        
-        .result-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin-top: 20px;
-        }
-        
-        .result-box h3 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-        }
-        
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-        }
-        
-        .result-item:last-child {
-            border-bottom: none;
-        }
-        
-        .result-label {
-            opacity: 0.9;
-        }
-        
-        .result-value {
-            font-size: 1.3rem;
-            font-weight: bold;
-        }
-        
-        .result-highlight {
-            font-size: 1.8rem;
-            color: #ffd700;
-        }
-        
-        .bank-list {
-            max-height: 500px;
-            overflow-y: auto;
-        }
-        
-        .bank-item {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-        
-        .bank-item:hover {
-            background: #e9ecef;
-            transform: translateX(5px);
-        }
-        
-        .bank-item.selected {
-            background: #e8eaf6;
-            border-color: #667eea;
-        }
-        
-        .bank-name {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
-        }
-        
-        .bank-product {
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 8px;
-        }
-        
-        .bank-rates {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            color: #667eea;
-            font-weight: 600;
-        }
-        
-        .bank-info {
-            font-size: 0.8rem;
-            color: #999;
-            margin-top: 5px;
-        }
-        
-        .toggle-btn {
-            width: 100%;
-            padding: 12px;
-            background: #e8eaf6;
-            color: #667eea;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-bottom: 15px;
-            transition: all 0.3s;
-        }
-        
-        .toggle-btn:hover {
-            background: #d1d4f0;
-        }
-        
-        .alert {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-        
-        .alert-title {
-            font-weight: 600;
-            color: #856404;
-            margin-bottom: 8px;
-        }
-        
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .header h1 {
-                font-size: 1.8rem;
-            }
-            
-            .lpr-content {
-                flex-direction: column;
-            }
+            background-color: #f0f3ff;
+            border-color: #4b6cb7;
         }
         
         .spin {
@@ -360,146 +325,294 @@
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
+        
+        .bank-section {
+            margin-top: 30px;
+            border-top: 1px solid #eaeaea;
+            padding-top: 20px;
+        }
+        
+        .toggle-btn {
+            width: 100%;
+            padding: 12px;
+            background: #f0f3ff;
+            color: #4b6cb7;
+            border: 1px dashed #4b6cb7;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+        
+        .toggle-btn:hover {
+            background: #e6eaf8;
+        }
+        
+        .bank-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        
+        .bank-item {
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .bank-item:hover {
+            border-color: #4b6cb7;
+            box-shadow: 0 4px 12px rgba(75, 108, 183, 0.1);
+        }
+        
+        .bank-item.selected {
+            background: #f0f3ff;
+            border-color: #4b6cb7;
+            border-width: 2px;
+        }
+        
+        .bank-name {
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .bank-product {
+            font-size: 0.85rem;
+            color: #666;
+            background: #f0f0f0;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        
+        .bank-rates-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #4b6cb7;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-container {
+                flex-direction: column;
+            }
+
+            .input-section {
+                border-right: none;
+                border-bottom: 1px solid #eaeaea;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .lpr-banner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .refresh-btn {
+                align-self: flex-end;
+            }
+        }
+        
+        /* Scrollbar styling for bank list */
+        .bank-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .bank-list::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+            border-radius: 4px;
+        }
+        .bank-list::-webkit-scrollbar-thumb {
+            background: #c1c1c1; 
+            border-radius: 4px;
+        }
+        .bank-list::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8; 
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>
-                <span>🧮</span>
-                贷款利息计算器
-                <span>📊</span>
-            </h1>
-            <p>支持等额本息、等额本金 | 实时银行利率数据</p>
+        <header>
+            <h1><i class="fas fa-calculator"></i> 贷款利息计算器</h1>
+            <p class="subtitle">支持等额本息、等额本金 | 实时银行利率数据</p>
             <div class="update-info">
-                <span class="badge">数据更新：<span id="updateDate">2026年1月8日</span></span>
-                <span class="badge">✅ 实时数据</span>
+                <span class="badge"><i class="far fa-clock"></i> 数据更新：<span id="updateDate">2026年1月8日</span></span>
+                <span class="badge"><i class="fas fa-check-circle"></i> 实时数据</span>
             </div>
-        </div>
+        </header>
 
-        <div class="lpr-banner">
-            <div class="lpr-content">
-                <div>
-                    <h3 style="margin-bottom: 15px;">📈 贷款市场报价利率（LPR）- 中国人民银行</h3>
-                    <div class="lpr-rates">
-                        <div class="lpr-item">
-                            <span class="lpr-label">1年期LPR</span>
-                            <span class="lpr-value">3.10%</span>
-                        </div>
-                        <div class="lpr-item">
-                            <span class="lpr-label">5年期LPR</span>
-                            <span class="lpr-value">3.60%</span>
-                        </div>
-                    </div>
-                </div>
-                <button class="refresh-btn" onclick="refreshRates()" id="refreshBtn">
-                    <span id="refreshIcon">🔄</span>
-                    <span>刷新数据</span>
-                </button>
-            </div>
-        </div>
-
-        <div class="main-content">
-            <div class="card">
-                <h2>💰 贷款信息</h2>
+        <div class="calculator-container">
+            <div class="input-section">
                 
-                <div class="form-group">
-                    <label for="loanAmount">贷款金额（元）</label>
-                    <input type="number" id="loanAmount" value="100000" min="10000" step="10000" oninput="calculate()">
-                    <input type="range" id="loanAmountRange" min="10000" max="1000000" value="100000" step="10000" oninput="syncAmount(this.value)">
+                <div class="lpr-banner">
+                    <div>
+                        <div class="lpr-title"><i class="fas fa-chart-line"></i> 贷款市场报价利率（LPR）</div>
+                        <div class="lpr-rates">
+                            <div class="lpr-item">
+                                <span class="lpr-label">1年期LPR</span>
+                                <span class="lpr-value">3.10%</span>
+                            </div>
+                            <div class="lpr-item">
+                                <span class="lpr-label">5年期LPR</span>
+                                <span class="lpr-value">3.60%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="refresh-btn" onclick="refreshRates()" id="refreshBtn">
+                        <i class="fas fa-sync-alt" id="refreshIcon"></i> 刷新数据
+                    </button>
                 </div>
 
-                <div class="form-group">
-                    <label for="loanYears">贷款年限（年）</label>
-                    <input type="number" id="loanYears" value="3" min="1" max="30" oninput="calculate()">
-                    <input type="range" id="loanYearsRange" min="1" max="30" value="3" oninput="syncYears(this.value)">
-                </div>
+                <h2 style="margin-bottom: 20px; color: #333; font-size: 1.5rem;"><i class="fas fa-edit"></i> 贷款设置</h2>
 
-                <div class="form-group">
-                    <label for="bankSelect">选择银行（2026年最新利率）</label>
-                    <select id="bankSelect" onchange="selectBank()">
-                        <option value="">请选择银行</option>
-                        <optgroup label="🏛️ 国有大行">
-                            <option value="icbc">中国工商银行 - 融e借 - 3.45%</option>
-                            <option value="abc">中国农业银行 - 随薪贷 - 3.45%</option>
-                            <option value="boc">中国银行 - 中银E贷 - 3.10%</option>
-                            <option value="ccb">中国建设银行 - 快贷 - 3.00%</option>
-                            <option value="bocom">交通银行 - 惠民贷 - 3.45%</option>
-                            <option value="psbc">中国邮政储蓄银行 - 邮享贷 - 3.45%</option>
-                        </optgroup>
-                        <optgroup label="🏦 股份制银行">
-                            <option value="cmb">招商银行 - 闪电贷 - 3.40%</option>
-                            <option value="citic">中信银行 - 信秒贷 - 2.88%</option>
-                            <option value="ceb">中国光大银行 - 阳光消费贷 - 3.50%</option>
-                            <option value="spdb">上海浦东发展银行 - 浦银快贷 - 3.50%</option>
-                            <option value="cmbc">中国民生银行 - 随心贷 - 3.50%</option>
-                            <option value="cib">兴业银行 - 兴闪贷 - 3.75%</option>
-                            <option value="pingan">平安银行 - 新一贷 - 3.80%</option>
-                            <option value="hxb">华夏银行 - 龙商贷 - 3.50%</option>
-                            <option value="gdb">广发银行 - 财智金 - 3.50%</option>
-                        </optgroup>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="customRate">或输入自定义年利率（%）</label>
-                    <input type="number" id="customRate" placeholder="例如：3.10" step="0.01" min="0" max="24" oninput="useCustomRate()">
-                </div>
-
-                <div class="form-group">
-                    <label>还款方式</label>
-                    <div class="button-group">
-                        <button class="btn" id="btnEqual" onclick="setRepaymentType('equal')">等额本息</button>
-                        <button class="btn active" id="btnPrincipal" onclick="setRepaymentType('principal')">等额本金</button>
+                <div class="input-group">
+                    <label for="loanAmount"><i class="fas fa-money-bill-wave"></i> 贷款金额 (元)</label>
+                    <div class="input-with-icon">
+                        <span class="icon">¥</span>
+                        <input type="number" id="loanAmount" min="10000" step="10000" value="100000" placeholder="请输入贷款金额">
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="loanAmount-slider" min="10000" max="2000000" step="10000" value="100000">
+                        <div class="slider-value" id="loanAmount-value">100,000 元</div>
                     </div>
                 </div>
 
-                <div class="result-box">
-                    <h3>📊 计算结果</h3>
-                    <div class="result-item">
-                        <span class="result-label">当前年利率：</span>
-                        <span class="result-value" id="currentRate">3.10%</span>
+                <div class="input-group">
+                    <label for="loanYears"><i class="far fa-calendar-alt"></i> 贷款年限 (年)</label>
+                    <div class="input-with-icon">
+                        <span class="icon"><i class="fas fa-hourglass-half"></i></span>
+                        <input type="number" id="loanYears" min="1" max="30" step="1" value="3" placeholder="请输入贷款年限">
                     </div>
-                    <div class="result-item">
-                        <span class="result-label">贷款本金：</span>
-                        <span class="result-value" id="principal">¥100,000</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">支付利息：</span>
-                        <span class="result-value result-highlight" id="totalInterest">¥0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">还款总额：</span>
-                        <span class="result-value" id="totalPayment">¥0</span>
-                    </div>
-                    <div class="result-item" style="border-top: 2px solid rgba(255,255,255,0.3); margin-top: 10px; padding-top: 20px;">
-                        <div id="monthlyPayment" style="width: 100%;"></div>
+                    <div class="slider-container">
+                        <input type="range" id="loanYears-slider" min="1" max="30" step="1" value="3">
+                        <div class="slider-value" id="loanYears-value">3 年 (36 期)</div>
                     </div>
                 </div>
 
-                <div class="alert">
-                    <div class="alert-title">💡 还款方式说明</div>
-                    <p><strong>等额本息：</strong>每月还款金额固定，前期利息占比大，后期本金占比大</p>
-                    <p><strong>等额本金：</strong>每月还款本金固定，利息递减，总利息更少但前期压力大</p>
+                <div class="input-group">
+                    <label for="bankSelect"><i class="fas fa-university"></i> 银行利率 (2026年最新)</label>
+                    <div class="input-with-icon">
+                        <span class="icon"><i class="fas fa-percentage"></i></span>
+                        <select id="bankSelect" onchange="selectBank()">
+                            <option value="">请选择银行自动带入利率</option>
+                            <optgroup label="🏛️ 国有大行">
+                                <option value="icbc">中国工商银行 - 融e借</option>
+                                <option value="abc">中国农业银行 - 随薪贷</option>
+                                <option value="boc">中国银行 - 中银E贷</option>
+                                <option value="ccb">中国建设银行 - 快贷</option>
+                                <option value="bocom">交通银行 - 惠民贷</option>
+                                <option value="psbc">中国邮政储蓄银行 - 邮享贷</option>
+                            </optgroup>
+                            <optgroup label="🏦 股份制银行">
+                                <option value="cmb">招商银行 - 闪电贷</option>
+                                <option value="citic">中信银行 - 信秒贷</option>
+                                <option value="ceb">中国光大银行 - 阳光消费贷</option>
+                                <option value="spdb">上海浦东发展银行 - 浦银快贷</option>
+                                <option value="cmbc">中国民生银行 - 随心贷</option>
+                                <option value="cib">兴业银行 - 兴闪贷</option>
+                                <option value="pingan">平安银行 - 新一贷</option>
+                                <option value="hxb">华夏银行 - 龙商贷</option>
+                                <option value="gdb">广发银行 - 财智金</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="customRate"><i class="fas fa-sliders-h"></i> 实际年利率 (%)</label>
+                    <div class="input-with-icon">
+                        <span class="icon">%</span>
+                        <input type="number" id="customRate" placeholder="例如：3.10" step="0.01" min="0" max="24" value="3.10">
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="customRate-slider" min="1.0" max="15.0" step="0.05" value="3.10">
+                        <div class="slider-value" id="customRate-value">3.10%</div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-exchange-alt"></i> 还款方式</label>
+                    <div class="calc-type-selector">
+                        <div class="calc-type active" id="type-principal">等额本金 (首月最多，逐月递减)</div>
+                        <div class="calc-type" id="type-equal">等额本息 (每月还款额固定)</div>
+                    </div>
+                </div>
+                
+                <div class="bank-section">
+                    <button class="toggle-btn" onclick="toggleBankList()">
+                        <i class="fas fa-list-ul"></i> <span id="toggleText">展开查看15家银行详细利率表</span>
+                    </button>
+                    <div id="bankList" class="bank-list" style="display: none;"></div>
                 </div>
             </div>
 
-            <div class="card">
-                <h2>🏦 银行利率表</h2>
-                <button class="toggle-btn" onclick="toggleBankList()">
-                    <span id="toggleText">展开查看15家银行利率</span>
-                </button>
-                <div id="bankList" style="display: none;"></div>
-                <div class="alert">
-                    <div class="alert-title">⚠️ 重要提示</div>
-                    <p>1. 以上利率为2026年1月最新参考数据</p>
-                    <p>2. 实际利率受个人征信、收入等影响</p>
-                    <p>3. 优质客户可获得更低利率优惠</p>
-                    <p>4. 建议拨打银行客服获取准确报价</p>
+            <div class="result-section">
+                <h2 style="margin-bottom: 20px; color: #333; font-size: 1.5rem;"><i class="fas fa-chart-pie"></i> 计算结果</h2>
+
+                <div class="results-container">
+                    <div class="result-card">
+                        <div class="result-title">每月还款情况</div>
+                        <div id="monthlyPaymentDisplay">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="result-card highlight">
+                        <div class="result-title">支付总利息</div>
+                        <div class="result-value" id="totalInterest">¥0.00</div>
+                        <div class="result-details">
+                            <span>贷款本金: <strong id="principalDisplay">¥0.00</strong></span>
+                            <span>年利率: <strong id="rateDisplay">0.00%</strong></span>
+                        </div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div class="result-title">累计还款总额 (本金+利息)</div>
+                        <div class="result-value" id="totalPayment" style="font-size: 1.8rem;">¥0.00</div>
+                    </div>
+
+                    <div class="explanation">
+                        <h3><i class="fas fa-lightbulb"></i> 还款方式说明</h3>
+                        <div id="repaymentExplanation">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <footer>
+        <p>© 2026 贷款利息计算器 | 本工具仅供参考，实际利率和还款额以各银行最终审批为准</p>
+        <p>温馨提示：合理借贷，理性消费，避免逾期影响征信</p>
+    </footer>
 
     <script>
         const bankData = {
@@ -520,105 +633,213 @@
             gdb: { name: '广发银行', product: '财智金', rate1y: 3.50, rate3y: 3.80, rate5y: 4.00, max: 30, source: '官网数据' }
         };
 
-        let repaymentType = 'principal';
+        // State variables
+        let repaymentType = 'principal'; // 'principal' or 'equal'
         let selectedBankId = '';
 
-        function syncAmount(val) {
-            document.getElementById('loanAmount').value = val;
-            calculate();
+        // DOM Elements
+        const els = {
+            loanAmount: document.getElementById('loanAmount'),
+            loanAmountSlider: document.getElementById('loanAmount-slider'),
+            loanAmountValue: document.getElementById('loanAmount-value'),
+            
+            loanYears: document.getElementById('loanYears'),
+            loanYearsSlider: document.getElementById('loanYears-slider'),
+            loanYearsValue: document.getElementById('loanYears-value'),
+            
+            customRate: document.getElementById('customRate'),
+            customRateSlider: document.getElementById('customRate-slider'),
+            customRateValue: document.getElementById('customRate-value'),
+            
+            bankSelect: document.getElementById('bankSelect'),
+            
+            btnEqual: document.getElementById('type-equal'),
+            btnPrincipal: document.getElementById('type-principal'),
+            
+            // Results
+            totalInterest: document.getElementById('totalInterest'),
+            totalPayment: document.getElementById('totalPayment'),
+            monthlyDisplay: document.getElementById('monthlyPaymentDisplay'),
+            principalDisplay: document.getElementById('principalDisplay'),
+            rateDisplay: document.getElementById('rateDisplay'),
+            explanationDisplay: document.getElementById('repaymentExplanation')
+        };
+
+        // Format currency
+        function fmt(val) {
+            return parseFloat(val).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 
-        function syncYears(val) {
-            document.getElementById('loanYears').value = val;
-            calculate();
+        // Initialize listeners
+        function setupListeners() {
+            // Amount sync
+            els.loanAmount.addEventListener('input', function() {
+                els.loanAmountSlider.value = this.value;
+                els.loanAmountValue.textContent = fmt(this.value) + ' 元';
+                calculate();
+            });
+            els.loanAmountSlider.addEventListener('input', function() {
+                els.loanAmount.value = this.value;
+                els.loanAmountValue.textContent = fmt(this.value) + ' 元';
+                calculate();
+            });
+
+            // Years sync
+            els.loanYears.addEventListener('input', function() {
+                els.loanYearsSlider.value = this.value;
+                els.loanYearsValue.textContent = `${this.value} 年 (${this.value * 12} 期)`;
+                updateRateFromBank();
+                calculate();
+            });
+            els.loanYearsSlider.addEventListener('input', function() {
+                els.loanYears.value = this.value;
+                els.loanYearsValue.textContent = `${this.value} 年 (${this.value * 12} 期)`;
+                updateRateFromBank();
+                calculate();
+            });
+
+            // Rate sync
+            els.customRate.addEventListener('input', function() {
+                els.customRateSlider.value = this.value;
+                els.customRateValue.textContent = parseFloat(this.value).toFixed(2) + '%';
+                // Clear bank selection if manually typing rate
+                els.bankSelect.value = '';
+                selectedBankId = '';
+                updateBankListSelection();
+                calculate();
+            });
+            els.customRateSlider.addEventListener('input', function() {
+                els.customRate.value = this.value;
+                els.customRateValue.textContent = parseFloat(this.value).toFixed(2) + '%';
+                els.bankSelect.value = '';
+                selectedBankId = '';
+                updateBankListSelection();
+                calculate();
+            });
+
+            // Repayment type toggle
+            els.btnEqual.addEventListener('click', () => setRepaymentType('equal'));
+            els.btnPrincipal.addEventListener('click', () => setRepaymentType('principal'));
         }
 
         function setRepaymentType(type) {
             repaymentType = type;
-            document.getElementById('btnEqual').classList.toggle('active', type === 'equal');
-            document.getElementById('btnPrincipal').classList.toggle('active', type === 'principal');
+            els.btnEqual.classList.toggle('active', type === 'equal');
+            els.btnPrincipal.classList.toggle('active', type === 'principal');
             calculate();
         }
 
         function selectBank() {
-            selectedBankId = document.getElementById('bankSelect').value;
-            document.getElementById('customRate').value = '';
-            calculate();
-        }
-
-        function useCustomRate() {
-            document.getElementById('bankSelect').value = '';
-            selectedBankId = '';
-            calculate();
-        }
-
-        function getCurrentRate() {
-            const customRate = parseFloat(document.getElementById('customRate').value);
-            if (customRate) return customRate;
-            
-            if (selectedBankId && bankData[selectedBankId]) {
-                const bank = bankData[selectedBankId];
-                const years = parseInt(document.getElementById('loanYears').value);
-                if (years <= 1) return bank.rate1y;
-                if (years <= 3) return bank.rate3y;
-                return bank.rate5y;
+            selectedBankId = els.bankSelect.value;
+            if (selectedBankId) {
+                updateRateFromBank();
             }
+            updateBankListSelection();
+            calculate();
+        }
+
+        function updateRateFromBank() {
+            if (!selectedBankId || !bankData[selectedBankId]) return;
             
-            return 3.10;
+            const bank = bankData[selectedBankId];
+            const years = parseInt(els.loanYears.value) || 3;
+            let rate;
+            
+            if (years <= 1) rate = bank.rate1y;
+            else if (years <= 3) rate = bank.rate3y;
+            else rate = bank.rate5y;
+            
+            els.customRate.value = rate;
+            els.customRateSlider.value = rate;
+            els.customRateValue.textContent = rate.toFixed(2) + '%';
         }
 
         function calculate() {
-            const amount = parseFloat(document.getElementById('loanAmount').value);
-            const years = parseInt(document.getElementById('loanYears').value);
-            const rate = getCurrentRate() / 100 / 12;
+            const amount = parseFloat(els.loanAmount.value) || 0;
+            const years = parseInt(els.loanYears.value) || 0;
+            const ratePercent = parseFloat(els.customRate.value) || 0;
+            
+            const rate = ratePercent / 100 / 12; // Monthly rate
             const months = years * 12;
 
-            document.getElementById('loanAmountRange').value = amount;
-            document.getElementById('loanYearsRange').value = years;
-
-            let totalInterest, totalPayment, monthlyDisplay;
+            let totalInterest = 0;
+            let totalPayment = 0;
 
             if (repaymentType === 'equal') {
-                const monthly = (amount * rate * Math.pow(1 + rate, months)) / (Math.pow(1 + rate, months) - 1);
+                // 等额本息
+                const monthly = (amount * rate * Math.pow(1 + rate, months)) / (Math.pow(1 + rate, months) - 1) || 0;
                 totalPayment = monthly * months;
                 totalInterest = totalPayment - amount;
-                monthlyDisplay = `<div style="display: flex; justify-content: space-between;"><span class="result-label">每月还款：</span><span class="result-value" style="font-size: 2rem;">¥${monthly.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span></div>`;
-            } else {
-                const monthlyPrincipal = amount / months;
-                let interest = 0;
-                let firstMonth = 0, lastMonth = 0;
                 
-                for (let i = 0; i < months; i++) {
-                    const remaining = amount - (monthlyPrincipal * i);
-                    const monthlyInterest = remaining * rate;
-                    interest += monthlyInterest;
-                    if (i === 0) firstMonth = monthlyPrincipal + monthlyInterest;
-                    if (i === months - 1) lastMonth = monthlyPrincipal + monthlyInterest;
+                els.monthlyDisplay.innerHTML = `<div class="result-value" style="color: #4b6cb7;">¥${fmt(monthly)}</div>`;
+                
+                els.explanationDisplay.innerHTML = `
+                    <strong>等额本息：</strong> 每月还款金额固定。<br>
+                    <span style="color: #666; font-size: 0.9rem;">特点：前期还款中利息占比较大，本金占比较小。适合收入稳定的群体，每月还款压力均衡。</span>
+                `;
+            } else {
+                // 等额本金
+                const monthlyPrincipal = amount / months || 0;
+                let firstMonth = 0, lastMonth = 0, monthlyDecrease = 0;
+                
+                if (months > 0) {
+                    firstMonth = monthlyPrincipal + (amount * rate);
+                    lastMonth = monthlyPrincipal + (monthlyPrincipal * rate);
+                    monthlyDecrease = monthlyPrincipal * rate;
+                    
+                    totalInterest = (months + 1) * amount * rate / 2;
+                    totalPayment = amount + totalInterest;
                 }
                 
-                totalInterest = interest;
-                totalPayment = amount + interest;
-                monthlyDisplay = `<div><div style="display: flex; justify-content: space-between; margin-bottom: 10px;"><span class="result-label">首月还款：</span><span class="result-value">¥${firstMonth.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span></div><div style="display: flex; justify-content: space-between;"><span class="result-label">末月还款：</span><span class="result-value">¥${lastMonth.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span></div></div>`;
+                els.monthlyDisplay.innerHTML = `
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                            <span style="color: #666; font-size: 0.95rem;">首月还款:</span>
+                            <span class="result-value" style="font-size: 1.8rem; color: #4b6cb7;">¥${fmt(firstMonth)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                            <span style="color: #666; font-size: 0.95rem;">末月还款:</span>
+                            <span class="result-value" style="font-size: 1.4rem;">¥${fmt(lastMonth)}</span>
+                        </div>
+                        <div style="font-size: 0.85rem; color: #888; text-align: right;">每月递减: ¥${fmt(monthlyDecrease)}</div>
+                    </div>
+                `;
+                
+                els.explanationDisplay.innerHTML = `
+                    <strong>等额本金：</strong> 每月偿还的本金固定，利息逐月递减。<br>
+                    <span style="color: #666; font-size: 0.9rem;">特点：总利息较少，但前期还款金额大，压力较重，后期逐渐轻松。适合当前资金宽裕的群体。</span>
+                `;
             }
 
-            document.getElementById('currentRate').textContent = getCurrentRate().toFixed(2) + '%';
-            document.getElementById('principal').textContent = '¥' + amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('totalInterest').textContent = '¥' + totalInterest.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('totalPayment').textContent = '¥' + totalPayment.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('monthlyPayment').innerHTML = monthlyDisplay;
+            // Update UI
+            els.principalDisplay.textContent = `¥${fmt(amount)}`;
+            els.rateDisplay.textContent = `${ratePercent.toFixed(2)}%`;
+            
+            // Handle edge cases
+            if (amount === 0 || months === 0 || isNaN(totalInterest)) {
+                els.totalInterest.textContent = '¥0.00';
+                els.totalPayment.textContent = '¥0.00';
+            } else {
+                els.totalInterest.textContent = `¥${fmt(totalInterest)}`;
+                els.totalPayment.textContent = `¥${fmt(totalPayment)}`;
+            }
         }
 
+        // Bank list functionality
         function toggleBankList() {
             const list = document.getElementById('bankList');
             const text = document.getElementById('toggleText');
+            const icon = text.previousElementSibling;
             
             if (list.style.display === 'none') {
-                list.style.display = 'block';
-                text.textContent = '收起利率表';
+                list.style.display = 'grid';
+                text.textContent = '收起详细利率表';
+                icon.className = 'fas fa-chevron-up';
                 renderBankList();
             } else {
                 list.style.display = 'none';
-                text.textContent = '展开查看15家银行利率';
+                text.textContent = '展开查看15家银行详细利率表';
+                icon.className = 'fas fa-list-ul';
             }
         }
 
@@ -629,14 +850,19 @@
             for (const [id, bank] of Object.entries(bankData)) {
                 const isSelected = id === selectedBankId ? 'selected' : '';
                 html += `
-                    <div class="bank-item ${isSelected}" onclick="selectBankFromList('${id}')">
-                        <div class="bank-name">${bank.name} <span class="bank-product">(${bank.product})</span></div>
-                        <div class="bank-rates">
-                            <span>1年: ${bank.rate1y}%</span>
-                            <span>3年: ${bank.rate3y}%</span>
-                            <span>5年: ${bank.rate5y}%</span>
+                    <div class="bank-item ${isSelected}" onclick="selectBankFromList('${id}')" id="bank-item-${id}">
+                        <div class="bank-name">
+                            <span><i class="fas fa-building" style="color: #888; margin-right: 5px;"></i>${bank.name}</span>
+                            <span class="bank-product">${bank.product}</span>
                         </div>
-                        <div class="bank-info">额度: 最高${bank.max}万 | ${bank.source}</div>
+                        <div class="bank-rates-display">
+                            <span>1年: ${bank.rate1y.toFixed(2)}%</span>
+                            <span>3年: ${bank.rate3y.toFixed(2)}%</span>
+                            <span>5年: ${bank.rate5y.toFixed(2)}%</span>
+                        </div>
+                        <div style="font-size: 0.8rem; color: #999; margin-top: 2px;">
+                            额度: 最高${bank.max}万 | 数据: ${bank.source}
+                        </div>
                     </div>
                 `;
             }
@@ -646,17 +872,29 @@
 
         function selectBankFromList(id) {
             selectedBankId = id;
-            document.getElementById('bankSelect').value = id;
-            document.getElementById('customRate').value = '';
+            els.bankSelect.value = id;
+            updateRateFromBank();
+            updateBankListSelection();
             calculate();
-            renderBankList();
+        }
+        
+        function updateBankListSelection() {
+            const items = document.querySelectorAll('.bank-item');
+            if (items.length === 0) return; // List not rendered yet
+            
+            items.forEach(item => item.classList.remove('selected'));
+            if (selectedBankId) {
+                const selectedEl = document.getElementById(`bank-item-${selectedBankId}`);
+                if (selectedEl) selectedEl.classList.add('selected');
+            }
         }
 
         function refreshRates() {
             const btn = document.getElementById('refreshBtn');
             const icon = document.getElementById('refreshIcon');
             
-            btn.classList.add('loading');
+            btn.style.opacity = '0.7';
+            btn.style.cursor = 'not-allowed';
             icon.classList.add('spin');
             
             setTimeout(() => {
@@ -664,14 +902,32 @@
                 const dateStr = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`;
                 document.getElementById('updateDate').textContent = dateStr;
                 
-                btn.classList.remove('loading');
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
                 icon.classList.remove('spin');
                 
-                alert(`✅ 利率数据已更新！\n\n更新时间：${dateStr}\n\n⚠️ 提示：\n• 实际利率以各银行最新公布为准\n• 个人资质会影响最终利率\n• 建议致电银行获取精确报价\n\n数据来源：\n• LPR基准利率（中国人民银行）\n• 各银行官方APP及网站\n• 2026年最新市场数据`);
-            }, 1500);
+                // Show a brief success message
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> 更新成功';
+                btn.style.color = '#2eb85c';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.color = '';
+                }, 2000);
+            }, 800);
         }
 
-        calculate();
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            setupListeners();
+            calculate();
+            
+            // Set initial display values
+            els.loanAmountValue.textContent = fmt(els.loanAmount.value) + ' 元';
+            els.loanYearsValue.textContent = `${els.loanYears.value} 年 (${els.loanYears.value * 12} 期)`;
+            els.customRateValue.textContent = parseFloat(els.customRate.value).toFixed(2) + '%';
+        });
     </script>
 </body>
 </html>
