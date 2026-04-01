@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>微信</title>
+  <style>
+    :root {
+      --bg-color: #ededed;
+      --header-bg: #ededed;
+      --nav-bg: #f7f7f7;
+      --item-active: #d6d6d6;
+      --text-primary: #191919;
+      --text-secondary: #b2b2b2;
+      --text-time: #b2b2b2;
+      --divider: #e0e0e0;
+      --wechat-green: #07c160;
+      --safe-area-top: env(safe-area-inset-top);
+      --safe-area-bottom: env(safe-area-inset-bottom);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Status Bar Placeholder */
+    .status-bar {
+      height: var(--safe-area-top);
+      background-color: var(--header-bg);
+      z-index: 100;
+    }
+
+    /* Header */
+    .header {
+      height: 44px;
+      background-color: var(--header-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 16px;
+      position: relative;
+      z-index: 100;
+      /* box-shadow: 0 0.5px 0 rgba(0,0,0,0.1); */
+    }
+
+    .header-title {
+      font-size: 17px;
+      font-weight: 500;
+    }
+
+    .header-actions {
+      position: absolute;
+      right: 16px;
+      display: flex;
+      gap: 16px;
+    }
+
+    .icon-btn {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background-color: #fff;
+    }
+
+    /* Search Bar */
+    .search-bar {
+      background-color: var(--bg-color);
+      padding: 8px 10px;
+    }
+
+    .search-input-box {
+      background-color: #fff;
+      border-radius: 6px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      font-size: 15px;
+    }
+
+    /* Chat List */
+    .chat-list {
+      background-color: #fff;
+    }
+
+    .chat-item {
+      display: flex;
+      height: 72px;
+      padding: 0 16px;
+      background-color: #fff;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .chat-item:active {
+      background-color: var(--item-active);
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 6px;
+      margin-right: 12px;
+      align-self: center;
+      background-color: #eee;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .chat-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-bottom: 0.5px solid var(--divider);
+      overflow: hidden;
+    }
+
+    .chat-item:last-child .chat-info {
+      border-bottom: none;
+    }
+
+    .chat-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .chat-name {
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 70%;
+    }
+
+    .chat-time {
+      font-size: 12px;
+      color: var(--text-time);
+    }
+
+    .chat-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-msg {
+      font-size: 14px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 85%;
+    }
+
+    .chat-badge {
+      display: none;
+      min-width: 18px;
+      height: 18px;
+      background-color: #fa5151;
+      color: #fff;
+      font-size: 12px;
+      border-radius: 9px;
+      align-items: center;
+      justify-content: center;
+      padding: 0 5px;
+    }
+
+    .chat-badge.show {
+      display: flex;
+    }
+
+    .chat-mute {
+      width: 14px;
+      height: 14px;
+      display: none;
+    }
+    
+    .chat-mute.show {
+        display: block;
+        color: var(--text-secondary);
+    }
+
+    /* Tab Bar */
+    .tab-bar {
+      height: calc(56px + var(--safe-area-bottom));
+      background-color: var(--nav-bg);
+      border-top: 0.5px solid rgba(0,0,0,0.1);
+      display: flex;
+      padding-bottom: var(--safe-area-bottom);
+      z-index: 100;
+    }
+
+    .tab-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .tab-icon {
+      width: 28px;
+      height: 28px;
+      margin-bottom: 2px;
+      position: relative;
+    }
+    
+    .tab-badge {
+        position: absolute;
+        top: -2px;
+        right: -8px;
+        min-width: 16px;
+        height: 16px;
+        background-color: #fa5151;
+        color: white;
+        font-size: 10px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 4px;
+    }
+
+    .tab-text {
+      font-size: 10px;
+      color: var(--text-primary);
+    }
+
+    .tab-item.active .tab-text {
+      color: var(--wechat-green);
+    }
+    
+    /* Icons (SVG) */
+    .icon-svg {
+        width: 100%;
+        height: 100%;
+        fill: currentColor;
+    }
+    
+    .tab-item .icon-svg {
+        fill: transparent;
+        stroke: var(--text-primary);
+        stroke-width: 1.5;
+    }
+    
+    .tab-item.active .icon-svg {
+        fill: var(--wechat-green);
+        stroke: var(--wechat-green);
+    }
+
+    /* SVG Definitions */
+    .svg-defs { display: none; }
+  </style>
+</head>
+
+<body>
+  <!-- Icons -->
+  <svg class="svg-defs">
+    <symbol id="icon-add" viewBox="0 0 24 24">
+      <path d="M11 11V5H13V11H19V13H13V19H11V13H5V11H11Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24">
+      <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-chat" viewBox="0 0 24 24">
+        <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 16H6L4 18V4H20V16Z" />
+    </symbol>
+    <symbol id="icon-contacts" viewBox="0 0 24 24">
+         <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z"/>
+    </symbol>
+    <symbol id="icon-discover" viewBox="0 0 24 24">
+        <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM14.19 14.19L6 18L9.81 9.81L18 6L14.19 14.19ZM12 10.9C11.39 10.9 10.9 11.39 10.9 12C10.9 12.61 11.39 13.1 12 13.1C12.61 13.1 13.1 12.61 13.1 12C13.1 11.39 12.61 10.9 12 10.9Z"/>
+    </symbol>
+    <symbol id="icon-me" viewBox="0 0 24 24">
+        <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z"/>
+    </symbol>
+    <symbol id="icon-mute" viewBox="0 0 24 24">
+         <path d="M16.24 7.76C15.07 6.59 13.54 6 12 6V1.5C12 0.67 11.33 0 10.5 0C9.67 0 9 0.67 9 1.5V6C7.46 6 5.93 6.59 4.76 7.76C2.41 10.11 2.41 13.89 4.76 16.24C5.93 17.41 7.46 18 9 18V22.5C9 23.33 9.67 24 10.5 24C11.33 24 12 23.33 12 22.5V18C13.54 18 15.07 17.41 16.24 16.24C18.59 13.89 18.59 10.11 16.24 7.76ZM14.83 14.83C13.92 15.74 12.72 16.2 11.51 16.2H9.49C8.28 16.2 7.08 15.74 6.17 14.83C4.34 13 4.34 10 6.17 8.17C7.08 7.26 8.28 6.8 9.49 6.8H11.51C12.72 6.8 13.92 7.26 14.83 8.17C16.66 10 16.66 13 14.83 14.83Z" fill="currentColor"/>
+    </symbol>
+  </svg>
+
+  <div class="status-bar"></div>
+
+  <div class="header">
+    <div class="header-title">微信(12)</div>
+    <div class="header-actions">
+      <div class="icon-btn">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="var(--text-primary)">
+            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        </svg>
+      </div>
+      <div class="icon-btn">
+         <svg viewBox="0 0 24 24" width="24" height="24" fill="var(--text-primary)">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+         </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="search-bar">
+      <div class="search-input-box">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        </svg>
+        <span>搜索</span>
+      </div>
+    </div>
+
+    <div class="chat-list" id="chatList">
+      <!-- Items will be injected by JS -->
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <div class="tab-item active" data-tab="chat">
+      <div class="tab-icon">
+        <div class="tab-badge">12</div>
+        <svg class="icon-svg" viewBox="0 0 24 24">
+             <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+        </svg>
+      </div>
+      <div class="tab-text">微信</div>
+    </div>
+    <div class="tab-item" data-tab="contacts">
+      <div class="tab-icon">
+         <svg class="icon-svg" viewBox="0 0 24 24">
+            <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+         </svg>
+      </div>
+      <div class="tab-text">通讯录</div>
+    </div>
+    <div class="tab-item" data-tab="discover">
+      <div class="tab-icon">
+         <div class="tab-badge" style="width: 8px; height: 8px; min-width: 8px; padding: 0; right: 0;"></div>
+         <svg class="icon-svg" viewBox="0 0 24 24">
+             <path d="M12 10.9c-.61 0-1.1.49-1.1 1.1s.49 1.1 1.1 1.1c.61 0 1.1-.49 1.1-1.1s-.49-1.1-1.1-1.1zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19z"/>
+         </svg>
+      </div>
+      <div class="tab-text">发现</div>
+    </div>
+    <div class="tab-item" data-tab="me">
+      <div class="tab-icon">
+         <svg class="icon-svg" viewBox="0 0 24 24">
+             <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+         </svg>
+      </div>
+      <div class="tab-text">我</div>
+    </div>
+  </div>
+
+  <script>
+    const chatData = [
+      {
+        id: 1,
+        name: "文件传输助手",
+        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=File&backgroundColor=07c160",
+        message: "[图片]",
+        time: "18:45",
+        mute: false,
+        unread: 0
+      },
+      {
+        id: 2,
+        name: "订阅号消息",
+        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=Sub&backgroundColor=fa9d3b",
+        message: "36氪: 刚刚，OpenAI发布Sora，视频生成炸裂！",
+        time: "17:30",
+        mute: false,
+        unread: 2
+      },
+      {
+        id: 3,
+        name: "腾讯新闻",
+        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=News&backgroundColor=1485ee",
+        message: "春节档票房破80亿，贾玲《热辣滚烫》领跑",
+        time: "14:20",
+        mute: true,
+        unread: 0
+      },
+      {
+        id: 4,
+        name: "产品经理交流群",
+        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=PM&backgroundColor=e0e0e0",
+        message: "Tony: 那个需求下周一能上吗？",
+        time: "12:15",
+        mute: true,
+        unread: 8
+      },
+      {
+        id: 5,
+        name: "家庭群",
+        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=Family&backgroundColor=ff5722",
+        message: "妈妈: [红包] 新年快乐！",
+        time: "昨天",
+        mute: false,
+        unread: 1
+      },
+      {
+        id: 6,
+        name: "微信支付",
+        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=Pay&backgroundColor=07c160",
+        message: "微信支付凭证",
+        time: "昨天",
+        mute: false,
+        unread: 0
+      },
+      {
+        id: 7,
+        name: "张三",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Zhang",
+        message: "好的，没问题",
+        time: "星期五",
+        mute: false,
+        unread: 0
+      },
+      {
+        id: 8,
+        name: "李四",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Li",
+        message: "收到，谢谢",
+        time: "星期四",
+        mute: true,
+        unread: 0
+      },
+      {
+        id: 9,
+        name: "服务通知",
+        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=Service&backgroundColor=07c160",
+        message: "你有一份新的快递已送达",
+        time: "星期三",
+        mute: false,
+        unread: 1
+      },
+       {
+        id: 10,
+        name: "王五",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Wang",
+        message: "周末有空吗？",
+        time: "星期二",
+        mute: false,
+        unread: 0
+      },
+       {
+        id: 11,
+        name: "赵六",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Zhao",
+        message: "[语音通话]",
+        time: "2023/12/31",
+        mute: false,
+        unread: 0
+      }
+    ];
+
+    function renderChatList() {
+      const container = document.getElementById('chatList');
+      let html = '';
+      
+      chatData.forEach(chat => {
+        html += `
+          <div class="chat-item">
+            <img class="avatar" src="${chat.avatar}" alt="${chat.name}">
+            <div class="chat-info">
+              <div class="chat-top">
+                <div class="chat-name">${chat.name}</div>
+                <div class="chat-time">${chat.time}</div>
+              </div>
+              <div class="chat-bottom">
+                <div class="chat-msg">${chat.message}</div>
+                <div class="chat-badge ${chat.unread > 0 ? 'show' : ''}">${chat.unread}</div>
+                <svg class="chat-mute ${chat.mute && chat.unread === 0 ? 'show' : ''}" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.07 4.93L17.66 6.34C18.5 7.18 19 8.28 19 9.5C19 9.85 18.96 10.19 18.88 10.53L20.44 12.09C20.8 11.29 21 10.42 21 9.5C21 7.61 20.25 5.92 19.07 4.93ZM16.24 7.76L14.83 9.17C14.94 9.28 15 9.38 15 9.5C15 10.33 14.33 11 13.5 11C13.38 11 13.28 10.94 13.17 10.83L11.76 12.24C12.18 12.72 12.8 13 13.5 13C15.43 13 17 11.43 17 9.5C17 8.8 16.72 8.18 16.24 7.76ZM2.1 2.1L4.93 4.93C3.08 5.92 1.83 7.61 1.83 9.5C1.83 11.39 3.08 13.08 4.93 14.07L14.07 23.21L15.49 21.8L3.51 9.83L21.9 28.21L20.49 29.62L2.1 2.1ZM7.76 7.76L6.34 6.34C5.5 7.18 5 8.28 5 9.5C5 11.43 6.57 13 8.5 13H11.5L14.5 16V14.5L16.5 16.5V18H9L6 21V18H4.5C2.57 18 1 16.43 1 14.5V9.5C1 8.8 1.28 8.18 1.76 7.76H7.76ZM14.5 9.5L14.5 9.5L14.5 9.5L14.5 9.5Z" fill="currentColor" />
+                    <!-- Simplified bell-slash icon -->
+                    <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    // Initialize
+    renderChatList();
+
+    // Tab Bar Interaction
+    const tabs = document.querySelectorAll('.tab-item');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        // Update header title based on tab
+        const type = tab.getAttribute('data-tab');
+        const titleEl = document.querySelector('.header-title');
+        
+        if (type === 'chat') titleEl.textContent = '微信(12)';
+        else if (type === 'contacts') titleEl.textContent = '通讯录';
+        else if (type === 'discover') titleEl.textContent = '发现';
+        else if (type === 'me') titleEl.textContent = '我';
+      });
+    });
+  </script>
+</body>
+
+</html>

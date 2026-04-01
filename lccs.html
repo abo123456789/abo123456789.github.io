@@ -1,210 +1,218 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>专业理财产品收益测算器 (多年度)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="./images/001.png">
     <style>
-        :root {
-            --bg-color: #0d1117;
-            --glass-bg: rgba(22, 27, 34, 0.65);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --text-primary: #f0f6fc;
-            --text-secondary: #8b949e;
-            --accent-primary: #58a6ff;
-            --accent-glow: rgba(88, 166, 255, 0.2);
-            --accent-green: #3fb950;
-            --accent-danger: #f85149;
-            --input-bg: rgba(13, 17, 23, 0.8);
-            --card-year-bg: rgba(255, 255, 255, 0.03);
-            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
-        }
-
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            background-image:
-                radial-gradient(circle at 10% 20%, rgba(88, 166, 255, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(63, 185, 80, 0.05) 0%, transparent 40%);
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 40px 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
             line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .container {
             width: 100%;
-            max-width: 1000px;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 24px;
-            animation: fadeIn 0.6s ease-out;
+            max-width: 1100px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-top: 20px;
+            margin-bottom: 40px;
         }
 
-        @media (min-width: 850px) {
-            .container {
-                grid-template-columns: 350px 1fr;
-                align-items: start;
-            }
+        header {
+            background: linear-gradient(to right, #4b6cb7, #182848);
+            color: white;
+            padding: 30px;
+            text-align: center;
         }
 
-        .glass-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 32px;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            box-shadow: var(--shadow-lg);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
         }
 
-        .header {
-            margin-bottom: 28px;
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
         }
 
-        .header h1 {
-            font-size: 22px;
-            font-weight: 600;
-            background: linear-gradient(135deg, #fff, #8b949e);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
+        .calculator-container {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0;
         }
 
-        .header p {
-            font-size: 13px;
-            color: var(--text-secondary);
+        .input-section {
+            flex: 1;
+            min-width: 350px;
+            padding: 30px;
+            background-color: #f9fafc;
+            border-right: 1px solid #eaeaea;
         }
 
-        .form-group {
-            margin-bottom: 20px;
+        .result-section {
+            flex: 1.2;
+            min-width: 350px;
+            padding: 30px;
+            background-color: white;
         }
 
-        .form-group label {
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
             display: block;
             margin-bottom: 8px;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            letter-spacing: 0.5px;
+            font-weight: 600;
+            color: #444;
+            font-size: 1.1rem;
+        }
+        
+        .help-text {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 8px;
+            display: block;
         }
 
-        .input-wrapper {
+        .input-with-icon {
             position: relative;
             display: flex;
             align-items: center;
         }
 
-        .input-icon {
+        .icon {
             position: absolute;
-            left: 14px;
-            color: var(--text-secondary);
-            font-size: 14px;
-            pointer-events: none;
+            left: 15px;
+            color: #4b6cb7;
+            font-size: 1.2rem;
+            width: 20px;
+            text-align: center;
         }
 
-        .form-control {
+        input[type="number"] {
             width: 100%;
-            background: var(--input-bg);
-            border: 1px solid var(--glass-border);
-            color: var(--text-primary);
-            padding: 12px 14px 12px 36px;
-            border-radius: 8px;
-            font-size: 15px;
-            transition: all 0.2s;
+            padding: 12px 15px 12px 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            background-color: white;
+        }
+
+        input:focus {
+            border-color: #4b6cb7;
             outline: none;
+            box-shadow: 0 0 0 3px rgba(75, 108, 183, 0.1);
         }
 
-        .form-control:focus {
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 0 3px var(--accent-glow);
-        }
-
-        .btn-submit {
-            width: 100%;
-            background: var(--accent-primary);
-            color: #000;
-            border: none;
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
+        .slider-container {
             margin-top: 10px;
         }
 
-        .btn-submit:hover {
-            background: #79b8ff;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px var(--accent-glow);
+        input[type="range"] {
+            width: 100%;
+            accent-color: #4b6cb7;
         }
 
-        /* Results Panel */
-        .results-panel {
-            display: none;
-            flex-direction: column;
-            gap: 20px;
+        .slider-value {
+            text-align: center;
+            font-weight: 600;
+            color: #4b6cb7;
+            margin-top: 5px;
+            font-size: 1.1rem;
+        }
+
+        /* Results styles */
+        .results-container {
+            margin-top: 10px;
         }
 
         .summary-box {
-            background: linear-gradient(135deg, rgba(88, 166, 255, 0.1), rgba(63, 185, 80, 0.05));
-            border: 1px solid var(--accent-glow);
-            border-radius: 12px;
-            padding: 24px;
-            text-align: center;
-            margin-bottom: 20px;
             display: flex;
-            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
-        .summary-column {
+        .result-card {
+            flex: 1;
+            min-width: 140px;
+            background: linear-gradient(to right, #f8f9ff, #f0f3ff);
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 5px solid #4b6cb7;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 8px;
+            justify-content: center;
+        }
+        
+        .result-card.success {
+            border-left-color: #5bc0de;
+            background: linear-gradient(to right, #f2fbff, #e6f7ff);
+        }
+        
+        .result-card.warning {
+            border-left-color: #e55353;
+            background: linear-gradient(to right, #fff5f5, #ffebeb);
         }
 
-        .summary-label {
-            font-size: 14px;
-            color: var(--text-secondary);
+        .result-title {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 5px;
+            font-weight: 600;
         }
 
-        .summary-value {
-            font-size: 32px;
+        .result-value {
+            font-size: 1.8rem;
             font-weight: 700;
-            color: var(--accent-green);
+            color: #182848;
+        }
+        
+        .result-card.warning .result-value {
+            color: #da3633;
         }
 
-        .summary-value.years-box {
-            color: var(--accent-primary);
-            font-size: 28px;
+        .result-details {
+            color: #666;
+            font-size: 0.95rem;
+            margin-top: 5px;
         }
 
+        /* Year cards */
         .years-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 16px;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
         }
 
         .year-card {
-            background: var(--card-year-bg);
-            border: 1px solid var(--glass-border);
+            background-color: #fff;
+            border: 1px solid #eaeaea;
             border-radius: 12px;
             padding: 20px;
-            transition: transform 0.2s, background 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
             position: relative;
             overflow: hidden;
         }
@@ -214,30 +222,20 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--accent-primary);
-            opacity: 0.5;
+            width: 100%;
+            height: 4px;
+            background: #4b6cb7;
         }
-
-        .year-card:hover {
-            background: rgba(255, 255, 255, 0.05);
-            transform: translateY(-2px);
-        }
-
-        .year-card.year-1::before {
-            background: #58a6ff;
-        }
-
+        
         .year-card.year-2::before {
             background: #ab7df8;
         }
 
         .year-title {
-            font-size: 16px;
+            font-size: 1.2rem;
             font-weight: 600;
-            margin-bottom: 16px;
-            color: var(--text-primary);
+            margin-bottom: 15px;
+            color: #333;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -248,7 +246,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px dashed #eaeaea;
         }
 
         .data-row:last-child {
@@ -256,235 +254,300 @@
             padding-bottom: 0;
             margin-top: 8px;
             padding-top: 12px;
-            border-top: 1px dashed rgba(255, 255, 255, 0.1);
+            border-top: 1px solid #eaeaea;
         }
 
         .data-row.highlighted {
-            background: rgba(255, 255, 255, 0.03);
+            background: #f8f9ff;
             border-radius: 6px;
             padding: 8px;
+            margin: 4px 0;
+            border: 1px solid #eef2ff;
         }
 
         .data-label {
-            color: var(--text-secondary);
-            font-size: 13px;
+            color: #666;
+            font-size: 0.95rem;
         }
 
         .data-value {
-            font-weight: 500;
-            font-size: 14px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #333;
         }
 
         .val-danger {
-            color: var(--accent-danger);
+            color: #e55353;
         }
 
         .val-success {
-            color: var(--accent-green);
+            color: #2eb85c;
         }
 
         .val-highlight {
-            color: var(--text-primary);
-            font-weight: 600;
-            font-size: 16px;
+            color: #4b6cb7;
+            font-size: 1.15rem;
+            font-weight: 700;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-container {
+                flex-direction: column;
             }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            .input-section {
+                border-right: none;
+                border-bottom: 1px solid #eaeaea;
+            }
+
+            .years-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .summary-box {
+                flex-direction: column;
             }
         }
     </style>
 </head>
-
 <body>
-
     <div class="container">
-        <!-- Form Section -->
-        <div class="glass-card">
-            <div class="header">
-                <h1>理财测算器</h1>
-                <p>输入费率与收益预期，自动推演盈亏及回本年限。</p>
-            </div>
+        <header>
+            <h1><i class="fas fa-chart-pie"></i> 理财测算器</h1>
+            <p class="subtitle">输入费率与收益预期，自动推演盈亏及回本年限</p>
+        </header>
 
-            <form id="calcForm">
-                <div class="form-group">
-                    <label>投资金额 (元)</label>
-                    <div class="input-wrapper">
-                        <span class="input-icon">¥</span>
-                        <input type="number" id="investAmount" class="form-control" placeholder="100000" min="1"
-                            value="100000" required>
+        <div class="calculator-container">
+            <div class="input-section">
+                <h2 style="margin-bottom: 20px; color: #333;"><i class="fas fa-edit"></i> 参数设置</h2>
+
+                <div class="input-group">
+                    <label for="investAmount"><i class="fas fa-money-bill-wave"></i> 投资金额 (元)</label>
+                    <div class="input-with-icon">
+                        <span class="icon">¥</span>
+                        <input type="number" id="investAmount" min="1000" step="1000" value="100000" placeholder="请输入投资金额">
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="investAmount-slider" min="1000" max="1000000" step="1000" value="100000" class="slider">
+                        <div class="slider-value" id="investAmount-value">100,000 元</div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>前端买入费率 (%)</label>
-                    <div class="input-wrapper">
-                        <span class="input-icon">🛒</span>
-                        <input type="number" id="purchaseRate" class="form-control" placeholder="0.03" step="0.01"
-                            value="0.03" required>
+                <div class="input-group">
+                    <label for="purchaseRate"><i class="fas fa-shopping-cart"></i> 前端买入费率 (%)</label>
+                    <span class="help-text">仅在第一年买入时扣除一次</span>
+                    <div class="input-with-icon">
+                        <span class="icon">%</span>
+                        <input type="number" id="purchaseRate" min="0" max="5" step="0.01" value="0.03" placeholder="请输入前端买入费率">
                     </div>
-                    <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">仅在第一年买入时扣除一次</div>
-                </div>
-
-                <div class="form-group">
-                    <label>管理费率/综合费率 (%)</label>
-                    <div class="input-wrapper">
-                        <span class="input-icon">🛡</span>
-                        <input type="number" id="mgmtRate" class="form-control" placeholder="0.4" step="0.01"
-                            value="0.4" required>
-                    </div>
-                    <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">每年提取的主动管理/托管等维持费用</div>
-                </div>
-
-                <div class="form-group">
-                    <label>期末卖出/赎回费率 (%)</label>
-                    <div class="input-wrapper">
-                        <span class="input-icon">💸</span>
-                        <input type="number" id="sellRate" class="form-control" placeholder="0.0" step="0.01"
-                            value="0.0" required>
-                    </div>
-                    <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">持有时不扣除，仅在按资产净值最终卖出兑付时产生
+                    <div class="slider-container">
+                        <input type="range" id="purchaseRate-slider" min="0" max="5" step="0.01" value="0.03" class="slider">
+                        <div class="slider-value" id="purchaseRate-value">0.03%</div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>预期年化收益率 (%)</label>
-                    <div class="input-wrapper">
-                        <span class="input-icon">📈</span>
-                        <input type="number" id="yieldRate" class="form-control" placeholder="2.3" step="0.1"
-                            value="2.3" required>
+                <div class="input-group">
+                    <label for="mgmtRate"><i class="fas fa-shield-alt"></i> 管理/综合费率 (%)</label>
+                    <span class="help-text">每年提取的主动管理/托管等维持费用</span>
+                    <div class="input-with-icon">
+                        <span class="icon">%</span>
+                        <input type="number" id="mgmtRate" min="0" max="5" step="0.01" value="0.4" placeholder="请输入管理费率">
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="mgmtRate-slider" min="0" max="5" step="0.01" value="0.4" class="slider">
+                        <div class="slider-value" id="mgmtRate-value">0.40%</div>
                     </div>
                 </div>
 
-                <button type="submit" class="btn-submit">开始推演测算</button>
-            </form>
-        </div>
+                <div class="input-group">
+                    <label for="sellRate"><i class="fas fa-hand-holding-usd"></i> 期末卖出费率 (%)</label>
+                    <span class="help-text">持有时不扣除，仅在按资产净值最终卖出兑付时产生</span>
+                    <div class="input-with-icon">
+                        <span class="icon">%</span>
+                        <input type="number" id="sellRate" min="0" max="5" step="0.01" value="0" placeholder="请输入期末卖出费率">
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="sellRate-slider" min="0" max="5" step="0.01" value="0" class="slider">
+                        <div class="slider-value" id="sellRate-value">0.00%</div>
+                    </div>
+                </div>
 
-        <!-- Results Section -->
-        <div class="glass-card results-panel" id="resultsPanel">
-            <div class="summary-box" style="flex-wrap: wrap; gap: 20px;">
-                <div class="summary-column" style="flex: 1; min-width: 200px;">
-                    <div class="summary-label">第二年末预计总资产</div>
-                    <div class="summary-value" id="finalAssets">¥0.00</div>
-                    <div style="font-size: 13px; color: var(--text-secondary);">
-                        总投入: <span id="summaryInput">¥0.00</span> | 累计净利: <span id="summaryProfit"
-                            class="val-success">¥0.00</span>
+                <div class="input-group">
+                    <label for="yieldRate"><i class="fas fa-chart-line"></i> 预期年化收益率 (%)</label>
+                    <div class="input-with-icon">
+                        <span class="icon">%</span>
+                        <input type="number" id="yieldRate" min="-10" max="50" step="0.1" value="2.3" placeholder="请输入预期年化收益率">
                     </div>
-                </div>
-                <div class="summary-column"
-                    style="flex: 1; min-width: 180px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 20px;">
-                    <div class="summary-label">抹平手续费(买+卖)回本时间</div>
-                    <div class="summary-value years-box" id="timeToBreakEven" style="color: var(--text-primary);">-- 天
+                    <div class="slider-container">
+                        <input type="range" id="yieldRate-slider" min="-5" max="20" step="0.1" value="2.3" class="slider">
+                        <div class="slider-value" id="yieldRate-value">2.3%</div>
                     </div>
-                </div>
-                <div class="summary-column"
-                    style="flex: 1; min-width: 180px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 20px;">
-                    <div class="summary-label">净收益达到本金（翻倍）所需年限</div>
-                    <div class="summary-value years-box" id="yearsToDouble">-- 年</div>
                 </div>
             </div>
 
-            <div class="years-grid">
-                <!-- Year 1 -->
-                <div class="year-card year-1">
-                    <div class="year-title">📅 第一年预期表现</div>
-                    <div class="data-row">
-                        <span class="data-label">期初本金</span>
-                        <span class="data-value" id="y1-start">¥0.00</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-label">前端买入费</span>
-                        <span class="data-value val-danger" id="y1-purchase-fee">-¥0.00</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-label">有效投资额</span>
-                        <span class="data-value" id="y1-effective">¥0.00</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-label">本年毛收益</span>
-                        <span class="data-value val-success" id="y1-gross-profit">+¥0.00</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-label">管理费用提成</span>
-                        <span class="data-value val-danger" id="y1-mgmt-fee">-¥0.00</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-label">假定卖出费 (按年末净值)</span>
-                        <span class="data-value val-danger" id="y1-sell-fee">-¥0.00</span>
-                    </div>
-                    <div class="data-row highlighted">
-                        <span class="data-label" style="font-weight:bold;color:var(--text-primary)">期末清仓净利润</span>
-                        <span class="data-value val-success" id="y1-net-profit">+¥0.00</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-label">第一年末折现总资产</span>
-                        <span class="data-value val-highlight" id="y1-end">¥0.00</span>
-                    </div>
-                </div>
+            <div class="result-section">
+                <h2 style="margin-bottom: 20px; color: #333;"><i class="fas fa-poll"></i> 推演结果</h2>
 
-                <!-- Year 2 -->
-                <div class="year-card year-2">
-                    <div class="year-title">📅 第二年预期表现</div>
-                    <div class="data-row">
-                        <span class="data-label">期初本金 (上年结转)</span>
-                        <span class="data-value" id="y2-start">¥0.00</span>
+                <div class="results-container">
+                    <div class="summary-box">
+                        <div class="result-card">
+                            <div class="result-title">第二年末预计总资产</div>
+                            <div class="result-value" id="finalAssets">0.00 元</div>
+                            <div class="result-details">总投入: <span id="summaryInput">0.00 元</span></div>
+                            <div class="result-details">累计净利: <span id="summaryProfit" class="val-success">0.00 元</span></div>
+                        </div>
+                        
+                        <div class="result-card success" id="breakEvenCard">
+                            <div class="result-title">抹平手续费回本时间</div>
+                            <div class="result-value" id="timeToBreakEven">-- 天</div>
+                            <div class="result-details" style="margin-top: 8px;">净收益达到本金（翻倍）:</div>
+                            <div class="result-details" id="yearsToDouble" style="font-weight: 700; color: #4b6cb7; font-size: 1.1rem;">-- 年</div>
+                        </div>
                     </div>
-                    <div class="data-row">
-                        <span class="data-label">前端买入费</span>
-                        <span class="data-value" style="color:var(--text-secondary)">¥0.00</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-label">有效投资额</span>
-                        <span class="data-value" id="y2-effective">¥0.00</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-label">本年毛收益</span>
-                        <span class="data-value val-success" id="y2-gross-profit">+¥0.00</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-label">管理费用提成</span>
-                        <span class="data-value val-danger" id="y2-mgmt-fee">-¥0.00</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-label">假定卖出费 (按年末净值)</span>
-                        <span class="data-value val-danger" id="y2-sell-fee">-¥0.00</span>
-                    </div>
-                    <div class="data-row highlighted">
-                        <span class="data-label" style="font-weight:bold;color:var(--text-primary)">期末清仓总净利 (扣耗损)</span>
-                        <span class="data-value val-success" id="y2-net-profit">+¥0.00</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-label">第二年末折现总资产</span>
-                        <span class="data-value val-highlight" id="y2-end">¥0.00</span>
+
+                    <div class="years-grid">
+                        <!-- Year 1 -->
+                        <div class="year-card year-1">
+                            <div class="year-title"><i class="far fa-calendar-alt"></i> 第一年预期表现</div>
+                            <div class="data-row">
+                                <span class="data-label">期初本金</span>
+                                <span class="data-value" id="y1-start">0.00 元</span>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">前端买入费</span>
+                                <span class="data-value val-danger" id="y1-purchase-fee">-0.00 元</span>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">有效投资额</span>
+                                <span class="data-value" id="y1-effective">0.00 元</span>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">本年毛收益</span>
+                                <span class="data-value val-success" id="y1-gross-profit">+0.00 元</span>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">管理费用提成</span>
+                                <span class="data-value val-danger" id="y1-mgmt-fee">-0.00 元</span>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">假定卖出费</span>
+                                <span class="data-value val-danger" id="y1-sell-fee">-0.00 元</span>
+                            </div>
+                            <div class="data-row highlighted">
+                                <span class="data-label" style="font-weight:600;color:#333;">期末清仓净利</span>
+                                <span class="data-value val-success" id="y1-net-profit">+0.00 元</span>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">年末折现总资产</span>
+                                <span class="data-value val-highlight" id="y1-end">0.00 元</span>
+                            </div>
+                        </div>
+
+                        <!-- Year 2 -->
+                        <div class="year-card year-2">
+                            <div class="year-title"><i class="far fa-calendar-alt"></i> 第二年预期表现</div>
+                            <div class="data-row">
+                                <span class="data-label">期初本金 (结转)</span>
+                                <span class="data-value" id="y2-start">0.00 元</span>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">前端买入费</span>
+                                <span class="data-value" style="color:#aaa">0.00 元</span>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">有效投资额</span>
+                                <span class="data-value" id="y2-effective">0.00 元</span>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">本年毛收益</span>
+                                <span class="data-value val-success" id="y2-gross-profit">+0.00 元</span>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">管理费用提成</span>
+                                <span class="data-value val-danger" id="y2-mgmt-fee">-0.00 元</span>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">假定卖出费</span>
+                                <span class="data-value val-danger" id="y2-sell-fee">-0.00 元</span>
+                            </div>
+                            <div class="data-row highlighted">
+                                <span class="data-label" style="font-weight:600;color:#333;">期末清仓总净利</span>
+                                <span class="data-value val-success" id="y2-net-profit">+0.00 元</span>
+                            </div>
+                            <div class="data-row">
+                                <span class="data-label">年末折现总资产</span>
+                                <span class="data-value val-highlight" id="y2-end">0.00 元</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        const form = document.getElementById('calcForm');
-        const resultsPanel = document.getElementById('resultsPanel');
+    <footer>
+        <p>© 2026 理财收益计算器 | 本工具仅供参考，实际收益可能因产品条款和市场波动而异</p>
+        <p>温馨提示：投资有风险，理财需谨慎</p>
+    </footer>
 
+    <script>
         function fmt(val) {
-            return '¥' + val.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            return parseFloat(val).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' 元';
         }
 
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
+        // DOM Elements
+        const inputs = ['investAmount', 'purchaseRate', 'mgmtRate', 'sellRate', 'yieldRate'];
+        const els = {};
+        
+        inputs.forEach(id => {
+            els[id] = document.getElementById(id);
+            els[id + 'Slider'] = document.getElementById(id + '-slider');
+            els[id + 'Value'] = document.getElementById(id + '-value');
+        });
 
-            const initialPrincipal = parseFloat(document.getElementById('investAmount').value);
-            const purchaseRatePercent = parseFloat(document.getElementById('purchaseRate').value);
-            const mgmtRatePercent = parseFloat(document.getElementById('mgmtRate').value);
-            const yieldRatePercent = parseFloat(document.getElementById('yieldRate').value);
-            const sellRatePercent = parseFloat(document.getElementById('sellRate').value);
+        function formatDisplayValue(id, value) {
+            if (id === 'investAmount') {
+                return parseFloat(value).toLocaleString('zh-CN') + ' 元';
+            }
+            return parseFloat(value).toFixed(id === 'yieldRate' ? 1 : 2) + '%';
+        }
+
+        function setupListeners() {
+            inputs.forEach(id => {
+                els[id].addEventListener('input', function() {
+                    els[id + 'Slider'].value = this.value;
+                    els[id + 'Value'].textContent = formatDisplayValue(id, this.value);
+                    calculate();
+                });
+                
+                els[id + 'Slider'].addEventListener('input', function() {
+                    els[id].value = this.value;
+                    els[id + 'Value'].textContent = formatDisplayValue(id, this.value);
+                    calculate();
+                });
+            });
+        }
+
+        function calculate() {
+            const initialPrincipal = parseFloat(els.investAmount.value) || 0;
+            const purchaseRatePercent = parseFloat(els.purchaseRate.value) || 0;
+            const mgmtRatePercent = parseFloat(els.mgmtRate.value) || 0;
+            const yieldRatePercent = parseFloat(els.yieldRate.value) || 0;
+            const sellRatePercent = parseFloat(els.sellRate.value) || 0;
 
             const rPurchase = purchaseRatePercent / 100;
             const rMgmt = mgmtRatePercent / 100;
@@ -514,13 +577,12 @@
             document.getElementById('y1-sell-fee').textContent = '-' + fmt(y1SellFee);
 
             const y1NetEl = document.getElementById('y1-net-profit');
-            y1NetEl.textContent = (y1NetProfit >= 0 ? '+' : '') + fmt(y1NetProfit);
+            y1NetEl.textContent = (y1NetProfit >= 0 ? '+' : '-') + fmt(Math.abs(y1NetProfit));
             y1NetEl.className = 'data-value ' + (y1NetProfit >= 0 ? 'val-success' : 'val-danger');
 
             document.getElementById('y1-end').textContent = fmt(y1End);
 
             // --- Year 2 ---
-            // If you hold to year 2, you didn't sell in year 1
             const y2Start = y1AssetsBeforeSell;
             const y2Effective = y2Start; // No purchase fee year 2
             const y2Gross = y2Effective * rYield;
@@ -540,7 +602,7 @@
             document.getElementById('y2-sell-fee').textContent = '-' + fmt(y2SellFee);
 
             const y2NetEl = document.getElementById('y2-net-profit');
-            y2NetEl.textContent = (y2NetProfit >= 0 ? '+' : '') + fmt(y2NetProfit);
+            y2NetEl.textContent = (y2NetProfit >= 0 ? '+' : '-') + fmt(Math.abs(y2NetProfit));
             y2NetEl.className = 'data-value ' + (y2NetProfit >= 0 ? 'val-success' : 'val-danger');
 
             document.getElementById('y2-end').textContent = fmt(y2End);
@@ -556,37 +618,28 @@
                 summaryProfitEl.textContent = '+' + fmt(totalProfitAfter2Years);
                 summaryProfitEl.className = 'val-success';
             } else {
-                summaryProfitEl.textContent = fmt(totalProfitAfter2Years);
+                summaryProfitEl.textContent = '-' + fmt(Math.abs(totalProfitAfter2Years));
                 summaryProfitEl.className = 'val-danger';
             }
-
-            // 翻倍时间计算: 
-            // 每年资金增长乘数: GrowthFactor = (1 + rYield) * (1 - rMgmt)
-            // 我们要寻找 N, 使得: InitialPrincipal * (1 - rPurchase) * (GrowthFactor ^ N) = InitialPrincipal * 2
-            // 即: GrowthFactor ^ N = 2 / ((1 - rPurchase) * (1 - rSell))
-            // N = Math.log( 2 / ((1 - rPurchase) * (1 - rSell)) ) / Math.log(GrowthFactor)
 
             const growthFactor = (1 + rYield) * (1 - rMgmt);
             const yearsEl = document.getElementById('yearsToDouble');
             const breakEvenEl = document.getElementById('timeToBreakEven');
+            const breakEvenCard = document.getElementById('breakEvenCard');
 
             if (growthFactor <= 1) {
-                // 收不抵支或零增长
                 yearsEl.textContent = '无法达到';
-                yearsEl.style.color = 'var(--accent-danger)';
-                yearsEl.style.fontSize = '20px';
+                yearsEl.style.color = '#da3633';
 
                 breakEvenEl.textContent = '无法回本';
-                breakEvenEl.style.color = 'var(--accent-danger)';
-                breakEvenEl.style.fontSize = '20px';
+                breakEvenCard.className = 'result-card warning';
             } else {
                 const targetRatio = 2 / ((1 - rPurchase) * (1 - rSell));
                 const nYears = Math.log(targetRatio) / Math.log(growthFactor);
                 yearsEl.textContent = nYears.toFixed(1) + ' 年';
-                yearsEl.style.color = 'var(--accent-primary)';
-                yearsEl.style.fontSize = '28px';
+                yearsEl.style.color = '#4b6cb7';
+                breakEvenCard.className = 'result-card success';
 
-                // 回本时间计算
                 const breakEvenRatio = 1 / ((1 - rPurchase) * (1 - rSell));
                 if (breakEvenRatio === 1) {
                     breakEvenEl.textContent = '0 天';
@@ -599,19 +652,16 @@
                         breakEvenEl.textContent = nBreakEvenYears.toFixed(2) + ' 年';
                     }
                 }
-                breakEvenEl.style.color = '#fff';
-                breakEvenEl.style.fontSize = '28px';
             }
+        }
 
-            // Show panel with animation
-            resultsPanel.style.display = 'flex';
-            resultsPanel.style.opacity = '0';
-            requestAnimationFrame(() => {
-                resultsPanel.style.animation = 'fadeIn 0.5s ease forwards';
-            });
-        });
+        // Initialize
+        function init() {
+            setupListeners();
+            calculate();
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
     </script>
-
 </body>
-
 </html>
