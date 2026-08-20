@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>一朵玫瑰</title>
+<style>
+  :root{
+    --deep:   #7a0f28;
+    --mid:    #b3183f;
+    --bright: #e63757;
+    --light:  #ff8fa3;
+    --leaf1:  #2f5233;
+    --leaf2:  #4c7a3f;
+    --bg1:    #1a0e12;
+    --bg2:    #2d1420;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    height:100%;
+    margin:0;
+    background:
+      radial-gradient(ellipse at 50% 20%, var(--bg2), var(--bg1) 70%);
+    overflow:hidden;
+    font-family: "Songti SC","STSong",serif;
+  }
+
+  .stage{
+    position:relative;
+    width:100%;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  /* 漂浮的花瓣粒子背景 */
+  .petal-fall{
+    position:absolute;
+    top:-10%;
+    width:10px;
+    height:10px;
+    background: var(--light);
+    border-radius: 0 100% 0 100%;
+    opacity:.55;
+    animation: drift linear infinite;
+    filter: blur(.3px);
+  }
+  @keyframes drift{
+    0%   { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity:0; }
+    10%  { opacity:.6; }
+    90%  { opacity:.4; }
+    100% { transform: translateY(110vh) translateX(var(--dx,40px)) rotate(340deg); opacity:0; }
+  }
+
+  .caption{
+    position:absolute;
+    bottom:6%;
+    left:0;
+    right:0;
+    text-align:center;
+    color: #e8c9c9;
+    letter-spacing:.5em;
+    font-size:14px;
+    opacity:.75;
+    animation: fadein 2s ease .8s both;
+  }
+  @keyframes fadein{ from{opacity:0; transform:translateY(6px);} to{opacity:.75; transform:none;} }
+
+  /* 整株：茎+花，随风轻摆，锚点在茎底部 */
+  .rose-wrap{
+    position:relative;
+    width:340px;
+    height:560px;
+    transform-origin: 50% 100%;
+    animation: sway 5.5s ease-in-out infinite;
+  }
+  @keyframes sway{
+    0%,100% { transform: rotate(-2.2deg); }
+    50%     { transform: rotate(2.2deg); }
+  }
+
+  svg{ position:absolute; inset:0; overflow:visible; }
+
+  /* 茎 */
+  .stem{
+    fill:none;
+    stroke: var(--leaf1);
+    stroke-width:7;
+    stroke-linecap:round;
+  }
+
+  .thorn{
+    fill: var(--leaf1);
+  }
+
+  .leaf{
+    fill: var(--leaf2);
+    transform-origin: center;
+    animation: leafwave 5.5s ease-in-out infinite;
+  }
+  .leaf.left{ animation-delay:.1s; }
+  .leaf.right{ animation-delay:.35s; }
+  @keyframes leafwave{
+    0%,100% { transform: rotate(-4deg); }
+    50%     { transform: rotate(6deg); }
+  }
+
+  /* 花头组：整体在茎顶端，做绽放的呼吸感微缩放 */
+  .bloom{
+    transform-origin: 170px 195px;
+    animation: breathe 4.2s ease-in-out infinite;
+  }
+  @keyframes breathe{
+    0%,100% { transform: scale(1); }
+    50%     { transform: scale(1.018); }
+  }
+
+  /* 花瓣：从中心以旋转+展开动画“绽放” */
+  .petal{
+    transform-origin: 170px 195px;
+    fill: url(#petalGrad);
+    stroke: rgba(0,0,0,.12);
+    stroke-width:.5;
+    opacity:0;
+    animation: unfurl 1.6s cubic-bezier(.2,.9,.25,1) forwards;
+    filter: drop-shadow(0 3px 6px rgba(60,0,10,.35));
+  }
+
+  @keyframes unfurl{
+    0%   { opacity:0; transform: scale(.15) rotate(var(--r0)); }
+    60%  { opacity:1; }
+    100% { opacity:1; transform: scale(1) rotate(var(--r1)); }
+  }
+
+  .petal-inner{ fill:url(#petalGradInner); }
+
+  .glow{
+    fill: var(--bright);
+    opacity:.25;
+    filter: blur(18px);
+    animation: pulseGlow 4.2s ease-in-out infinite;
+  }
+  @keyframes pulseGlow{
+    0%,100%{ opacity:.18; }
+    50%{ opacity:.32; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+
+  <div class="rose-wrap">
+    <svg viewBox="0 0 340 560" width="340" height="560">
+      <defs>
+        <radialGradient id="petalGrad" cx="45%" cy="35%" r="75%">
+          <stop offset="0%"  stop-color="#ff9daf"/>
+          <stop offset="45%" stop-color="var(--bright)"/>
+          <stop offset="100%" stop-color="var(--deep)"/>
+        </radialGradient>
+        <radialGradient id="petalGradInner" cx="50%" cy="30%" r="70%">
+          <stop offset="0%"  stop-color="#ffd0da"/>
+          <stop offset="55%" stop-color="var(--mid)"/>
+          <stop offset="100%" stop-color="var(--deep)"/>
+        </radialGradient>
+      </defs>
+
+      <!-- 茎 -->
+      <path class="stem" d="M170,225 C150,300 190,340 165,420 C150,470 175,510 168,556"/>
+      <path class="thorn" d="M172,330 L192,318 L176,342 Z"/>
+      <path class="thorn" d="M158,410 L138,400 L156,424 Z"/>
+
+      <!-- 叶片 -->
+      <path class="leaf left" d="M163,360
+              C120,350 90,375 78,415
+              C110,410 140,405 163,378 Z"/>
+      <path class="leaf right" d="M172,300
+              C215,285 248,305 262,340
+              C228,338 195,332 172,318 Z"/>
+
+      <!-- 花朵发光底 -->
+      <ellipse class="glow" cx="170" cy="195" rx="95" ry="90"/>
+
+      <!-- 花头：外层大花瓣 -> 中层 -> 内层花心，依次延迟绽放 -->
+      <g class="bloom">
+
+        <!-- 外层 6 瓣 -->
+        <g>
+          <path class="petal" style="--r0:-40deg;--r1:0deg;animation-delay:.05s"
+                d="M170,195 C120,175 95,205 100,250 C130,275 175,265 190,235 C200,215 190,200 170,195 Z"
+                transform="rotate(0 170 195)"/>
+          <path class="petal" style="--r0:-40deg;--r1:60deg;animation-delay:.12s"
+                d="M170,195 C120,175 95,205 100,250 C130,275 175,265 190,235 C200,215 190,200 170,195 Z"
+                transform="rotate(60 170 195)"/>
+          <path class="petal" style="--r0:-40deg;--r1:120deg;animation-delay:.19s"
+                d="M170,195 C120,175 95,205 100,250 C130,275 175,265 190,235 C200,215 190,200 170,195 Z"
+                transform="rotate(120 170 195)"/>
+          <path class="petal" style="--r0:-40deg;--r1:180deg;animation-delay:.26s"
+                d="M170,195 C120,175 95,205 100,250 C130,275 175,265 190,235 C200,215 190,200 170,195 Z"
+                transform="rotate(180 170 195)"/>
+          <path class="petal" style="--r0:-40deg;--r1:240deg;animation-delay:.33s"
+                d="M170,195 C120,175 95,205 100,250 C130,275 175,265 190,235 C200,215 190,200 170,195 Z"
+                transform="rotate(240 170 195)"/>
+          <path class="petal" style="--r0:-40deg;--r1:300deg;animation-delay:.40s"
+                d="M170,195 C120,175 95,205 100,250 C130,275 175,265 190,235 C200,215 190,200 170,195 Z"
+                transform="rotate(300 170 195)"/>
+        </g>
+
+        <!-- 中层 5 瓣，稍小、稍晚绽放 -->
+        <g>
+          <path class="petal" style="--r0:-30deg;--r1:36deg;animation-delay:.5s"
+                d="M170,195 C138,180 122,200 126,228 C146,244 172,238 182,218 C188,204 182,197 170,195 Z"
+                transform="rotate(36 170 195)"/>
+          <path class="petal" style="--r0:-30deg;--r1:108deg;animation-delay:.56s"
+                d="M170,195 C138,180 122,200 126,228 C146,244 172,238 182,218 C188,204 182,197 170,195 Z"
+                transform="rotate(108 170 195)"/>
+          <path class="petal" style="--r0:-30deg;--r1:180deg;animation-delay:.62s"
+                d="M170,195 C138,180 122,200 126,228 C146,244 172,238 182,218 C188,204 182,197 170,195 Z"
+                transform="rotate(180 170 195)"/>
+          <path class="petal" style="--r0:-30deg;--r1:252deg;animation-delay:.68s"
+                d="M170,195 C138,180 122,200 126,228 C146,244 172,238 182,218 C188,204 182,197 170,195 Z"
+                transform="rotate(252 170 195)"/>
+          <path class="petal" style="--r0:-30deg;--r1:324deg;animation-delay:.74s"
+                d="M170,195 C138,180 122,200 126,228 C146,244 172,238 182,218 C188,204 182,197 170,195 Z"
+                transform="rotate(324 170 195)"/>
+        </g>
+
+        <!-- 内层花心：卷曲的花瓣，最后绽放 -->
+        <g>
+          <path class="petal petal-inner" style="--r0:0deg;--r1:20deg;animation-delay:.85s"
+                d="M170,195 C155,186 150,198 154,212 C162,220 174,216 178,206 C180,199 176,196 170,195 Z"
+                transform="rotate(20 170 195)"/>
+          <path class="petal petal-inner" style="--r0:0deg;--r1:110deg;animation-delay:.9s"
+                d="M170,195 C155,186 150,198 154,212 C162,220 174,216 178,206 C180,199 176,196 170,195 Z"
+                transform="rotate(110 170 195)"/>
+          <path class="petal petal-inner" style="--r0:0deg;--r1:200deg;animation-delay:.95s"
+                d="M170,195 C155,186 150,198 154,212 C162,220 174,216 178,206 C180,199 176,196 170,195 Z"
+                transform="rotate(200 170 195)"/>
+          <path class="petal petal-inner" style="--r0:0deg;--r1:290deg;animation-delay:1.0s"
+                d="M170,195 C155,186 150,198 154,212 C162,220 174,216 178,206 C180,199 176,196 170,195 Z"
+                transform="rotate(290 170 195)"/>
+        </g>
+
+        <!-- 花蕊小卷芯 -->
+        <circle cx="170" cy="196" r="7" fill="#5c0e1f" opacity="0"
+                style="animation: unfurl .8s ease 1.15s forwards;"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="caption">R  O  S  E</div>
+</div>
+
+<script>
+  // 生成飘落的花瓣粒子
+  const stage = document.getElementById('stage');
+  const count = 18;
+  for(let i=0;i<count;i++){
+    const p = document.createElement('div');
+    p.className = 'petal-fall';
+    const left = Math.random()*100;
+    const dur = 8 + Math.random()*7;
+    const delay = Math.random()*10;
+    const dx = (Math.random()*80-40) + 'px';
+    const scale = 0.5 + Math.random()*0.9;
+    const hueShift = Math.random() > 0.5 ? '#ff8fa3' : '#e63757';
+    p.style.left = left + 'vw';
+    p.style.setProperty('--dx', dx);
+    p.style.animationDuration = dur + 's';
+    p.style.animationDelay = delay + 's';
+    p.style.transform = `scale(${scale})`;
+    p.style.background = hueShift;
+    stage.appendChild(p);
+  }
+</script>
+
+</body>
+</html>
