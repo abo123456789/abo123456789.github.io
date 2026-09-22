@@ -124,7 +124,7 @@
     list.addEventListener('click',e=>{const button=e.target.closest('[data-voice]');if(!button)return;selected=voices.find(v=>v.id===button.dataset.voice);renderVoices($('#search').value);if(e.target.closest('.preview'))generate(true);});
     $('#generate').addEventListener('click',()=>generate());$('#search').addEventListener('input',e=>renderVoices(e.target.value));$('#language').addEventListener('change',()=>renderVoices($('#search').value));text.addEventListener('input',updateText);$('#clearText').addEventListener('click',()=>{text.value='';updateText();text.focus();});$('#sampleText').addEventListener('click',()=>{text.value='城市在晨雾中慢慢醒来。沿街的咖啡香，和远处的车铃声一起，写下了今天的开场。';updateText();});
     $('#rate').addEventListener('input',e=>$('#rateOut').textContent=`${Number(e.target.value)>=0?'+':''}${e.target.value}%`);$('#pitch').addEventListener('input',e=>$('#pitchOut').textContent=`${Number(e.target.value)>=0?'+':''}${e.target.value} Hz`);
-    renderVoices();updateText();if(!isMicrosoftEdge()){setStatus('请使用 Microsoft 浏览器打开');notice.textContent='纯前端直连仅支持 Microsoft 浏览器。文本不会上传到本网站，但合成时会直接发送给 Microsoft 的语音服务。';notice.classList.add('show');}else{loadVoices();}
+    renderVoices();updateText();if(!isMicrosoftEdge()){setStatus('请使用 Microsoft Edge 浏览器打开');notice.textContent='纯前端直连仅支持 Microsoft Edge 浏览器。文本不会上传到本网站，但合成时会直接发送给 Microsoft 的语音服务。';notice.classList.add('show');}else{loadVoices();}
   </script>
 </body>
 </html>
