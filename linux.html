@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fffefb">
+<meta name="color-scheme" content="light">
+<title>Linux 常用命令速查</title>
+<style>
+  :root{
+    --primary:#ff4f00;
+    --on-primary:#fffefb;
+    --ink:#201515;
+    --ink-soft:#2f2a26;
+    --body:#605d52;
+    --body-mid:#939084;
+    --mute:#c5c0b1;
+    --canvas:#fffefb;
+    --canvas-soft:#f8f4f0;
+
+    --sm:6px; --md:12px; --pill:9999px;
+
+    --font-display:"Degular Display","Inter","Segoe UI",system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    --font-body:"Inter","Segoe UI",system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    --font-mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"JetBrains Mono","Courier New",monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--canvas);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:18px;
+    line-height:27px;
+    -webkit-font-smoothing:antialiased;
+    -webkit-tap-highlight-color:rgba(32,21,21,.08);
+    overflow-x:hidden;
+  }
+  .wrap{
+    max-width:1280px;margin:0 auto;
+    padding-left:max(24px,env(safe-area-inset-left));
+    padding-right:max(24px,env(safe-area-inset-right));
+  }
+  input[type="search"]::-webkit-search-cancel-button,
+  input[type="search"]::-webkit-search-decoration{-webkit-appearance:none;appearance:none}
+
+  /* ---------- Hero ---------- */
+  .hero{padding:56px 0 32px}
+  .eyebrow{
+    margin:0 0 16px;
+    font-family:var(--font-display);
+    font-size:14px;font-weight:500;line-height:14px;letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--ink);
+  }
+  h1{
+    margin:0;
+    font-family:var(--font-display);
+    font-size:clamp(34px,5.2vw,56px);
+    font-weight:500;line-height:1.05;
+    letter-spacing:-0.5px;
+  }
+  .lead{
+    margin:16px 0 0;
+    max-width:62ch;
+    font-size:20px;line-height:30px;letter-spacing:-0.2px;
+    color:var(--body);
+  }
+  .hero-note{
+    margin:20px 0 0;display:flex;flex-wrap:wrap;gap:8px;
+  }
+  .tag{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:4px 12px;border-radius:var(--pill);
+    background:var(--canvas-soft);
+    font-size:14px;line-height:21px;color:var(--ink);
+  }
+
+  /* ---------- Sticky toolbar ---------- */
+  .toolbar{
+    position:sticky;top:0;z-index:20;
+    background:var(--canvas);
+    border-top:1px solid var(--mute);
+    border-bottom:1px solid var(--mute);
+    padding:12px 0;
+  }
+  .toolbar-inner{display:flex;flex-direction:column;gap:12px}
+  .search-row{display:flex;gap:12px;align-items:center}
+  .search{
+    position:relative;flex:1 1 auto;display:flex;align-items:center;
+    background:var(--canvas);
+    border:1px solid var(--ink);
+    border-radius:var(--sm);
+    padding:0 14px;
+    height:48px;
+  }
+  .search svg{flex:0 0 auto;opacity:.55}
+  .search input{
+    flex:1 1 auto;border:0;outline:0;background:transparent;
+    font:inherit;font-size:18px;color:var(--ink);
+    padding:0 10px;height:100%;min-width:0;
+  }
+  .search input::placeholder{color:var(--body-mid)}
+  .kbd{
+    flex:0 0 auto;font-family:var(--font-mono);font-size:12px;
+    border:1px solid var(--mute);border-radius:4px;
+    padding:1px 6px;color:var(--body-mid);
+  }
+  .clear{
+    flex:0 0 auto;border:0;background:transparent;cursor:pointer;
+    font:inherit;font-size:14px;color:var(--body);
+    padding:6px 4px;border-radius:4px;
+  }
+  .clear:hover{color:var(--ink)}
+  button{font-family:var(--font-body);touch-action:manipulation}
+  .lbl-sm{display:none}
+  .btn-primary{
+    flex:0 0 auto;
+    background:var(--primary);color:var(--on-primary);
+    font-size:16px;font-weight:600;line-height:27px;
+    border:0;border-radius:var(--md);
+    padding:10px 22px;cursor:pointer;
+    white-space:nowrap;
+    min-height:48px;
+    transition:filter .12s ease, transform .12s ease;
+  }
+  .btn-primary:hover{filter:brightness(1.08)}
+  .btn-primary:active{transform:translateY(1px)}
+  .btn-primary:disabled{cursor:not-allowed}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{
+    flex:0 0 auto;cursor:pointer;
+    background:var(--canvas);color:var(--ink);
+    border:1px solid var(--mute);border-radius:var(--pill);
+    font-size:13.5px;line-height:21px;
+    padding:6px 13px;
+    transition:border-color .12s ease, background .12s ease, color .12s ease;
+  }
+  .chip:hover{border-color:var(--ink)}
+  .chip.on{background:var(--ink);color:var(--canvas-soft);border-color:var(--ink)}
+  .chip .n{opacity:.5;margin-left:5px;font-family:var(--font-mono);font-size:12px}
+
+  /* ---------- Grid ---------- */
+  main{padding:24px 0 64px}
+  .meta{
+    display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+    font-size:14px;line-height:21px;color:var(--body-mid);
+    margin:0 0 16px;padding-bottom:12px;
+    border-bottom:1px solid var(--canvas-soft);
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(min(100%,380px),1fr));
+    gap:24px;
+  }
+  .card{
+    background:var(--canvas-soft);
+    border-radius:var(--md);
+    padding:24px;
+    display:flex;flex-direction:column;gap:12px;
+    min-width:0;
+  }
+  .card-head{display:flex;align-items:flex-start;gap:12px;justify-content:space-between}
+  .card-title{
+    margin:0;
+    font-size:20px;font-weight:600;line-height:25px;letter-spacing:-0.5px;
+  }
+  .card-cat{
+    display:block;margin:6px 0 0;
+    font-family:var(--font-display);
+    font-size:11px;font-weight:500;letter-spacing:1px;text-transform:uppercase;
+    color:var(--body-mid);
+  }
+  .card-desc{
+    margin:0;font-size:16px;line-height:24px;color:var(--body);
+  }
+  .warn{
+    display:inline-flex;align-items:center;gap:5px;
+    align-self:flex-start;
+    background:var(--ink);color:var(--canvas-soft);
+    border-radius:var(--pill);
+    font-size:12px;line-height:18px;padding:2px 10px;
+  }
+  .code{
+    position:relative;
+    background:var(--canvas);
+    border:1px solid var(--mute);
+    border-radius:var(--sm);
+    padding:14px 16px;
+    font-family:var(--font-mono);
+    font-size:13.5px;line-height:21px;
+    color:var(--ink-soft);
+    white-space:pre-wrap;
+    word-break:break-word;
+    cursor:copy;
+    margin:0;
+  }
+  .code:hover{border-color:var(--ink)}
+  .code:active{border-color:var(--ink);background:var(--canvas-soft)}
+  .ph{color:var(--primary);font-weight:600}
+  .copy{
+    flex:0 0 auto;
+    background:var(--canvas);color:var(--ink);
+    border:1px solid var(--ink);border-radius:var(--md);
+    font-size:13px;font-weight:700;line-height:14px;letter-spacing:.14px;
+    padding:8px 14px;cursor:pointer;
+    min-height:36px;
+    transition:background .12s ease,color .12s ease,border-color .12s ease;
+  }
+  .copy:hover{background:var(--ink);color:var(--canvas-soft)}
+  .copy:active{background:var(--ink);color:var(--canvas-soft)}
+  .copy.done{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+
+  .empty{
+    border:1px solid var(--mute);border-radius:var(--md);
+    padding:48px 24px;text-align:center;color:var(--body);
+  }
+  footer{
+    background:var(--ink);color:var(--canvas-soft);
+    padding:48px 0 calc(48px + env(safe-area-inset-bottom));
+    font-size:14px;line-height:24px;
+  }
+  footer strong{color:var(--canvas);font-weight:600}
+  footer p{margin:0 0 8px}
+  footer p:last-child{margin-bottom:0;color:var(--body-mid)}
+
+  /* ---------- Toast ---------- */
+  #toast{
+    position:fixed;left:50%;bottom:28px;transform:translate(-50%,16px);
+    background:var(--ink);color:var(--canvas-soft);
+    border-radius:var(--md);
+    padding:12px 18px;
+    font-size:14px;line-height:21px;
+    font-family:var(--font-mono);
+    max-width:min(680px,calc(100vw - 48px));
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    opacity:0;pointer-events:none;
+    transition:opacity .16s ease, transform .16s ease;
+    z-index:60;
+  }
+  #toast.show{opacity:1;transform:translate(-50%,0)}
+
+  /* ---------- 笔记本及以下：分类条横向滑动，吸顶区保持一行 ---------- */
+  @media (max-width:1279px){
+    .chips{flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+      -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 32px),rgba(0,0,0,.15));
+      mask-image:linear-gradient(90deg,#000 calc(100% - 32px),rgba(0,0,0,.15));}
+    .chips::-webkit-scrollbar{display:none}
+  }
+
+  /* ---------- 平板 ---------- */
+  @media (max-width:1023px){
+    .grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:20px}
+  }
+
+  /* ---------- 手机 ---------- */
+  @media (max-width:720px){
+    body{font-size:17px;line-height:26px}
+    .hero{padding:32px 0 20px}
+    h1{font-size:clamp(30px,8.4vw,40px);letter-spacing:-0.4px}
+    .lead{font-size:17px;line-height:26px;margin-top:12px}
+    .hero-note{margin-top:16px}
+    .tag{font-size:13px;line-height:20px;padding:3px 10px}
+
+    /* 吸顶工具条压到两行：搜索一行 + 分类横向滑动 */
+    .toolbar{padding:10px 0}
+    .toolbar-inner{gap:10px}
+    .search-row{flex-wrap:nowrap;gap:8px}
+    .search{height:46px;padding:0 10px}
+    .search input{font-size:16px;padding:0 8px}
+    .kbd{display:none}
+    .clear{font-size:13px;padding:8px 6px;min-height:40px}
+    .lbl-lg{display:none}
+    .lbl-sm{display:inline}
+    .btn-primary{font-size:15px;line-height:22px;padding:12px 16px;min-height:46px;width:auto}
+
+    .chips{flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+      -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 32px),rgba(0,0,0,.15));
+      mask-image:linear-gradient(90deg,#000 calc(100% - 32px),rgba(0,0,0,.15));}
+    .chips::-webkit-scrollbar{display:none}
+    .chip{font-size:13px;line-height:20px;padding:9px 14px}
+
+    main{padding:16px 0 40px}
+    .grid{grid-template-columns:1fr;gap:16px}
+    .card{padding:18px;gap:10px}
+    .card-title{font-size:19px;line-height:24px}
+    .card-cat{font-size:10px;margin-top:4px}
+    .card-desc{font-size:15px;line-height:23px}
+    .copy{min-height:44px;padding:12px 16px;font-size:13.5px}
+    .code{font-size:13px;line-height:20px;padding:13px 14px}
+    .meta{font-size:13px;margin-bottom:12px;padding-bottom:10px}
+    .empty{padding:36px 18px;font-size:16px}
+    footer{font-size:13px;line-height:22px;padding:32px 0 calc(32px + env(safe-area-inset-bottom))}
+
+    #toast{
+      left:16px;right:16px;max-width:none;
+      bottom:calc(20px + env(safe-area-inset-bottom));
+      transform:translateY(16px);
+      white-space:normal;
+      font-size:13px;
+    }
+    #toast.show{transform:translateY(0)}
+  }
+
+  @media (max-width:380px){
+    .card{padding:16px}
+    .card-title{font-size:18px}
+    .btn-primary{padding:12px 12px;font-size:14px}
+    .search input{font-size:15px}
+    .copy{padding:11px 12px;font-size:13px}
+  }
+
+  /* ---------- 大屏 PC ---------- */
+  @media (min-width:1440px){
+    .grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,390px),1fr))}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Linux Cheat Sheet</p>
+    <h1>Linux 常用命令速查</h1>
+    <p class="lead">日常运维最常用的指令集，点一下命令或按钮即可复制。包含 Ubuntu 文件夹授权、按端口查进程 ID、日志排查、服务管理等。</p>
+    <div class="hero-note">
+      <span class="tag">· 单页无跳转</span>
+      <span class="tag">· 点命令即复制</span>
+      <span class="tag">· 按 / 搜索</span>
+    </div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="wrap toolbar-inner">
+    <div class="search-row">
+      <label class="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#201515" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.6-3.6"></path></svg>
+        <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="搜索：端口、权限、日志、进程、nginx…">
+        <span class="kbd">/</span>
+        <button class="clear" id="clear" type="button" hidden>清除</button>
+      </label>
+      <button class="btn-primary" id="copyAll" type="button"><span class="lbl-lg">复制当前列表</span><span class="lbl-sm">复制全部</span></button>
+    </div>
+    <div class="chips" id="chips"></div>
+  </div>
+</div>
+
+<main>
+  <div class="wrap">
+    <div class="meta" id="meta"></div>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty" hidden>
+      没有匹配的命令。换个关键词试试，比如 <b>端口</b>、<b>授权</b>、<b>日志</b>。
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>用法：</strong>点任意命令块或「复制」按钮，即复制到剪贴板。</p>
+    <p>尖括号部分（如 &lt;端口&gt;）是占位符，复制后请替换成实际值。橙色标记的高危命令请确认后再执行。</p>
+    <p>单文件网页，可直接离线保存使用。</p>
+  </div>
+</footer>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================ 命令数据 ============================ */
+const DATA = [
+  /* ---------------- 权限与授权 ---------------- */
+  {c:"权限与授权", t:"把文件夹授权给指定用户", d:"最常用的 Ubuntu 授权：递归把目录属主改成某个用户。$USER 表示当前登录用户。", cmd:"sudo chown -R $USER:$USER /var/www"},
+  {c:"权限与授权", t:"递归给文件夹读写执行权限", d:"755 = 属主可读写执行，同组和其他用户只读+进入。网站目录最常用的权限。", cmd:"sudo chmod -R 755 /var/www"},
+  {c:"权限与授权", t:"授权给 Web 服务用户", d:"让 nginx / apache（www-data 用户）拥有目录，站点才不会报 403。", cmd:"sudo chown -R www-data:www-data /var/www/html"},
+  {c:"权限与授权", t:"目录 755、文件 644 一步到位", d:"目录和文件权限分开设，比整体 chmod -R 更安全。", cmd:"sudo find /var/www -type d -exec chmod 755 {} \\; && sudo find /var/www -type f -exec chmod 644 {} \\;"},
+  {c:"权限与授权", t:"给单个用户加 ACL 权限", d:"不动原有属主，只额外授予某用户读写执行（ACL）。", cmd:"sudo setfacl -R -m u:<用户名>:rwx -m d:u:<用户名>:rwx /data"},
+  {c:"权限与授权", t:"查看目录权限和 ACL", d:"确认授权是否生效。ls -l 第一个字母 d 表示目录。", cmd:"ls -l /var/www && getfacl /var/www"},
+  {c:"权限与授权", t:"把用户加入 sudo 组", d:"让普通用户获得 sudo 权限，重新登录后生效。", cmd:"sudo usermod -aG sudo <用户名>"},
+  {c:"权限与授权", t:"修改文件夹属主和属组", d:"把目录交给指定用户和用户组所有。", cmd:"sudo chown -R <用户名>:<组名> /opt/app"},
+  {c:"权限与授权", t:"开放所有权限（慎用）", d:"777 任何人都能改，仅用于本地临时排错，生产环境不要用。", cmd:"sudo chmod -R 777 /tmp/test", warn:"777 会放开全部权限，生产环境慎用"},
+  {c:"权限与授权", t:"上传目录一键修正权限", d:"新解压/上传的网站目录常权限不对，这一条同时修正属主和权限。", cmd:"sudo chown -R www-data:www-data /var/www/html && sudo chmod -R 755 /var/www/html"},
+  {c:"权限与授权", t:"给脚本加可执行权限", d:"让 .sh 文件可以直接运行，之后用 ./run.sh 执行。", cmd:"chmod +x run.sh"},
+  {c:"权限与授权", t:"用 root 权限手动改文件", d:"权限不足时临时提权执行命令。", cmd:"sudo -i"},
+
+  /* ---------------- 端口与进程 ---------------- */
+  {c:"端口与进程", t:"按端口号查找进程 ID", d:"最常用的一条：查出 8080 端口被哪个进程占用，输出里有 PID。", cmd:"sudo lsof -i:8080"},
+  {c:"端口与进程", t:"只输出占用端口的 PID", d:"干净地只拿到 PID，方便接 kill 或写脚本。", cmd:"sudo lsof -t -i:8080"},
+  {c:"端口与进程", t:"ss 精确查询端口占用", d:"新版系统自带 ss，比 netstat 更快。l=监听，p=进程，t/u=TCP/UDP，n=不解析名字。", cmd:"sudo ss -lptn 'sport = :8080'"},
+  {c:"端口与进程", t:"netstat 查询端口（老写法）", d:"老系统或习惯用法，需要 net-tools 包。", cmd:"sudo netstat -tunlp | grep 8080"},
+  {c:"端口与进程", t:"列出所有监听中的端口", d:"一眼看清服务器开了哪些端口、分别是哪个程序。", cmd:"sudo ss -tunlp"},
+  {c:"端口与进程", t:"按进程名查 PID", d:"找 nginx 相关的所有进程和 PID。", cmd:"pgrep -af nginx"},
+  {c:"端口与进程", t:"查看进程详细信息", d:"过滤进程列表，确认启动命令和路径。", cmd:"ps aux | grep nginx | grep -v grep"},
+  {c:"端口与进程", t:"结束进程", d:"把 PID 换成上一步查到的进程号。先试普通 kill，不行再 -9。", cmd:"kill -9 <PID>", warn:"kill -9 强制结束，可能丢失未保存数据"},
+  {c:"端口与进程", t:"强制杀掉占用端口的进程", d:"按端口直接干掉占用进程，清理卡死的服务很快。", cmd:"sudo fuser -k 8080/tcp", warn:"会直接杀掉进程，确认端口再执行"},
+  {c:"端口与进程", t:"查看占 CPU 最高的进程", d:"排名前 10 的吃 CPU 进程，排查服务器变慢。", cmd:"ps aux --sort=-%cpu | head -n 10"},
+  {c:"端口与进程", t:"查看占内存最高的进程", d:"按内存占用倒序排列。", cmd:"ps aux --sort=-%mem | head -n 10"},
+  {c:"端口与进程", t:"测试端口是否连通", d:"从本机或远端测端口通不通，nc 没装可用 telnet。", cmd:"nc -zv 127.0.0.1 8080"},
+  {c:"端口与进程", t:"持续监控进程状态", d:"每隔 2 秒刷新一次，观察进程是否重启或退出。", cmd:"watch -n 2 'ps -p <PID> -o pid,cmd,%cpu,%mem'"},
+
+  /* ---------------- 文件与目录 ---------------- */
+  {c:"文件与目录", t:"查看目录内容（含大小）", d:"人类可读的大小 + 显示隐藏文件，日常最常用。", cmd:"ls -lah"},
+  {c:"文件与目录", t:"进入目录 / 返回上级", d:"cd 进目录，.. 回上一级，~ 回家目录。", cmd:"cd /var/log"},
+  {c:"文件与目录", t:"查看当前所在路径", d:"迷路时先看自己在哪。", cmd:"pwd"},
+  {c:"文件与目录", t:"复制文件夹", d:"-r 递归复制整个目录，-v 显示过程。", cmd:"cp -rv /data/source /data/backup"},
+  {c:"文件与目录", t:"移动或重命名", d:"同一个命令：目标不存在就是重命名。", cmd:"mv /data/a.txt /data/b.txt"},
+  {c:"文件与目录", t:"删除文件夹", d:"删除目录及内部全部内容，执行前务必确认路径。", cmd:"rm -rf /data/old", warn:"rm -rf 不可恢复，路径写错会删错目录"},
+  {c:"文件与目录", t:"一次性创建多级目录", d:"-p 自动创建缺失的父目录。", cmd:"mkdir -p /data/app/logs"},
+  {c:"文件与目录", t:"按名称查找文件", d:"从指定目录往下找，2>/dev/null 用来屏蔽无权限的报错。", cmd:"sudo find / -name 'nginx.conf' 2>/dev/null"},
+  {c:"文件与目录", t:"查找 100MB 以上的大文件", d:"磁盘告警时找元凶，按大小排序。", cmd:"sudo find / -type f -size +100M -exec ls -lh {} \\; 2>/dev/null | sort -k5 -hr | head -n 20"},
+  {c:"文件与目录", t:"查看目录占用并排序", d:"找出 /var 下最占空间的子目录。", cmd:"du -sh /var/* | sort -hr | head -n 15"},
+  {c:"文件与目录", t:"创建软链接", d:"类似 Windows 快捷方式，改版本时只换链接。", cmd:"ln -s /data/app/v2 /data/app/current"},
+  {c:"文件与目录", t:"清空大日志文件", d:"不删除文件本身，把内容清空，适合被占用的日志。", cmd:"sudo truncate -s 0 /var/log/app.log"},
+  {c:"文件与目录", t:"快速定位命令所在路径", d:"确认用的是哪个版本的软件（多版本环境尤其有用）。", cmd:"which -a python3"},
+
+  /* ---------------- 日志与文本 ---------------- */
+  {c:"日志与文本", t:"实时滚动查看日志", d:"查看日志的经典用法，Ctrl+C 退出。", cmd:"tail -f /var/log/syslog"},
+  {c:"日志与文本", t:"看日志最后 200 行", d:"排错时先看最近发生了什么。", cmd:"tail -n 200 /var/log/nginx/error.log"},
+  {c:"日志与文本", t:"在目录里搜关键词", d:"-r 递归，-n 显示行号。找配置、找报错都好用。", cmd:"grep -rn 'ERROR' /var/log/"},
+  {c:"日志与文本", t:"忽略大小写搜索", d:"-i 不区分大小写，-C 3 显示上下 3 行上下文。", cmd:"grep -rin -C 3 'timeout' /etc/nginx/"},
+  {c:"日志与文本", t:"替换文件里的内容", d:"把 old 全部换成 new，直接改原文件（-i）。改前建议先备份。", cmd:"sudo sed -i.bak 's/old/new/g' /etc/nginx/nginx.conf"},
+  {c:"日志与文本", t:"统计文件行数", d:"确认日志条数、数据行数。", cmd:"wc -l access.log"},
+  {c:"日志与文本", t:"提取指定列", d:"取第 1 列（默认空格分隔），可接 sort | uniq -c 做统计。", cmd:"awk '{print $1}' access.log | sort | uniq -c | sort -nr | head"},
+  {c:"日志与文本", t:"查看大文件前几行", d:"快速确认文件格式，别用 cat 打开大文件。", cmd:"head -n 20 data.csv"},
+  {c:"日志与文本", t:"分页查看大文件", d:"空格翻页，/ 搜索，q 退出。", cmd:"less +F /var/log/app.log"},
+  {c:"日志与文本", t:"只看今天的日志", d:"按日期字符串过滤，日期格式要和日志里一致。", cmd:"grep \"$(date +%Y-%m-%d)\" /var/log/app.log"},
+  {c:"日志与文本", t:"多文件批量替换文本", d:"批量改配置，注意先备份。", cmd:"grep -rl 'old.com' /etc/ | xargs -r sudo sed -i 's/old.com/new.com/g'"},
+
+  /* ---------------- 系统与资源 ---------------- */
+  {c:"系统与资源", t:"查看磁盘剩余空间", d:"-h 人类可读，-i 看 inode 是否用满。", cmd:"df -h"},
+  {c:"系统与资源", t:"查看内存使用", d:"-h 人类可读，重点看 available 那一列。", cmd:"free -h"},
+  {c:"系统与资源", t:"查看系统负载和运行时长", d:"三个数字分别是 1 / 5 / 15 分钟平均负载。", cmd:"uptime"},
+  {c:"系统与资源", t:"实时监控系统资源", d:"top 自带，htop 更友好（需安装）。", cmd:"top"},
+  {c:"系统与资源", t:"查看系统版本信息", d:"确认发行版和内核版本。", cmd:"cat /etc/os-release && uname -a"},
+  {c:"系统与资源", t:"查看历史命令", d:"找回之前敲过的命令，配合 grep 过滤。", cmd:"history | grep ssh"},
+  {c:"系统与资源", t:"查看当前登录用户", d:"确认是谁在连这台机器。", cmd:"who && w"},
+  {c:"系统与资源", t:"查看定时任务", d:"编辑当前用户的 crontab 或看系统级任务。", cmd:"crontab -l"},
+  {c:"系统与资源", t:"设置时区", d:"把服务器时区改成上海，日志时间才对得上。", cmd:"sudo timedatectl set-timezone Asia/Shanghai"},
+  {c:"系统与资源", t:"查看开机时间与重启记录", d:"排查是否意外重启过。", cmd:"last reboot | head"},
+  {c:"系统与资源", t:"修改主机名", d:"改完重新登录生效。", cmd:"sudo hostnamectl set-hostname <新主机名>"},
+
+  /* ---------------- 服务管理 ---------------- */
+  {c:"服务管理", t:"重启服务", d:"改完配置后重启生效，传统 sysvinit 写法：service nginx restart。", cmd:"sudo systemctl restart nginx"},
+  {c:"服务管理", t:"查看服务状态", d:"看服务是否 active (running)，以及最近的日志。", cmd:"sudo systemctl status nginx"},
+  {c:"服务管理", t:"设置开机自启", d:"enable 开机启动，disable 取消。", cmd:"sudo systemctl enable nginx"},
+  {c:"服务管理", t:"停止 / 启动服务", d:"停止服务。换成 start 即为启动。", cmd:"sudo systemctl stop nginx"},
+  {c:"服务管理", t:"重载配置（不重启进程）", d:"nginx 等支持 reload，不断连接生效。", cmd:"sudo systemctl reload nginx"},
+  {c:"服务管理", t:"跟踪某个服务的日志", d:"journalctl 看 systemd 管的服务日志，-f 实时跟踪。", cmd:"sudo journalctl -u nginx -f"},
+  {c:"服务管理", t:"只看今天的错误日志", d:"-p err 只看错误级别，-S today 从今天开始。", cmd:"sudo journalctl -p err -S today --no-pager"},
+  {c:"服务管理", t:"列出正在运行的服务", d:"快速盘点机器上跑着哪些服务。", cmd:"systemctl list-units --type=service --state=running"},
+  {c:"服务管理", t:"排查服务启动失败原因", d:"看最近 50 行服务日志定位报错。", cmd:"sudo journalctl -u nginx -n 50 --no-pager"},
+  {c:"服务管理", t:"测试 nginx 配置是否正确", d:"改配置后先测试再重启，避免服务起不来。", cmd:"sudo nginx -t"},
+
+  /* ---------------- 网络 ---------------- */
+  {c:"网络", t:"查看本机 IP 地址", d:"查看所有网卡地址；只想看 IP 用 hostname -I。", cmd:"ip a"},
+  {c:"网络", t:"只输出本机 IP", d:"一行拿到本机所有 IPv4 地址。", cmd:"hostname -I"},
+  {c:"网络", t:"测试网络连通性", d:"-c 4 只发 4 个包，避免一直 ping。", cmd:"ping -c 4 8.8.8.8"},
+  {c:"网络", t:"测试 HTTP 接口响应", d:"-I 只看响应头，排查接口 502/504 很快。", cmd:"curl -I https://example.com"},
+  {c:"网络", t:"带超时的接口测试", d:"-m 最大耗时，-w 打印状态码和耗时。", cmd:"curl -m 5 -o /dev/null -s -w '%{http_code} %{time_total}s\\n' https://example.com"},
+  {c:"网络", t:"下载文件", d:"-c 支持断点续传，-O 保留原文件名。", cmd:"wget -c https://example.com/file.tar.gz"},
+  {c:"网络", t:"远程登录服务器", d:"指定端口用 -p，密钥用 -i。", cmd:"ssh -p 22 <用户名>@<服务器IP>"},
+  {c:"网络", t:"上传本地文件到服务器", d:"scp 用法和 cp 类似，-r 可传目录。", cmd:"scp -P 22 ./file.tar.gz <用户名>@<服务器IP>:/data/"},
+  {c:"网络", t:"目录增量同步", d:"-avz 保留权限并压缩传输，--delete 让目标与源一致（慎用）。", cmd:"rsync -avz --progress ./dist/ <用户名>@<服务器IP>:/var/www/html/"},
+  {c:"网络", t:"查看 DNS 解析结果", d:"确认域名解析到哪台机器，排查解析问题。", cmd:"dig +short example.com"},
+  {c:"网络", t:"查看路由和默认网关", d:"排查网络不通、路由表异常。", cmd:"ip route"},
+  {c:"网络", t:"抓包排查请求", d:"-i 指定网卡，port 过滤端口，Ctrl+C 停止。", cmd:"sudo tcpdump -i any -nn port 80 -c 50"},
+
+  /* ---------------- 压缩解压 ---------------- */
+  {c:"压缩解压", t:"打包并压缩目录", d:"最常用的备份命令：c 创建、z gzip、v 显示、f 文件名。", cmd:"tar -czvf backup-$(date +%F).tar.gz /data/app"},
+  {c:"压缩解压", t:"解压 tar.gz 到指定目录", d:"-C 指定解压目标目录，目录需已存在。", cmd:"sudo tar -xzvf app.tar.gz -C /data/app"},
+  {c:"压缩解压", t:"只查看压缩包内容", d:"解压前先看看里面是什么结构，避免解压出一堆散文件。", cmd:"tar -tzvf app.tar.gz | head -n 30"},
+  {c:"压缩解压", t:"zip 压缩", d:"跨平台通用格式，-r 递归目录。", cmd:"zip -r site.zip /var/www/html"},
+  {c:"压缩解压", t:"unzip 解压", d:"-d 指定目标目录，-o 覆盖已有文件。", cmd:"unzip site.zip -d /data/site"},
+  {c:"压缩解压", t:"解压 .tar.xz 格式", d:"-J 处理 xz，内核源码包常用这个格式。", cmd:"tar -xJvf linux.tar.xz"},
+
+  /* ---------------- 包管理（Ubuntu） ---------------- */
+  {c:"包管理（Ubuntu）", t:"更新软件源索引", d:"装软件前先执行，否则可能找不到包。", cmd:"sudo apt update"},
+  {c:"包管理（Ubuntu）", t:"升级已安装的软件", d:"-y 自动确认。生产环境先确认变更内容再升级。", cmd:"sudo apt upgrade -y"},
+  {c:"包管理（Ubuntu）", t:"安装软件包", d:"以 nginx 为例，换成你要装的包名即可。", cmd:"sudo apt install -y nginx"},
+  {c:"包管理（Ubuntu）", t:"卸载软件包", d:"--purge 连配置文件一起删除。", cmd:"sudo apt remove --purge -y <包名>"},
+  {c:"包管理（Ubuntu）", t:"搜索安装包", d:"不确定包名时先搜一下。", cmd:"apt search <关键词>"},
+  {c:"包管理（Ubuntu）", t:"查看已安装的包", d:"配合 grep 找某个软件装没装、什么版本。", cmd:"dpkg -l | grep nginx"},
+  {c:"包管理（Ubuntu）", t:"查看命令属于哪个包", d:"知道文件路径反查包名。", cmd:"dpkg -S $(which python3)"},
+  {c:"包管理（Ubuntu）", t:"清理无用的依赖和缓存", d:"回收磁盘空间，服务器磁盘告警时常用。", cmd:"sudo apt autoremove -y && sudo apt clean"},
+
+  /* ---------------- 用户与账号 ---------------- */
+  {c:"用户与账号", t:"新建用户", d:"交互式创建用户并设置密码，同时创建家目录。", cmd:"sudo adduser <用户名>"},
+  {c:"用户与账号", t:"修改用户密码", d:"给指定用户重置密码。", cmd:"sudo passwd <用户名>"},
+  {c:"用户与账号", t:"查看用户所属用户组", d:"确认用户有没有 sudo 组。", cmd:"id <用户名>"},
+  {c:"用户与账号", t:"删除用户及其家目录", d:"--remove-home 会把家目录一起删掉，不可恢复。", cmd:"sudo deluser --remove-home <用户名>", warn:"会删除该用户的家目录数据"},
+  {c:"用户与账号", t:"切换用户身份", d:"- 表示同时切换环境变量和工作目录。", cmd:"su - <用户名>"},
+  {c:"用户与账号", t:"免密 sudo 配置", d:"编辑 sudoers 请务必用 visudo，写错会导致无法 sudo。", cmd:"sudo visudo", warn:"sudoers 语法错误会导致失去 sudo 权限"},
+
+  /* ---------------- 磁盘与安全 ---------------- */
+  {c:"磁盘与安全", t:"查看磁盘分区情况", d:"看清磁盘和分区，挂载新盘前先看这里。", cmd:"lsblk -f"},
+  {c:"磁盘与安全", t:"挂载磁盘分区", d:"把分区挂到目录，重启后失效；永久挂载需写入 /etc/fstab。", cmd:"sudo mount /dev/sdb1 /mnt/data"},
+  {c:"磁盘与安全", t:"查看磁盘 inode 使用率", d:"磁盘还有空间却写不进文件，通常是 inode 用满。", cmd:"df -ih"},
+  {c:"磁盘与安全", t:"查看防火墙状态", d:"Ubuntu 默认 ufw，看规则和开关状态。", cmd:"sudo ufw status verbose"},
+  {c:"磁盘与安全", t:"开放端口", d:"放行 80 端口，改动后立即生效。", cmd:"sudo ufw allow 80/tcp"},
+  {c:"磁盘与安全", t:"查看谁在登录机器", d:"排查异常登录来源 IP。", cmd:"last -n 20"},
+  {c:"磁盘与安全", t:"查看 SSH 登录失败记录", d:"排查暴力破解尝试。", cmd:"sudo grep 'Failed password' /var/log/auth.log | tail -n 20"},
+  {c:"磁盘与安全", t:"修改 SSH 端口（编辑配置）", d:"改成非 22 端口后需重启 ssh 服务并放行新端口。", cmd:"sudo sed -i 's/^#\\?Port .*/Port 2222/' /etc/ssh/sshd_config && sudo systemctl restart ssh", warn:"改 SSH 端口前先确认防火墙已放行，否则可能连不上"}
+];
+
+/* ============================ 渲染逻辑 ============================ */
+const $ = s => document.querySelector(s);
+const grid = $('#grid'), chips = $('#chips'), meta = $('#meta'),
+      q = $('#q'), empty = $('#empty'), toast = $('#toast');
+
+const CATS = [...new Set(DATA.map(i => i.c))];
+let activeCat = '全部';
+
+function esc(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+          .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function codeHTML(cmd){
+  return esc(cmd)
+    .replace(/&lt;([^&]{1,30}?)&gt;/g, '<span class="ph">&lt;$1&gt;</span>')
+    .replace(/\$USER|\$\(date \+%F\)/g, m => '<span class="ph">' + m + '</span>');
+}
+
+/* 类目筛选按钮 */
+function renderChips(){
+  const items = ['全部', ...CATS];
+  chips.innerHTML = items.map(c => {
+    const n = c === '全部' ? DATA.length : DATA.filter(i => i.c === c).length;
+    return `<button class="chip${c === activeCat ? ' on' : ''}" type="button" data-cat="${esc(c)}">${esc(c)}<span class="n">${n}</span></button>`;
+  }).join('');
+}
+
+/* 命令卡片 */
+function render(){
+  const kw = q.value.trim().toLowerCase();
+  const list = DATA.filter(i => {
+    const okCat = activeCat === '全部' || i.c === activeCat;
+    if (!okCat) return false;
+    if (!kw) return true;
+    return (i.t + ' ' + i.d + ' ' + i.c + ' ' + i.cmd).toLowerCase().includes(kw);
+  });
+
+  grid.innerHTML = list.map(i => `
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2 class="card-title">${esc(i.t)}</h2>
+          <span class="card-cat">${esc(i.c)}</span>
+        </div>
+        <button class="copy" type="button" aria-label="复制命令：${esc(i.t)}" data-copy="${esc(i.cmd)}">复制</button>
+      </div>
+      <p class="card-desc">${esc(i.d)}</p>
+      ${i.warn ? `<span class="warn">⚠ ${esc(i.warn)}</span>` : ''}
+      <p class="code" data-copy="${esc(i.cmd)}" title="点击复制">${codeHTML(i.cmd)}</p>
+    </section>`).join('');
+
+  empty.hidden = list.length > 0;
+  meta.textContent = `共 ${list.length} 条命令` + (activeCat === '全部' ? '' : ` · ${activeCat}`) + (kw ? ` · 关键词「${q.value.trim()}」` : '');
+  $('#copyAll').disabled = list.length === 0;
+  $('#copyAll').style.opacity = list.length === 0 ? .45 : 1;
+}
+
+/* 复制 */
+async function copyText(text){
+  try{
+    if (navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+    throw new Error('fallback');
+  }catch(e){
+    try{
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly','');
+      ta.style.cssText = 'position:fixed;top:-1000px;opacity:0';
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand('copy');
+      ta.remove();
+      return ok;
+    }catch(e2){ return false; }
+  }
+}
+let toastTimer;
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+}
+function activeList(){
+  const kw = q.value.trim().toLowerCase();
+  return DATA.filter(i => {
+    const okCat = activeCat === '全部' || i.c === activeCat;
+    if (!okCat) return false;
+    if (!kw) return true;
+    return (i.t + ' ' + i.d + ' ' + i.c + ' ' + i.cmd).toLowerCase().includes(kw);
+  });
+}
+
+document.addEventListener('click', async e => {
+  const copyBtn = e.target.closest('.copy');
+  const codeEl = e.target.closest('.code');
+  const chip = e.target.closest('.chip');
+
+  if (chip){
+    activeCat = chip.dataset.cat;
+    renderChips(); render();
+    return;
+  }
+  const target = copyBtn || codeEl;
+  if (target){
+    const text = target.dataset.copy;
+    const ok = await copyText(text);
+    if (ok){
+      showToast('已复制：' + text.split('\n')[0].slice(0, 70));
+      if (copyBtn){
+        copyBtn.textContent = '已复制 ✓';
+        copyBtn.classList.add('done');
+        setTimeout(() => { copyBtn.textContent = '复制'; copyBtn.classList.remove('done'); }, 1400);
+      }
+    } else {
+      showToast('复制失败，请手动选中命令复制');
+    }
+  }
+});
+
+$('#copyAll').addEventListener('click', async () => {
+  const list = activeList();
+  if (!list.length) return;
+  const text = list.map(i => `# ${i.t}\n${i.cmd}`).join('\n\n');
+  const ok = await copyText(text);
+  showToast(ok ? `已复制 ${list.length} 条命令` : '复制失败，请手动选中复制');
+});
+
+let t;
+function syncClear(){ $('#clear').hidden = !q.value; $('.kbd').style.display = q.value ? 'none' : ''; }
+q.addEventListener('input', () => {
+  syncClear();
+  clearTimeout(t); t = setTimeout(render, 90);
+});
+$('#clear').addEventListener('click', () => {
+  q.value = ''; syncClear(); render(); q.focus();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement !== q){ e.preventDefault(); q.focus(); q.select(); }
+  if (e.key === 'Escape' && document.activeElement === q){ q.value = ''; syncClear(); render(); q.blur(); }
+});
+
+renderChips();
+render();
+</script>
+</body>
+</html>
