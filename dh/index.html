@@ -1025,12 +1025,17 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-bottom">
-        <p>&copy; 2025 元空智能数字人科技有限公司. 保留所有权利.</p>
+        <p>&copy; <span id="year">2025</span> 元空智能数字人科技有限公司. 保留所有权利.</p>
       </div>
     </div>
   </footer>
 
   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // 动态设置年份
+      const currentYear = new Date().getFullYear();
+      document.getElementById('year').textContent = currentYear;
+      })
     // 平滑滚动
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
