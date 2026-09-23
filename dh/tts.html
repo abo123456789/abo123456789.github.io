@@ -27,6 +27,10 @@
     .nav { display:flex; gap:7px; padding:5px; border-radius:14px; background:#f0eff5; }
     .nav button { border:0; border-radius:10px; padding:9px 13px; background:transparent; color:var(--muted); font-size:14px; font-weight:650; }
     .nav button.active { color:var(--ink); background:#fff; box-shadow:0 1px 4px rgba(16,17,20,.08); }
+    .breadcrumb { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted); }
+    .breadcrumb a { color:var(--deep); text-decoration:none; font-weight:600; transition:.2s; }
+    .breadcrumb a:hover { color:var(--violet); }
+    .breadcrumb span { color:var(--faint); }
     .privacy { color:var(--muted); display:flex; align-items:center; gap:7px; font-size:13px; } .privacy b{ width:8px;height:8px;border-radius:50%;background:var(--green); }
     main { padding:44px 5.2% 31px; }
     .eyebrow { display:flex; gap:8px; align-items:center; color:var(--deep); font-weight:700; font-size:13px; letter-spacing:.08em; text-transform:uppercase; }
@@ -52,7 +56,7 @@
     .player { display:none; margin-top:24px; padding:18px 5.2%; border-top:1px solid var(--line); background:linear-gradient(90deg,#fff,#faf9ff); }.player.show{display:flex;align-items:center;gap:15px}.now{width:37px;height:37px;border-radius:11px;background:var(--tint);display:grid;place-items:center;color:var(--violet)}.track{flex:1;min-width:0}.track strong{display:block;font-size:14px}.track span{display:block;margin-top:2px;color:var(--muted);font-size:12px}.track audio{width:100%;height:28px;margin-top:5px}.download{border:1px solid var(--deep);background:white;color:var(--deep);padding:10px 12px;border-radius:10px;font-size:13px;font-weight:750;text-decoration:none;white-space:nowrap}
     .actionbar { display:flex; align-items:center; justify-content:space-between; margin-top:24px; padding:16px 18px; border:1px solid var(--line); border-radius:16px; background:white; box-shadow:0 8px 26px rgba(16,17,20,.035); }.status{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:13px}.status-dot{width:8px;height:8px;border-radius:50%;background:#b4b5c0}.status-dot.ready{background:var(--green);box-shadow:0 0 0 4px rgba(20,158,97,.12)}.generate{border:0;border-radius:12px;padding:14px 22px;min-width:144px;background:var(--violet);color:white;font-weight:800;box-shadow:0 10px 22px rgba(113,50,245,.28);transition:.2s}.generate:hover{background:var(--deep);transform:translateY(-1px)}.generate:disabled{opacity:.68;cursor:wait;transform:none}.generate svg{margin-right:8px;vertical-align:-3px}
     .notice { display:none; margin-top:15px; padding:12px 14px; color:#8a3f09; background:#fff8ed; border:1px solid #fed7aa; border-radius:11px; font-size:13px; line-height:1.5; }.notice.show{display:block}
-    @media(max-width:800px){header{height:66px;padding:0 20px}.brand{font-size:18px}.nav,.privacy{display:none}main{padding:31px 18px 22px}.studio{grid-template-columns:1fr;border-radius:16px}.editor{min-height:440px;padding:21px;border-right:0;border-bottom:1px solid var(--line)}.voice-panel{padding:21px}.voice-list{max-height:300px}.player.show{align-items:flex-start;flex-wrap:wrap}.track{min-width:calc(100% - 55px)}.download{margin-left:52px}.actionbar{padding:13px}.generate{min-width:126px;padding:13px 14px}}
+    @media(max-width:800px){header{height:66px;padding:0 20px}.brand{font-size:18px}.nav,.privacy,.breadcrumb{display:none}main{padding:31px 18px 22px}.studio{grid-template-columns:1fr;border-radius:16px}.editor{min-height:440px;padding:21px;border-right:0;border-bottom:1px solid var(--line)}.voice-panel{padding:21px}.voice-list{max-height:300px}.player.show{align-items:flex-start;flex-wrap:wrap}.track{min-width:calc(100% - 55px)}.download{margin-left:52px}.actionbar{padding:13px}.generate{min-width:126px;padding:13px 14px}}
     @media(max-width:430px){h1{font-size:31px}.intro{font-size:14px}.editor-bottom{align-items:flex-start;flex-direction:column}.actionbar{gap:11px}.status{font-size:12px}.generate{font-size:14px;min-width:auto}.draft{min-height:265px}textarea{min-height:198px;font-size:16px}}
   </style>
 </head>
@@ -60,6 +64,11 @@
   <div class="app">
     <header>
       <div class="brand"><span class="brand-mark"><i></i><i></i><i></i></span>声织 <small>Studio</small></div>
+      <nav class="breadcrumb" aria-label="面包屑导航">
+        <a href="index.html">数字人主页</a>
+        <span>/</span>
+        <span>语音合成</span>
+      </nav>
       <div class="privacy"><b></b>仅在你的浏览器处理</div>
     </header>
     <main>

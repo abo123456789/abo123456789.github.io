@@ -294,6 +294,47 @@
       font-size: 1.1rem;
     }
 
+    .advantage-list li a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.3s ease;
+      position: relative;
+      padding: 0.2rem 0;
+    }
+
+    .advantage-list li a::after {
+      content: '→';
+      font-size: 0.9rem;
+      transition: transform 0.3s ease;
+    }
+
+    .advantage-list li a:hover {
+      color: #1d4ed8;
+      transform: translateX(3px);
+    }
+
+    .advantage-list li a:hover::after {
+      transform: translateX(3px);
+    }
+
+    /* 高亮样式 - 让链接更突出 */
+    .advantage-list li.highlight {
+      background: linear-gradient(90deg, rgba(37, 99, 235, 0.05), transparent);
+      margin: 0.3rem -0.5rem;
+      padding: 0.5rem 0.5rem 0.5rem 2rem;
+      border-radius: 8px;
+      border-left: 3px solid #2563eb;
+    }
+
+    .advantage-list li.highlight::before {
+      left: 0.5rem;
+      color: #2563eb;
+    }
+
     /* 特色功能 */
     .features {
       padding: 5rem 0;
@@ -831,7 +872,7 @@
               <li>超自然人声克隆高保真还原</li>
               <li>声音克隆情感语调模拟</li>
               <li>多语种声音克隆转换</li>
-              <li><a href="tts.html" target="_blank">实时AI语音合成</a></li>
+              <li class="highlight"><a href="tts.html" target="_blank">实时AI语音合成</a></li>
             </ul>
           </div>
         </div>
@@ -849,7 +890,7 @@
               <li>云端SaaS服务</li>
               <li>私有化本地部署</li>
               <li>混合云架构支持</li>
-              <li>一键快速部署</li>
+              <li class="highlight"><a href="https://www.bilibili.com/video/BV1hPhw6TEyS" target="_blank">一键快速部署</a></li>
             </ul>
           </div>
         </div>
