@@ -119,6 +119,20 @@ const importedImages = [
   prompt: "原始提示词未保存在对应项目目录中；此图来自 GPT 图片生成记录。"
 }));
 
+importedImages.push(...Array.from({ length: 16 }, (_, index) => {
+  const number = String(index + 1).padStart(2, "0");
+  return {
+    title: `AI 龙虾标志探索 ${number}`,
+    subtitle: "GPT 生成 · 项目原图",
+    category: "Logo 方案",
+    date: "2026.09.30",
+    src: `./images/gpt-logo-${number}.png`,
+    transparent: false,
+    description: `AI 龙虾品牌标志设计探索方案 ${number}。`,
+    prompt: "GPT 生成的 AI 龙虾品牌标志探索图。"
+  };
+}));
+
 images.push(...importedImages);
 const allImages = [...images];
 let visibleImages = allImages;
