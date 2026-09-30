@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="description" content="浏览 GPT 生成图片，并查看图片说明与已留存的生成提示词。" />
+    <title>图片与提示词 · 图像档案</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23131d20'/%3E%3Cpath d='M12 45 27 25l9 11 7-8 9 17H12Z' fill='%23b6d7c7'/%3E%3Ccircle cx='45' cy='19' r='6' fill='%23efd1a4'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="./style.css" />
+    <script defer src="./app.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      <div class="heading-group">
+        <p class="eyebrow">IMAGE ARCHIVE / 本地图片集</p>
+        <h1>图片与提示词</h1>
+      </div>
+      <p class="image-count" id="image-count" aria-live="polite"></p>
+    </header>
+
+    <main class="page-content">
+      <p class="intro">点击图片查看完整尺寸、项目说明与已留存的生成提示词。</p>
+      <div class="search-bar">
+        <label for="image-search">搜索图片</label>
+        <input id="image-search" type="search" placeholder="按名称、分类或提示词搜索…" autocomplete="off" />
+      </div>
+      <section class="gallery" id="gallery" aria-label="生成图片列表"></section>
+      <div class="gallery-loader" id="gallery-loader" role="status" aria-live="polite"></div>
+      <noscript><p class="no-script">请启用 JavaScript 以浏览图片和提示词。</p></noscript>
+    </main>
+
+    <dialog class="detail-dialog" id="detail-dialog" aria-labelledby="detail-title">
+      <div class="dialog-layout">
+        <div class="detail-visual" id="detail-visual">
+          <img id="detail-image" alt="" />
+        </div>
+        <div class="detail-copy">
+          <div class="dialog-topline">
+            <span class="detail-index" id="detail-index"></span>
+            <button class="close-button" id="close-button" type="button" aria-label="关闭详情">×</button>
+          </div>
+          <p class="detail-category" id="detail-category"></p>
+          <h2 id="detail-title"></h2>
+          <p class="detail-description" id="detail-description"></p>
+          <div class="prompt-section">
+            <h3>生成提示词</h3>
+            <p class="prompt-note">已留存原始提示词的图片会在此展示；未留存时会说明图片来源。</p>
+            <pre id="detail-prompt"></pre>
+          </div>
+        </div>
+      </div>
+    </dialog>
+  </body>
+</html>
