@@ -74,8 +74,8 @@
 
   /* ===== 模式切换 ===== */
   .tabs{
-    margin:16px auto 0; width:100%; max-width:340px;
-    display:grid; grid-template-columns:1fr 1fr;
+    margin:16px auto 0; width:100%; max-width:360px;
+    display:grid; grid-template-columns:repeat(3,1fr);
     background:var(--panel); border:1px solid var(--line); border-radius:999px;
     padding:4px;
   }
@@ -101,6 +101,7 @@
     line-height:1; letter-spacing:.01em;
     font-variant-numeric:tabular-nums;
   }
+  .nums[hidden]{ display:none; }
   .unit{ display:flex; flex-direction:column; align-items:center; line-height:1; }
   .unit b{ font-weight:400; display:block; }
   .unit em{
@@ -185,6 +186,31 @@
 
   .hint{ text-align:center; color:var(--dim); font-size:12px; margin-top:14px; letter-spacing:.04em; }
 
+  /* ===== 秒表 ===== */
+  .ctrl-btn[hidden]{ display:none; }
+  .nums.sw .sw-cs b{ color:var(--dim); }
+  .nums.sw.wide{ font-size:.82em; }
+  .sw-list{
+    max-height:min(42vh,260px); overflow-y:auto;
+    border:1px solid var(--line); border-radius:10px; background:#0E1626;
+  }
+  .sw-list::-webkit-scrollbar{ width:8px; }
+  .sw-list::-webkit-scrollbar-thumb{ background:var(--line); border-radius:4px; }
+  .lap-head,.lap-row{
+    display:grid; grid-template-columns:1.2fr 1fr 1fr; align-items:center;
+    padding:9px 14px; gap:8px;
+  }
+  .lap-head{ color:var(--dim); font-size:12px; letter-spacing:.12em; border-bottom:1px dashed var(--line); }
+  .lap-row{
+    font-family:"Chivo Mono",ui-monospace,"Cascadia Mono","Consolas",monospace;
+    font-size:15px;
+  }
+  .lap-row + .lap-row{ border-top:1px solid rgba(38,50,74,.6); }
+  .lap-row.latest .lap-rel, .lap-row.latest .lap-total{ color:var(--amber); }
+  .lap-no{ color:var(--dim); font-size:13px; }
+  .lap-rel,.lap-total{ text-align:right; }
+  .sw-empty{ color:var(--dim); font-size:13px; text-align:center; padding:20px 0 10px; }
+
   /* ===== 桌面增强 ===== */
   @media (min-width:768px){
     .stage{ padding:26px 40px 34px; padding:26px max(40px, env(safe-area-inset-left)) max(34px, env(safe-area-inset-bottom)) max(40px, env(safe-area-inset-right)); }
@@ -255,9 +281,10 @@
     </div>
   </header>
 
-  <nav class="tabs" aria-label="倒计时模式">
+  <nav class="tabs" aria-label="计时模式">
     <button class="tab is-active" type="button" data-mode="duration">定时</button>
     <button class="tab" type="button" data-mode="deadline">到点</button>
+    <button class="tab" type="button" data-mode="stopwatch">秒表</button>
   </nav>
 
   <section class="clock" aria-label="剩余时间">
@@ -268,6 +295,13 @@
       <div class="unit"><b id="m">00</b><em>分</em></div>
       <i class="colon">:</i>
       <div class="unit"><b id="s">00</b><em>秒</em></div>
+    </div>
+    <div class="nums sw" id="swNums" hidden>
+      <div class="unit"><b id="swM">00</b><em>分</em></div>
+      <i class="colon">:</i>
+      <div class="unit"><b id="swS">00</b><em>秒</em></div>
+      <i class="colon sw-dot">.</i>
+      <div class="unit sw-cs"><b id="swC">00</b><em>厘秒</em></div>
     </div>
   </section>
 
@@ -298,12 +332,17 @@
     </div>
   </section>
 
+  <section class="panel hidden" id="panelStopwatch">
+    <div class="sw-list" id="lapsList"></div>
+  </section>
+
   <footer class="controls">
+    <button class="ctrl-btn ghost" id="lapBtn" type="button" hidden>计圈</button>
     <button class="ctrl-btn ghost" id="resetBtn" type="button">重置</button>
     <button class="ctrl-btn primary" id="startBtn" type="button">开始</button>
   </footer>
 
-  <p class="hint">空格 开始/暂停 · R 重置 · F 全屏</p>
+  <p class="hint">空格 开始/暂停 · L 计圈 · R 重置 · F 全屏</p>
 </main>
 
 <script>
@@ -312,16 +351,19 @@
   var $ = function(id){ return document.getElementById(id); };
   var stage=$("stage"), nums=$("nums"), hEl=$("h"), mEl=$("m"), sEl=$("s"),
       daysWrap=$("daysWrap"), daysEl=$("days"), statusEl=$("status"),
-      startBtn=$("startBtn"), resetBtn=$("resetBtn"),
+      startBtn=$("startBtn"), resetBtn=$("resetBtn"), lapBtn=$("lapBtn"),
+      lapsList=$("lapsList"),
+      swNums=$("swNums"), swM=$("swM"), swS=$("swS"), swC=$("swC"),
       inH=$("inH"), inM=$("inM"), inS=$("inS"),
       deadlineInput=$("deadlineInput"), presetsEl=$("presets"), chipsEl=$("chips"),
       soundBtn=$("soundBtn"), soundLabel=$("soundLabel"),
       soundIcoOn=$("soundIcoOn"), soundIcoOff=$("soundIcoOff"),
       fullBtn=$("fullBtn"), fullLabel=$("fullLabel");
 
-  var MODE_DUR="duration", MODE_DL="deadline";
+  var MODE_DUR="duration", MODE_DL="deadline", MODE_SW="stopwatch";
   var state={ mode:MODE_DUR, status:"idle", targetMs:0, remaining:0, muted:false };
-  var timer=null, actx=null;
+  var sw={ base:0, accum:0, running:false, laps:[], lastLapStart:0 };
+  var timer=null, swTimer=null, actx=null;
 
   /* ---------- 工具 ---------- */
   function pad(n){ return (n<10?"0":"")+n; }
@@ -351,6 +393,39 @@
   function renderFromTarget(){
     render(state.targetMs - Date.now());
   }
+
+  /* ---------- 秒表 ---------- */
+  function fmtSWStr(ms){
+    ms = Math.max(0, ms);
+    var cs = Math.floor(ms/10);
+    var m = Math.floor(cs/6000), s = Math.floor((cs%6000)/100), c = cs%100;
+    return (m>=100 ? String(m) : pad(m)) + ":" + pad(s) + "." + pad(c);
+  }
+  function swCurrent(){ return sw.running ? Date.now()-sw.base : sw.accum; }
+  function renderSW(ms){
+    ms = Math.max(0, ms);
+    var cs = Math.floor(ms/10);
+    var m = Math.floor(cs/6000), s = Math.floor((cs%6000)/100), c = cs%100;
+    swM.textContent = m>=100 ? String(m) : pad(m);
+    swS.textContent = pad(s);
+    swC.textContent = pad(c);
+    swNums.classList.toggle("wide", m>=100);
+  }
+  function renderLaps(){
+    var html = '<div class="lap-head"><span>圈</span><span class="lap-rel">单圈</span><span class="lap-total">累计</span></div>';
+    if(!sw.laps.length){
+      html += '<div class="sw-empty">点击「计圈」记录单圈时间</div>';
+    }else{
+      sw.laps.forEach(function(l,i){
+        html += '<div class="lap-row' + (i===sw.laps.length-1 ? " latest" : "") + '">'
+              + '<span class="lap-no">第 ' + (i+1) + ' 圈</span>'
+              + '<span class="lap-rel">' + fmtSWStr(l.rel) + '</span>'
+              + '<span class="lap-total">' + fmtSWStr(l.total) + '</span></div>';
+      });
+    }
+    lapsList.innerHTML = html;
+  }
+
   function setStatus(txt,hot){
     statusEl.textContent = txt;
     statusEl.classList.toggle("hot", !!hot);
@@ -362,9 +437,13 @@
   }
   function updateTitle(){
     if(state.status==="running"){
-      var rem=Math.max(0,state.targetMs-Date.now());
-      var ts=Math.floor(rem/1000), h=Math.floor(ts/3600), m=Math.floor(ts%3600/60), s=ts%60;
-      document.title = pad(h)+":"+pad(m)+":"+pad(s)+" · 倒计时";
+      if(state.mode===MODE_SW){
+        document.title = fmtSWStr(Date.now()-sw.base) + " · 秒表";
+      }else{
+        var rem=Math.max(0,state.targetMs-Date.now());
+        var ts=Math.floor(rem/1000), h=Math.floor(ts/3600), m=Math.floor(ts%3600/60), s=ts%60;
+        document.title = pad(h)+":"+pad(m)+":"+pad(s)+" · 倒计时";
+      }
     } else {
       document.title = "倒计时";
     }
@@ -407,6 +486,7 @@
   }
   function start(){
     ensureAudio();
+    if(state.mode===MODE_SW){ swToggle(); return; }
     if(state.status==="running"){ pause(); return; }
     if(state.status==="done"){ reset(); }
     var rem;
@@ -452,12 +532,17 @@
   }
   function reset(){
     stopTimer();
-    var rem = state.mode===MODE_DUR ? getDurFromInputs() : remainingFromDeadline();
     state.status="idle";
     state.targetMs=0;
-    render(rem);
     setRunningUI(false);
-    setStatus(state.mode===MODE_DUR ? "选一个时长，点击开始" : "选一个目标时间，点击开始",false);
+    if(state.mode===MODE_DL){
+      deadlineInput.value = "";
+      render(0);
+      setStatus("选一个目标时间，点击开始",false);
+    }else{
+      render(getDurFromInputs());
+      setStatus("选一个时长，点击开始",false);
+    }
     updateTitle();
     save();
   }
@@ -469,18 +554,80 @@
     return 0;
   }
 
+  /* ---------- 秒表状态机 ---------- */
+  function swStop(){
+    if(sw.running){
+      sw.running=false;
+      if(swTimer){ clearInterval(swTimer); swTimer=null; }
+      sw.accum = Date.now()-sw.base;
+    }
+  }
+  function swToggle(){
+    if(sw.running){
+      swStop();
+      state.status="paused";
+      renderSW(sw.accum);
+      setStatus("已暂停 · 点击继续计时",false);
+      setRunningUI(false);
+    }else{
+      sw.running=true;
+      sw.base = Date.now()-sw.accum;
+      state.status="running";
+      swTimer=setInterval(function(){
+        renderSW(Date.now()-sw.base);
+        updateTitle();
+      },80);
+      setStatus("计时中",false);
+      setRunningUI(true);
+    }
+    updateTitle();
+    save();
+  }
+  function swReset(){
+    swStop();
+    sw.accum=0; sw.base=0; sw.laps=[]; sw.lastLapStart=0;
+    state.status="idle";
+    renderSW(0);
+    renderLaps();
+    setRunningUI(false);
+    setStatus("秒表 · 点击开始计时",false);
+    updateTitle();
+    save();
+  }
+  function swLap(){
+    var el = swCurrent();
+    if(el<=0 && !sw.laps.length){ setStatus("先开始计时再计圈",true); return; }
+    sw.laps.push({ rel: el-sw.lastLapStart, total: el });
+    sw.lastLapStart = el;
+    renderLaps();
+    setStatus("已记录第 " + sw.laps.length + " 圈",false);
+    save();
+  }
+
   /* ---------- 模式 ---------- */
   function switchMode(mode){
     if(state.mode===mode) return;
     stopTimer();
+    if(state.mode===MODE_SW){ swStop(); }
     state.mode=mode;
     state.status="idle"; state.targetMs=0;
     document.querySelectorAll(".tab").forEach(function(t){ t.classList.toggle("is-active", t.dataset.mode===mode); });
     $("panelDuration").classList.toggle("hidden", mode!==MODE_DUR);
     $("panelDeadline").classList.toggle("hidden", mode!==MODE_DL);
+    $("panelStopwatch").classList.toggle("hidden", mode!==MODE_SW);
+    lapBtn.hidden = mode!==MODE_SW;
+    nums.hidden = mode===MODE_SW;
+    swNums.hidden = mode!==MODE_SW;
+    daysWrap.classList.add("hidden");
     setRunningUI(false);
-    render(mode===MODE_DUR ? getDurFromInputs() : remainingFromDeadline());
-    setStatus(mode===MODE_DUR ? "选一个时长，点击开始" : "选一个目标时间，点击开始",false);
+    if(mode===MODE_SW){
+      renderSW(swCurrent());
+      renderLaps();
+      setStatus("秒表 · 点击开始计时",false);
+    }else{
+      render(mode===MODE_DUR ? getDurFromInputs() : remainingFromDeadline());
+      setStatus(mode===MODE_DUR ? "选一个时长，点击开始" : "选一个目标时间，点击开始",false);
+    }
     updateTitle();
     save();
   }
@@ -561,7 +708,8 @@
     save();
   });
   startBtn.addEventListener("click", start);
-  resetBtn.addEventListener("click", reset);
+  resetBtn.addEventListener("click", function(){ if(state.mode===MODE_SW) swReset(); else reset(); });
+  lapBtn.addEventListener("click", swLap);
   soundBtn.addEventListener("click", function(){
     state.muted=!state.muted;
     soundBtn.setAttribute("aria-pressed", String(!state.muted));
@@ -581,8 +729,9 @@
   document.addEventListener("keydown", function(e){
     var tag=e.target && e.target.tagName;
     if(tag==="INPUT" || tag==="BUTTON") return;
-    if(e.code==="Space"){ e.preventDefault(); if(state.status==="running") pause(); else start(); }
-    else if(e.key==="r"||e.key==="R"){ reset(); }
+    if(e.code==="Space"){ e.preventDefault(); start(); }
+    else if(e.key==="r"||e.key==="R"){ if(state.mode===MODE_SW) swReset(); else reset(); }
+    else if(e.key==="l"||e.key==="L"){ if(state.mode===MODE_SW) swLap(); }
     else if(e.key==="f"||e.key==="F"){ fullBtn.click(); }
   });
 
@@ -593,7 +742,7 @@
       var data={ mode:state.mode,
         h:+inH.value||0, m:+inM.value||0, s:+inS.value||0,
         dl:deadlineInput.value, muted:!!state.muted,
-        running: state.status==="running" ? state.targetMs : null };
+        running: (state.status==="running" && state.mode!==MODE_SW) ? state.targetMs : null };
       localStorage.setItem(KEY, JSON.stringify(data));
     }catch(e){}
   }
@@ -608,6 +757,8 @@
     if(data.mode===MODE_DL){
       switchMode(MODE_DL);
       render(remainingFromDeadline());
+    }else if(data.mode===MODE_SW){
+      switchMode(MODE_SW);
     }else{
       render(getDurFromInputs());
     }
