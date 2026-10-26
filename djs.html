@@ -2,7 +2,11 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B101B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="倒计时">
 <title>倒计时</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230B101B'/%3E%3Ccircle cx='32' cy='32' r='21' fill='none' stroke='%23F6B84E' stroke-width='6'/%3E%3Cpath d='M32 20v13l11 7' fill='none' stroke='%23F6B84E' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://miaoda.feishu.cn">
@@ -25,6 +29,7 @@
   html,body{ height:100%; }
   body{
     font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    -webkit-text-size-adjust:100%;
     background:
       radial-gradient(70% 50% at 50% 30%, rgba(246,184,78,.08), transparent 72%),
       linear-gradient(180deg, #0D1422 0%, var(--bg) 55%, #090D15 100%);
@@ -33,13 +38,14 @@
     -webkit-tap-highlight-color:transparent;
     overflow-x:hidden;
   }
-  button{ font-family:inherit; }
+  button{ font-family:inherit; touch-action:manipulation; }
   .stage{
     min-height:100vh;
     min-height:100dvh;
     display:flex;
     flex-direction:column;
     padding:18px 20px 26px;
+    padding:18px max(20px, env(safe-area-inset-left)) max(26px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-right));
     max-width:900px;
     margin:0 auto;
   }
@@ -91,7 +97,7 @@
   .nums{
     display:flex; align-items:flex-start; gap:.06em;
     font-family:"Chivo Mono",ui-monospace,"Cascadia Mono","Consolas",monospace;
-    font-weight:400; font-size:clamp(46px,18vmin,240px);
+    font-weight:400; font-size:clamp(46px,18vmin,176px);
     line-height:1; letter-spacing:.01em;
     font-variant-numeric:tabular-nums;
   }
@@ -181,7 +187,7 @@
 
   /* ===== 桌面增强 ===== */
   @media (min-width:768px){
-    .stage{ padding:26px 40px 34px; }
+    .stage{ padding:26px 40px 34px; padding:26px max(40px, env(safe-area-inset-left)) max(34px, env(safe-area-inset-bottom)) max(40px, env(safe-area-inset-right)); }
     .brand{ font-size:22px; }
     .presets{ grid-template-columns:repeat(6,1fr); }
     .chips{ grid-template-columns:repeat(3,1fr); }
@@ -190,6 +196,45 @@
     .status{ font-size:16px; }
     .clock{ padding:30px 0 16px; }
     .ctrl-btn{ min-height:62px; font-size:18px; }
+  }
+
+  /* ===== iPad / 平板 竖屏（744-1024 宽，触屏） ===== */
+  @media (min-width:744px) and (max-width:1024px) and (orientation:portrait) and (pointer:coarse) and (hover:none){
+    .stage{ max-width:780px; padding-top:34px; padding-bottom:44px; }
+    .tabs{ margin-top:26px; max-width:360px; }
+    .clock{ padding:44px 0 26px; }
+    .nums{ font-size:clamp(56px,19vmin,144px); }
+    .days{ font-size:clamp(34px,10vmin,110px); }
+    .status{ font-size:17px; margin:4px 0 22px; }
+    .panel{ padding:20px; }
+    .pill{ min-height:50px; font-size:15px; }
+    .field label{ font-size:13px; }
+    .field input{ min-height:52px; font-size:20px; }
+    .deadline input[type="datetime-local"]{ min-height:52px; font-size:17px; }
+    .chip{ min-height:46px; font-size:14px; }
+    .custom{ margin-top:14px; padding-top:14px; }
+    .ctrl-btn{ min-height:68px; font-size:19px; }
+    .hint{ font-size:13px; margin-top:20px; }
+  }
+
+  /* ===== iPad / 平板 横屏（高度受限，触屏，紧凑单屏） ===== */
+  @media (min-width:744px) and (max-width:1366px) and (orientation:landscape) and (max-height:1024px) and (pointer:coarse) and (hover:none){
+    .stage{ max-width:1120px; padding-top:14px; padding-bottom:20px; }
+    .tabs{ margin-top:12px; max-width:320px; }
+    .clock{ padding:8px 0 2px; }
+    .nums{ font-size:clamp(40px,15vmin,150px); }
+    .days{ font-size:clamp(26px,7.5vmin,90px); }
+    .status{ margin:4px 0 10px; }
+    .panel{ padding:12px; }
+    .presets{ gap:6px; }
+    .pill{ min-height:40px; font-size:13px; }
+    .custom{ margin-top:8px; padding-top:8px; }
+    .field input{ min-height:42px; font-size:17px; }
+    .deadline input[type="datetime-local"]{ min-height:42px; font-size:15px; }
+    .chip{ min-height:38px; font-size:13px; }
+    .controls{ margin-top:10px; }
+    .ctrl-btn{ min-height:56px; font-size:17px; }
+    .hint{ margin-top:8px; }
   }
 </style>
 </head>
