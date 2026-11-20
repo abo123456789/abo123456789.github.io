@@ -13,199 +13,269 @@
   <style>
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      font-family: Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f4f4f4;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    /* 头部样式 */
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 30px 20px;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
     }
 
     h1 {
       text-align: center;
-      margin: 50px 0;
+      margin: 0;
+      font-size: 42px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -1px;
     }
 
-    .apps-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+    /* 主容器 */
+    main {
+      max-width: 1400px;
       margin: 0 auto;
-      max-width: 1200px;
+      padding: 40px 20px;
     }
 
-    .app {
-      background-color: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      margin: 20px;
+    /* 标签容器 */
+    .tags-container {
+      text-align: center;
+      margin-bottom: 50px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
       padding: 25px;
-      width: 320px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 应用网格布局 */
+    .apps-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 30px;
+      margin: 0 auto;
+    }
+
+    /* 应用卡片 */
+    .app {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
       overflow: hidden;
-      transition: all 0.3s ease;
-      border: 1px solid #f0f0f0;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 2px solid rgba(255, 255, 255, 0.5);
       position: relative;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .app::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      transform: scaleX(0);
+      transition: transform 0.4s ease;
+    }
+
+    .app:hover::before {
+      transform: scaleX(1);
     }
 
     .app:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-      border-color: #e0e0e0;
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+      border-color: rgba(118, 75, 162, 0.3);
+    }
+
+    .app-image-wrapper {
+      position: relative;
+      overflow: hidden;
+      height: 220px;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+
+    .app-image-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.1) 100%);
     }
 
     .app img {
-      max-width: 100%;
-      height: 200px;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 15px;
+      transition: transform 0.6s ease;
+    }
+
+    .app:hover img {
+      transform: scale(1.1);
+    }
+
+    .app-content {
+      padding: 24px;
     }
 
     .app h3 {
-      margin: 15px 0 10px 0;
-      font-size: 20px;
-      font-weight: 600;
-      text-align: left;
+      margin: 0 0 12px 0;
+      font-size: 22px;
+      font-weight: 700;
       line-height: 1.3;
     }
 
     .app h3 a {
       color: #2c3e50;
       text-decoration: none;
-      transition: color 0.3s ease;
+      transition: all 0.3s ease;
+      display: inline-block;
     }
 
     .app h3 a:hover {
-      color: #3498db;
+      color: #667eea;
+      transform: translateX(5px);
     }
 
     .app p {
-      margin: 12px 0 20px 0;
-      font-size: 14px;
-      text-align: left;
-      color: #666;
-      line-height: 1.5;
+      margin: 0 0 20px 0;
+      font-size: 15px;
+      color: #5a6c7d;
+      line-height: 1.7;
+      min-height: 50px;
+    }
+
+    .app-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     .tag {
       display: inline-block;
-      margin: 4px 6px 4px 0;
-      padding: 6px 12px;
-      font-size: 12px;
-      font-weight: 500;
-      border-radius: 4px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 20px;
       cursor: pointer;
-      transition: all 0.3s ease-in-out;
-      border: 1px solid transparent;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
       user-select: none;
       background-color: #f8f9fa;
       color: #495057;
     }
 
+    .tag:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
     .all {
-      background-color: #e9ecef;
-      border-color: #adb5bd;
-      color: #495057;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
     }
 
     .ai {
-      background-color: #e3f2fd;
-      border-color: #2196f3;
-      color: #1976d2;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
     }
 
     .nlp {
-      background-color: #f3e5f5;
-      border-color: #9c27b0;
-      color: #7b1fa2;
+      background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+      color: white;
     }
 
     .vision {
-      background-color: #e8f5e8;
-      border-color: #4caf50;
-      color: #388e3c;
+      background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+      color: white;
     }
 
     .recommendation {
-      background-color: #fff3e0;
-      border-color: #ff9800;
-      color: #f57c00;
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      color: white;
     }
 
     .programming {
-      background-color: #e8f5e8;
-      border-color: #4caf50;
-      color: #388e3c;
+      background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+      color: white;
     }
 
     .dg_human {
-      background-color: #fff3e0;
-      border-color: #ff9800;
-      color: #f57c00;
+      background: linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%);
+      color: white;
     }
 
     .travel {
-      background-color: #fce4ec;
-      border-color: #e91e63;
-      color: #c2185b;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
     }
 
     .health {
-      background-color: #e0f2f1;
-      border-color: #009688;
-      color: #00695c;
+      background: linear-gradient(135deg, #4fd1c5 0%, #3182ce 100%);
+      color: white;
     }
 
     .aigc {
-      background-color: #f1f8e9;
-      border-color: #8bc34a;
-      color: #689f38;
+      background: linear-gradient(135deg, #96fbc4 0%, #f9f586 100%);
+      color: #333;
+    }
+
+    .tag.active {
+      transform: translateY(-3px) scale(1.1);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.5);
     }
 
     footer {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: #ffffff;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      color: #2c3e50;
       padding: 40px 20px;
       margin-top: 60px;
       text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    footer::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
     }
 
     footer p {
       margin: 0;
-      font-size: 14px;
-      font-weight: 400;
+      font-size: 15px;
+      font-weight: 500;
       letter-spacing: 0.5px;
-      line-height: 1.6;
-      opacity: 0.95;
+      line-height: 1.8;
     }
 
     footer a {
-      color: #ffffff;
+      color: #667eea;
       text-decoration: none;
-      font-weight: 500;
+      font-weight: 600;
       padding: 4px 8px;
-      border-radius: 4px;
+      border-radius: 6px;
       transition: all 0.3s ease;
-      border-bottom: 1px solid transparent;
     }
 
     footer a:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-      border-bottom-color: rgba(255, 255, 255, 0.5);
-      transform: translateY(-1px);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      transform: translateY(-2px);
     }
 
     .copyright-symbol {
@@ -214,44 +284,68 @@
       margin: 0 2px;
     }
 
-    .tag.active {
-      transform: scale(1.05);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-      border-width: 2px;
-      font-weight: 600;
-    }
-
     /* 添加淡入动画 */
     @keyframes fadeIn {
       from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(20px);
       }
-
       to {
         opacity: 1;
         transform: translateY(0);
       }
     }
 
-    @media (max-width: 767px) {
-      .app {
-        width: 100%;
+    .app {
+      animation: fadeIn 0.6s ease backwards;
+    }
+
+    .app:nth-child(1) { animation-delay: 0.1s; }
+    .app:nth-child(2) { animation-delay: 0.2s; }
+    .app:nth-child(3) { animation-delay: 0.3s; }
+    .app:nth-child(4) { animation-delay: 0.4s; }
+    .app:nth-child(5) { animation-delay: 0.5s; }
+    .app:nth-child(6) { animation-delay: 0.6s; }
+
+    /* 响应式设计 */
+    @media (max-width: 1200px) {
+      .apps-container {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       }
     }
 
-    img {
-      width: 334px;
-      height: 334px;
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 32px;
+      }
+      
+      .apps-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
 
+      .tags-container {
+        padding: 20px 15px;
+      }
+
+      .tag {
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+
+      main {
+        padding: 30px 15px;
+      }
     }
   </style>
 </head>
 
 <body>
-  <h1>AI 应用市场</h1>
-  <div>
-    <div class="tags-container" style="text-align:center">
+  <header>
+    <h1>AI 应用市场</h1>
+  </header>
+  <main>
+    <div class="tags-container">
       <div class="tag all">全部</div>
       <div class="tag ai">人工智能</div>
       <div class="tag recommendation">理财工具</div>
@@ -265,187 +359,215 @@
     </div>
     <div class="apps-container">
       <div class="app">
-        <a href="https://abo123456789-ai-financial-advisor-ai-lc-c0fgm8.streamlit.app/" target="_blank" rel="noopener noreferrer"><img
-            src="./images/licai.png" alt="AI智能理财助手"></a>
-        <h3><a href="https://abo123456789-ai-financial-advisor-ai-lc-c0fgm8.streamlit.app/" target="_blank" rel="noopener noreferrer">AI智能理财助手</a>
-        </h3>
-        <p>AI能根据每个人的特点,定制详细的理财方案</p>
-        <div>
-          <div class="tag ai">人工智能</div>
-          <div class="tag recommendation">理财工具</div>
+        <a href="https://abo123456789-ai-financial-advisor-ai-lc-c0fgm8.streamlit.app/" target="_blank" rel="noopener noreferrer">
+          <div class="app-image-wrapper">
+            <img src="./images/licai.png" alt="AI智能理财助手">
+          </div>
+        </a>
+        <div class="app-content">
+          <h3><a href="https://abo123456789-ai-financial-advisor-ai-lc-c0fgm8.streamlit.app/" target="_blank" rel="noopener noreferrer">AI智能理财助手</a></h3>
+          <p>AI能根据每个人的特点,定制详细的理财方案</p>
+          <div class="app-tags">
+            <div class="tag ai">人工智能</div>
+            <div class="tag recommendation">理财工具</div>
+          </div>
         </div>
       </div>
       <div class="app">
-        <a href="https://abo123456789-ai-financial-advisor-ai-trip-6f0m3f.streamlit.app/" target="_blank" rel="noopener noreferrer"><img
-            src="./images/travel.png" alt="AI旅行行程助手"></a>
-        <h3><a href="https://abo123456789-ai-financial-advisor-ai-trip-6f0m3f.streamlit.app/"
-            target="_blank" rel="noopener noreferrer">AI旅行行程助手</a></h3>
-        <p>AI能根据您的个人出行打算,帮您定制详细的攻略和预算规划</p>
-        <div>
-          <div class="tag ai">人工智能</div>
-          <div class="tag travel">智能旅游</div>
+        <a href="https://abo123456789-ai-financial-advisor-ai-trip-6f0m3f.streamlit.app/" target="_blank" rel="noopener noreferrer">
+          <div class="app-image-wrapper">
+            <img src="./images/travel.png" alt="AI旅行行程助手">
+          </div>
+        </a>
+        <div class="app-content">
+          <h3><a href="https://abo123456789-ai-financial-advisor-ai-trip-6f0m3f.streamlit.app/" target="_blank" rel="noopener noreferrer">AI旅行行程助手</a></h3>
+          <p>AI能根据您的个人出行打算,帮您定制详细的攻略和预算规划</p>
+          <div class="app-tags">
+            <div class="tag ai">人工智能</div>
+            <div class="tag travel">智能旅游</div>
+          </div>
         </div>
       </div>
       <div class="app">
         <a href="https://abo123456789.github.io/contents/" target="_blank" rel="noopener noreferrer">
-          <img src="./images/dress.png" alt="AI提示词库">
+          <div class="app-image-wrapper">
+            <img src="./images/dress.png" alt="AI提示词库">
+          </div>
         </a>
-        <h3><a href="https://abo123456789.github.io/contents/" target="_blank" rel="noopener noreferrer">AI提示词库</a>
-        </h3>
-        <p>AI视频和图片提示词分享,分享AI文生视频,图生视频,文生图,图生图提示词</p>
-        <div>
-          <div class="tag vision">计算机视觉</div>
+        <div class="app-content">
+          <h3><a href="https://abo123456789.github.io/contents/" target="_blank" rel="noopener noreferrer">AI提示词库</a></h3>
+          <p>AI视频和图片提示词分享,分享AI文生视频,图生视频,文生图,图生图提示词</p>
+          <div class="app-tags">
+            <div class="tag vision">计算机视觉</div>
+          </div>
         </div>
       </div>
       <div class="app">
         <a href="https://abo123456789-ai-financial-advisor-ai-eat-jy8ugs.streamlit.app/" target="_blank" rel="noopener noreferrer">
-          <img src="./images/eat.jpeg" alt="AI饮食健康顾问">
+          <div class="app-image-wrapper">
+            <img src="./images/eat.jpeg" alt="AI饮食健康顾问">
+          </div>
         </a>
-        <h3><a href="https://abo123456789-ai-financial-advisor-ai-eat-jy8ugs.streamlit.app/"
-            target="_blank" rel="noopener noreferrer">AI饮食健康顾问</a></h3>
-        <p>支持根据您的增重和减重计划,自动帮你规划合适您的每日饮食计划</p>
-        <div>
-          <div class="tag ai">人工智能</div>
-          <div class="tag health">智能健康</div>
+        <div class="app-content">
+          <h3><a href="https://abo123456789-ai-financial-advisor-ai-eat-jy8ugs.streamlit.app/" target="_blank" rel="noopener noreferrer">AI饮食健康顾问</a></h3>
+          <p>支持根据您的增重和减重计划,自动帮你规划合适您的每日饮食计划</p>
+          <div class="app-tags">
+            <div class="tag ai">人工智能</div>
+            <div class="tag health">智能健康</div>
+          </div>
         </div>
       </div>
       <div class="app">
         <a href="https://abo123456789.github.io/games/" target="_blank" rel="noopener noreferrer">
-          <img src="./images/game.png" alt="AI游戏中心">
+          <div class="app-image-wrapper">
+            <img src="./images/game.png" alt="AI游戏中心">
+          </div>
         </a>
-        <h3><a href="https://abo123456789.github.io/games/" target="_blank" rel="noopener noreferrer">AI游戏中心</a></h3>
-        <p>体验多款AI智能游戏,包括围棋、五子棋、俄罗斯方块、猜谜游戏等</p>
-        <div>
-          <div class="tag ai">人工智能</div>
+        <div class="app-content">
+          <h3><a href="https://abo123456789.github.io/games/" target="_blank" rel="noopener noreferrer">AI游戏中心</a></h3>
+          <p>体验多款AI智能游戏,包括围棋、五子棋、俄罗斯方块、猜谜游戏等</p>
+          <div class="app-tags">
+            <div class="tag ai">人工智能</div>
+          </div>
         </div>
       </div>
       <div class="app">
         <a href="https://abo123456789-ai-financial-advisor-ai-vtitle-ic5yju.streamlit.app/" target="_blank" rel="noopener noreferrer">
-          <img src="./images/wenan.png" alt="AI智能文案">
+          <div class="app-image-wrapper">
+            <img src="./images/wenan.png" alt="AI智能文案">
+          </div>
         </a>
-        <h3><a href="https://abo123456789-ai-financial-advisor-ai-vtitle-ic5yju.streamlit.app/"
-            target="_blank" rel="noopener noreferrer">AI智能文案</a></h3>
-        <p>根据给出文本,生成资深运营级别的文案和创意,普通人也能写出好文案</p>
-        <div>
-          <div class="tag ai">人工智能</div>
-          <div class="tag aigc">AIGC</div>
+        <div class="app-content">
+          <h3><a href="https://abo123456789-ai-financial-advisor-ai-vtitle-ic5yju.streamlit.app/" target="_blank" rel="noopener noreferrer">AI智能文案</a></h3>
+          <p>根据给出文本,生成资深运营级别的文案和创意,普通人也能写出好文案</p>
+          <div class="app-tags">
+            <div class="tag ai">人工智能</div>
+            <div class="tag aigc">AIGC</div>
+          </div>
         </div>
       </div>
       <div class="app">
         <a href="https://abo123456789-ai-financial-advisor-ai-code-e8890q.streamlit.app/" target="_blank" rel="noopener noreferrer">
-          <img src="./images/aicode.png" alt="AI智能编程助手">
+          <div class="app-image-wrapper">
+            <img src="./images/aicode.png" alt="AI智能编程助手">
+          </div>
         </a>
-        <h3><a href="https://abo123456789-ai-financial-advisor-ai-code-e8890q.streamlit.app/"
-            target="_blank" rel="noopener noreferrer">AI智能编程助手</a></h3>
-        <p>支持根据已有代码自动解释代码,自动生成单元测试,自动发现安全问题,自动补全代码注释</p>
-        <div>
-          <div class="tag ai">人工智能</div>
-          <div class="tag programming">计算机编程</div>
+        <div class="app-content">
+          <h3><a href="https://abo123456789-ai-financial-advisor-ai-code-e8890q.streamlit.app/" target="_blank" rel="noopener noreferrer">AI智能编程助手</a></h3>
+          <p>支持根据已有代码自动解释代码,自动生成单元测试,自动发现安全问题,自动补全代码注释</p>
+          <div class="app-tags">
+            <div class="tag ai">人工智能</div>
+            <div class="tag programming">计算机编程</div>
+          </div>
         </div>
       </div>
       <div class="app">
         <a href="https://abo123456789-ai-financial-advisor-ai-transcoding-7v2yfh.streamlit.app/" target="_blank" rel="noopener noreferrer">
-          <img src="./images/code_convert.png" alt="AI代码转换器">
+          <div class="app-image-wrapper">
+            <img src="./images/code_convert.png" alt="AI代码转换器">
+          </div>
         </a>
-        <h3><a href="https://abo123456789-ai-financial-advisor-ai-transcoding-7v2yfh.streamlit.app/"
-            target="_blank" rel="noopener noreferrer">AI代码转换器</a></h3>
-        <p>快速将编程语言代码转换成指定语言代码.转换成功率比互联网上都高</p>
-        <div>
-          <div class="tag nlp">自然语言处理</div>
-          <div class="tag vision">计算机视觉</div>
+        <div class="app-content">
+          <h3><a href="https://abo123456789-ai-financial-advisor-ai-transcoding-7v2yfh.streamlit.app/" target="_blank" rel="noopener noreferrer">AI代码转换器</a></h3>
+          <p>快速将编程语言代码转换成指定语言代码.转换成功率比互联网上都高</p>
+          <div class="app-tags">
+            <div class="tag nlp">自然语言处理</div>
+            <div class="tag vision">计算机视觉</div>
+          </div>
         </div>
       </div>
       <div class="app">
         <a href="llm.html" target="_blank" rel="noopener noreferrer">
-          <img src="./images/008.png" alt="AI模型显存计算器">
+          <div class="app-image-wrapper">
+            <img src="./images/008.png" alt="AI模型显存计算器">
+          </div>
         </a>
-        <h3><a href="llm.html" target="_blank" rel="noopener noreferrer">AI大模型显存计算器</a></h3>
-        <p>快速根据模型的参数计算部署占用的显存和推荐的显卡</p>
-        <div>
-          <div class="tag nlp">自然语言处理</div>
-          <div class="tag vision">计算机编程</div>
+        <div class="app-content">
+          <h3><a href="llm.html" target="_blank" rel="noopener noreferrer">AI大模型显存计算器</a></h3>
+          <p>快速根据模型的参数计算部署占用的显存和推荐的显卡</p>
+          <div class="app-tags">
+            <div class="tag nlp">自然语言处理</div>
+            <div class="tag vision">计算机编程</div>
+          </div>
         </div>
       </div>
       <div class="app">
         <a href="./dh/index.html" target="_blank" rel="noopener noreferrer">
-          <img src="./images/009.png" alt="数字人">
+          <div class="app-image-wrapper">
+            <img src="./images/009.png" alt="数字人">
+          </div>
         </a>
-        <h3><a href="./dh/index.html" target="_blank" rel="noopener noreferrer">AI数字人</a></h3>
-        <p>AI根据音频和视频模板生成数字人</p>
-        <div>
-          <div class="tag ai">人工智能</div>
-          <div class="tag dg_human">AI数字人</div>
+        <div class="app-content">
+          <h3><a href="./dh/index.html" target="_blank" rel="noopener noreferrer">AI数字人</a></h3>
+          <p>AI根据音频和视频模板生成数字人</p>
+          <div class="app-tags">
+            <div class="tag ai">人工智能</div>
+            <div class="tag dg_human">AI数字人</div>
+          </div>
         </div>
       </div>
       <div class="app">
         <a href="./dh/tts.html" target="_blank" rel="noopener noreferrer">
-          <img src="./images/010.png" alt="数字人">
+          <div class="app-image-wrapper">
+            <img src="./images/010.png" alt="AI语音合成">
+          </div>
         </a>
-        <h3><a href="./dh/tts.html" target="_blank" rel="noopener noreferrer">AI语音合成</a></h3>
-        <p>AI根据文本生成语音</p>
-        <div>
-          <div class="tag ai">人工智能</div>
-          <div class="tag dg_voice">AI语音合成</div>
-          <div class="tag dg_human">AI数字人</div>
+        <div class="app-content">
+          <h3><a href="./dh/tts.html" target="_blank" rel="noopener noreferrer">AI语音合成</a></h3>
+          <p>AI根据文本生成语音</p>
+          <div class="app-tags">
+            <div class="tag ai">人工智能</div>
+            <div class="tag dg_human">AI数字人</div>
+          </div>
         </div>
       </div>
       <div class="app">
         <a href="lc.html" target="_blank" rel="noopener noreferrer">
-          <img src="./images/image_lc.jpg" alt="理财计算器">
+          <div class="app-image-wrapper">
+            <img src="./images/image_lc.jpg" alt="理财计算器">
+          </div>
         </a>
-        <h3><a href="lc.html" target="_blank" rel="noopener noreferrer">AI理财计算器</a></h3>
-        <p>AI根据输入金额和年数计算理财收益</p>
-        <div>
-          <div class="tag ai">人工智能</div>
-          <div class="tag recommendation">理财工具</div>
+        <div class="app-content">
+          <h3><a href="lc.html" target="_blank" rel="noopener noreferrer">AI理财计算器</a></h3>
+          <p>AI根据输入金额和年数计算理财收益</p>
+          <div class="app-tags">
+            <div class="tag ai">人工智能</div>
+            <div class="tag recommendation">理财工具</div>
+          </div>
         </div>
       </div>
       <div class="app">
         <a href="lccs.html" target="_blank" rel="noopener noreferrer">
-          <img src="./images/image_lccs.jpg" alt="AI理财费用测算器">
+          <div class="app-image-wrapper">
+            <img src="./images/image_lccs.jpg" alt="AI理财费用测算器">
+          </div>
         </a>
-        <h3><a href="lccs.html" target="_blank" rel="noopener noreferrer">AI理财费用测算器</a></h3>
-        <p>AI根据输入金额和各种管理费计算需要支持支出的金额</p>
-        <div>
-          <div class="tag ai">人工智能</div>
-          <div class="tag recommendation">理财工具</div>
+        <div class="app-content">
+          <h3><a href="lccs.html" target="_blank" rel="noopener noreferrer">AI理财费用测算器</a></h3>
+          <p>AI根据输入金额和各种管理费计算需要支持支出的金额</p>
+          <div class="app-tags">
+            <div class="tag ai">人工智能</div>
+            <div class="tag recommendation">理财工具</div>
+          </div>
         </div>
       </div>
-
       <div class="app">
         <a href="dk.html" target="_blank" rel="noopener noreferrer">
-          <img src="./images/image_dk.jpg" alt="贷款计算器">
+          <div class="app-image-wrapper">
+            <img src="./images/image_dk.jpg" alt="贷款计算器">
+          </div>
         </a>
-        <h3><a href="dk.html" target="_blank" rel="noopener noreferrer">AI贷款计算器</a></h3>
-        <p>AI根据输入金额和年数计算贷款利息</p>
-        <div>
-          <div class="tag ai">人工智能</div>
-          <div class="tag recommendation">理财工具</div>
+        <div class="app-content">
+          <h3><a href="dk.html" target="_blank" rel="noopener noreferrer">AI贷款计算器</a></h3>
+          <p>AI根据输入金额和年数计算贷款利息</p>
+          <div class="app-tags">
+            <div class="tag ai">人工智能</div>
+            <div class="tag recommendation">理财工具</div>
+          </div>
         </div>
       </div>
-      <div class="app">
-        <a href="https://abo123456789.github.io/games/" target="_blank" rel="noopener noreferrer">
-          <img src="./images/game.png" alt="AI游戏中心">
-        </a>
-        <h3><a href="https://abo123456789.github.io/games/" target="_blank" rel="noopener noreferrer">AI游戏中心</a></h3>
-        <p>体验多款AI智能游戏,包括围棋、五子棋、俄罗斯方块、猜谜游戏等</p>
-        <div>
-          <div class="tag ai">人工智能</div>
-        </div>
-      </div>
-      <!-- <div class="app">
-        <a href="cx.html" target="_blank" rel="noopener noreferrer">
-          <img src="./images/cxdjs.jpg" alt="除夕倒计时">
-        </a>
-        <h3><a href="cx.html" target="_blank" rel="noopener noreferrer">AI除夕倒计时器</a></h3>
-        <p>AI根据当前时间计算离除夕还有多少天多少分多少秒</p>
-        <div>
-          <div class="tag ai">人工智能</div>
-          <div class="tag recommendation">智能工具</div>
-        </div>
-      </div> -->
     </div>
-  </div>
+  </main>
   <footer>
     <p>Copyright<span class="copyright-symbol">&copy;</span><span id="year">2024</span> <a
         href="https://github.com/abo123456789/abo123456789.github.io">关于我们</a> · All rights reserved</p>
