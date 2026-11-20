@@ -412,8 +412,34 @@
             }
         }
     </style>
+
+    <style>
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(67, 233, 123, 0.4);
+            transition: all 0.3s;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(67, 233, 123, 0.5);
+        }
+    </style>
 </head>
 <body>
+    <a href="index.html" class="back-button">🏠 返回游戏主页</a>
     <div class="container">
         <div class="header">
             <h1 class="title">🧠 脑筋急转弯</h1>
