@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏中心</title>
+    <link rel="icon" type="image/x-icon" href="../images/001.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            animation: fadeInUp 0.8s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .game-card:hover::before {
+            left: 100%;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-icon {
+            font-size: 64px;
+            text-align: center;
+            margin-bottom: 20px;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.1));
+            display: none; /* 隐藏emoji图标 */
+        }
+
+        .game-preview {
+            width: 100%;
+            height: 180px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-preview::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 100%);
+        }
+
+        /* 围棋预览样式 */
+        .preview-go {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .preview-go::before {
+            content: '';
+            width: 140px;
+            height: 140px;
+            background: 
+                linear-gradient(#8b4513 2px, transparent 2px) 0 0 / 20px 20px,
+                linear-gradient(90deg, #8b4513 2px, transparent 2px) 0 0 / 20px 20px;
+            background-color: #daa520;
+            border-radius: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .preview-go .stones {
+            position: absolute;
+            z-index: 2;
+            display: flex;
+            gap: 25px;
+        }
+
+        .preview-go .stone {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+        }
+
+        .preview-go .stone.black {
+            background: radial-gradient(circle at 35% 35%, #4a4a4a, #000000);
+        }
+
+        .preview-go .stone.white {
+            background: radial-gradient(circle at 35% 35%, #ffffff, #d0d0d0);
+        }
+
+        /* 五子棋预览样式 */
+        .preview-gobang {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-gobang::before {
+            content: '';
+            width: 140px;
+            height: 140px;
+            background: 
+                linear-gradient(#8b4513 1.5px, transparent 1.5px) 0 0 / 20px 20px,
+                linear-gradient(90deg, #8b4513 1.5px, transparent 1.5px) 0 0 / 20px 20px;
+            background-color: #daa520;
+            border-radius: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .preview-gobang .pieces {
+            position: absolute;
+            z-index: 2;
+        }
+
+        .preview-gobang .piece {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+        }
+
+        .preview-gobang .piece.black {
+            background: radial-gradient(circle at 35% 35%, #4a4a4a, #000000);
+        }
+
+        .preview-gobang .piece.white {
+            background: radial-gradient(circle at 35% 35%, #ffffff, #d0d0d0);
+        }
+
+        /* 脑筋急转弯预览样式 */
+        .preview-riddle {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .preview-riddle .question-icon {
+            font-size: 72px;
+            margin-bottom: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        .preview-riddle .question-text {
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* 俄罗斯方块预览样式 */
+        .preview-tetris {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(6, 1fr);
+            gap: 2px;
+            padding: 20px;
+        }
+
+        .preview-tetris .block {
+            background: #333;
+            border-radius: 2px;
+        }
+
+        .preview-tetris .block.active {
+            box-shadow: inset 0 0 8px rgba(255,255,255,0.3);
+        }
+
+        .preview-tetris .block.cyan { background: #00f0f0; }
+        .preview-tetris .block.yellow { background: #f0f000; }
+        .preview-tetris .block.purple { background: #a000f0; }
+        .preview-tetris .block.orange { background: #f0a000; }
+        .preview-tetris .block.blue { background: #0000f0; }
+        .preview-tetris .block.green { background: #00f000; }
+        .preview-tetris .block.red { background: #f00000; }
+
+        .game-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .game-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .game-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: white;
+            animation: fadeIn 1s ease;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            display: inline-block;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .footer a:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 36px;
+            }
+
+            .header p {
+                font-size: 16px;
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .game-card {
+                padding: 25px;
+            }
+
+            .game-preview {
+                height: 160px;
+            }
+
+            .preview-go::before,
+            .preview-gobang::before {
+                width: 120px;
+                height: 120px;
+            }
+
+            .preview-riddle .question-icon {
+                font-size: 60px;
+            }
+
+            .preview-riddle .question-text {
+                font-size: 14px;
+            }
+        }
+
+        /* 为不同游戏设置不同的渐变色 */
+        .game-card:nth-child(1) .game-icon {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .game-card:nth-child(2) .game-icon {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .game-card:nth-child(3) .game-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .game-card:nth-child(4) .game-icon {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 游戏中心</h1>
+            <p>精选经典益智游戏，开启你的智慧之旅</p>
+        </div>
+
+        <div class="games-grid">
+            <a href="go.html" class="game-card">
+                <div class="game-preview preview-go">
+                    <div class="stones">
+                        <div class="stone black"></div>
+                        <div class="stone white"></div>
+                    </div>
+                </div>
+                <div class="game-title">围棋对弈</div>
+                <div class="game-description">
+                    千年棋道，智慧的较量。挑战AI，体验围棋的博大精深，在黑白世界中领悟人生哲理。
+                </div>
+                <div class="game-tag">策略</div>
+            </a>
+
+            <a href="gobang.html" class="game-card">
+                <div class="game-preview preview-gobang">
+                    <div class="pieces">
+                        <div class="piece black" style="top: 60px; left: 50px;"></div>
+                        <div class="piece black" style="top: 60px; left: 70px;"></div>
+                        <div class="piece black" style="top: 60px; left: 90px;"></div>
+                        <div class="piece white" style="top: 80px; left: 60px;"></div>
+                        <div class="piece white" style="top: 80px; left: 80px;"></div>
+                        <div class="piece black" style="top: 100px; left: 70px;"></div>
+                    </div>
+                </div>
+                <div class="game-title">五子棋对战</div>
+                <div class="game-description">
+                    经典五子棋游戏，简单易学却充满策略。五子连珠即可获胜，快来挑战AI对手吧！
+                </div>
+                <div class="game-tag">益智</div>
+            </a>
+
+            <a href="riddle.html" class="game-card">
+                <div class="game-preview preview-riddle">
+                    <div class="question-icon">🧠💡</div>
+                    <div class="question-text">动动脑筋<br/>挑战思维极限</div>
+                </div>
+                <div class="game-title">脑筋急转弯</div>
+                <div class="game-description">
+                    脑洞大开的趣味问答，挑战你的思维极限。每道题都是一次思维的冒险，来试试你的智商吧！
+                </div>
+                <div class="game-tag">益智</div>
+            </a>
+
+            <a href="tetris.html" class="game-card">
+                <div class="game-preview preview-tetris">
+                    <!-- 第一行 -->
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <!-- 第二行 -->
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <!-- 第三行 -->
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block cyan active"></div>
+                    <div class="block cyan active"></div>
+                    <div class="block cyan active"></div>
+                    <div class="block cyan active"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <!-- 第四行 -->
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <!-- 第五行 -->
+                    <div class="block yellow active"></div>
+                    <div class="block yellow active"></div>
+                    <div class="block purple active"></div>
+                    <div class="block purple active"></div>
+                    <div class="block purple active"></div>
+                    <div class="block orange active"></div>
+                    <div class="block orange active"></div>
+                    <div class="block red active"></div>
+                    <div class="block red active"></div>
+                    <div class="block"></div>
+                    <!-- 第六行 -->
+                    <div class="block yellow active"></div>
+                    <div class="block yellow active"></div>
+                    <div class="block purple active"></div>
+                    <div class="block orange active"></div>
+                    <div class="block orange active"></div>
+                    <div class="block orange active"></div>
+                    <div class="block blue active"></div>
+                    <div class="block red active"></div>
+                    <div class="block red active"></div>
+                    <div class="block green active"></div>
+                </div>
+                <div class="game-title">俄罗斯方块</div>
+                <div class="game-description">
+                    经典的俄罗斯方块游戏，考验你的反应力和空间想象力。消除方块，挑战高分！
+                </div>
+                <div class="game-tag">休闲</div>
+            </a>
+        </div>
+
+        <div class="footer">
+            <a href="../index.html">🏠 返回首页</a>
+        </div>
+    </div>
+
+    <script>
+        // 为游戏卡片添加动画延迟
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.game-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+
+        // 添加点击音效反馈（可选）
+        document.querySelectorAll('.game-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>
