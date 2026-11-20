@@ -429,10 +429,10 @@
             <div class="mode-selector">
                 <h4>🎯 对弈模式</h4>
                 <div class="mode-buttons">
-                    <button class="mode-btn active" onclick="setMode('pvp')">双人对战</button>
-                    <button class="mode-btn" onclick="setMode('pve')">人机对弈</button>
+                    <button class="mode-btn" onclick="setMode('pvp')">双人对战</button>
+                    <button class="mode-btn active" onclick="setMode('pve')">人机对弈</button>
                 </div>
-                <div class="difficulty-selector" id="difficultySelector">
+                <div class="difficulty-selector show" id="difficultySelector">
                     <label>难度选择：</label>
                     <div class="difficulty-buttons">
                         <button class="diff-btn" onclick="setDifficulty('easy')">简单</button>
@@ -449,7 +449,7 @@
 
             <div class="player-info" id="player2Info">
                 <div class="player-piece white"></div>
-                <div class="player-name">白方(玩家)</div>
+                <div class="player-name">白方(AI)</div>
             </div>
 
             <div class="game-stats">
@@ -491,7 +491,7 @@
         let moveCount = 0;
         let blackWins = 0;
         let whiteWins = 0;
-        let gameMode = 'pvp'; // 'pvp' 或 'pve'
+        let gameMode = 'pve'; // 'pvp' 或 'pve'
         let aiDifficulty = 'medium'; // 'easy', 'medium', 'hard'
         let isAIThinking = false;
 
