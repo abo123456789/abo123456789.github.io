@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>脑筋急转弯</title>
+    <link rel="icon" type="image/x-icon" href="../images/001.png">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -268,11 +269,147 @@
         }
         
         @media (max-width: 768px) {
-            .container { padding: 30px 20px; }
-            .title { font-size: 2rem; }
-            .question-text { font-size: 1.2rem; }
-            .button-group { flex-direction: column; }
-            .btn { width: 100%; }
+            body {
+                padding: 15px;
+            }
+
+            .container { 
+                padding: 30px 20px;
+                border-radius: 20px;
+            }
+
+            .title { 
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .question-card {
+                padding: 30px 20px;
+                min-height: 160px;
+            }
+
+            .question-number {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+                top: 12px;
+                left: 15px;
+            }
+
+            .question-text { 
+                font-size: 1.2rem;
+            }
+
+            .answer-card {
+                padding: 25px 20px;
+                min-height: 100px;
+            }
+
+            .answer-text {
+                font-size: 1.1rem;
+            }
+
+            .button-group { 
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .btn { 
+                width: 100%;
+                padding: 15px 30px;
+                font-size: 1rem;
+            }
+
+            .stats {
+                gap: 10px;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .stat-label {
+                font-size: 0.85rem;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 25px;
+                border-radius: 20px;
+            }
+
+            .modal-header {
+                font-size: 1.3rem;
+                margin-bottom: 15px;
+            }
+
+            .input-area {
+                font-size: 0.9rem;
+                min-height: 200px;
+            }
+
+            .help-text {
+                font-size: 0.8rem;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn-small {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 25px 15px;
+            }
+
+            .title {
+                font-size: 1.7rem;
+            }
+
+            .subtitle {
+                font-size: 0.9rem;
+            }
+
+            .question-card {
+                padding: 25px 15px;
+                min-height: 140px;
+            }
+
+            .question-text {
+                font-size: 1.1rem;
+            }
+
+            .answer-card {
+                padding: 20px 15px;
+            }
+
+            .answer-text {
+                font-size: 1rem;
+            }
+
+            .btn {
+                padding: 14px 25px;
+                font-size: 0.95rem;
+            }
+
+            .stat-value {
+                font-size: 1.8rem;
+            }
+
+            .modal-content {
+                padding: 20px;
+            }
         }
     </style>
 </head>

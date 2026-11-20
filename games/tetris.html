@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>俄罗斯方块</title>
+    <link rel="icon" type="image/x-icon" href="../images/001.png">
     <style>
         * {
             margin: 0;
@@ -298,17 +299,179 @@
         }
 
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
             .game-container {
                 flex-direction: column;
+                gap: 20px;
+            }
+
+            .game-board {
+                padding: 15px;
+                width: 100%;
+            }
+
+            .game-board::before {
+                font-size: 1rem;
+                padding: 6px 20px;
+            }
+
+            #tetrisCanvas {
+                width: 100% !important;
+                height: auto !important;
+                max-width: 100%;
             }
 
             .side-panel {
                 width: 100%;
             }
 
-            #tetrisCanvas {
-                width: 100%;
-                height: auto;
+            .info-panel,
+            .preview-panel,
+            .controls-panel {
+                min-width: auto;
+                padding: 20px;
+            }
+
+            .panel-title {
+                font-size: 1.3rem;
+                margin-bottom: 15px;
+            }
+
+            .score-display {
+                padding: 18px;
+            }
+
+            .score-value {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                gap: 10px;
+            }
+
+            .stat-value {
+                font-size: 1.3rem;
+            }
+
+            .stat-label {
+                font-size: 0.85rem;
+            }
+
+            .preview-canvas {
+                width: 100px;
+                height: 100px;
+            }
+
+            .game-btn {
+                padding: 13px 25px;
+                font-size: 0.95rem;
+            }
+
+            .controls-info h4 {
+                font-size: 0.95rem;
+            }
+
+            .key-item {
+                padding: 8px;
+                font-size: 0.85rem;
+            }
+
+            .key-name {
+                font-size: 0.8rem;
+                padding: 4px 10px;
+            }
+
+            .game-over-box {
+                width: 90%;
+                padding: 35px 25px;
+            }
+
+            .game-over-title {
+                font-size: 2rem;
+            }
+
+            .game-over-score {
+                font-size: 1.2rem;
+            }
+
+            .game-over-btn {
+                padding: 14px 35px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+
+            .game-board {
+                padding: 12px;
+            }
+
+            .info-panel,
+            .preview-panel,
+            .controls-panel {
+                padding: 18px;
+            }
+
+            .panel-title {
+                font-size: 1.2rem;
+            }
+
+            .score-display {
+                padding: 15px;
+            }
+
+            .score-label {
+                font-size: 0.85rem;
+            }
+
+            .score-value {
+                font-size: 1.8rem;
+            }
+
+            .stat-value {
+                font-size: 1.2rem;
+            }
+
+            .preview-canvas {
+                width: 90px;
+                height: 90px;
+            }
+
+            .game-btn {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+
+            .controls-info {
+                padding: 12px;
+            }
+
+            .key-item {
+                padding: 6px;
+                font-size: 0.8rem;
+            }
+
+            .game-over-box {
+                padding: 30px 20px;
+            }
+
+            .game-over-title {
+                font-size: 1.7rem;
+            }
+
+            .game-over-score {
+                font-size: 1.1rem;
+            }
+
+            .game-over-btn {
+                padding: 12px 30px;
+                font-size: 0.95rem;
             }
         }
     </style>
@@ -374,6 +537,19 @@
                         <span>直接落地</span>
                         <span class="key-name">空格</span>
                     </div>
+                    <h4 style="margin-top: 15px;">📱 触摸操作</h4>
+                    <div class="key-item">
+                        <span>左右移动</span>
+                        <span class="key-name">左右滑动</span>
+                    </div>
+                    <div class="key-item">
+                        <span>旋转方块</span>
+                        <span class="key-name">点击屏幕</span>
+                    </div>
+                    <div class="key-item">
+                        <span>加速/落地</span>
+                        <span class="key-name">向下滑动</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -397,7 +573,7 @@
 
         const COLS = 10;
         const ROWS = 20;
-        const BLOCK_SIZE = 30;
+        let BLOCK_SIZE = 30;
 
         // 方块形状定义
         const SHAPES = [
@@ -737,7 +913,7 @@
         document.addEventListener('keydown', (e) => {
             if (isGameOver) return;
 
-            // 如果游戏还没开始，提示用户
+            // 如果游戏还没开始,提示用户
             if (!gameLoop && !currentPiece) {
                 if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'a', 'A', 'd', 'D', 'w', 'W', 's', 'S', ' '].includes(e.key)) {
                     alert('请先点击"开始游戏"按钮！');
@@ -769,7 +945,6 @@
                 case 'W':
                     e.preventDefault();
                     rotatePiece();
-                    console.log('旋转方块'); // 调试信息
                     break;
                 case ' ':
                     e.preventDefault();
@@ -785,9 +960,92 @@
             }
         });
 
+        // 触摸控制
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchStartTime = 0;
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (isGameOver || !currentPiece) return;
+            
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+            touchStartTime = Date.now();
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        });
+
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            if (isGameOver || !currentPiece) return;
+
+            const touch = e.changedTouches[0];
+            const deltaX = touch.clientX - touchStartX;
+            const deltaY = touch.clientY - touchStartY;
+            const deltaTime = Date.now() - touchStartTime;
+
+            // 快速点击 = 旋转
+            if (Math.abs(deltaX) < 20 && Math.abs(deltaY) < 20 && deltaTime < 200) {
+                rotatePiece();
+            }
+            // 向下滑动 = 快速下落
+            else if (deltaY > 50 && Math.abs(deltaX) < 30) {
+                if (deltaY > 150) {
+                    hardDrop(); // 长距离滑动 = 直接落地
+                } else {
+                    movePiece('down'); // 短距离滑动 = 加速下落
+                }
+            }
+            // 向左滑动
+            else if (deltaX < -30 && Math.abs(deltaY) < 50) {
+                movePiece('left');
+            }
+            // 向右滑动
+            else if (deltaX > 30 && Math.abs(deltaY) < 50) {
+                movePiece('right');
+            }
+
+            if (!isPaused && !isGameOver) {
+                drawBoard();
+                if (currentPiece) {
+                    drawPiece(currentPiece);
+                }
+            }
+        });
+
         // 初始化
-        drawBoard();
-        updateStats();
+        function init() {
+            // 响应式调整canvas大小
+            function resizeCanvas() {
+                const container = document.querySelector('.game-board');
+                const maxWidth = Math.min(container.clientWidth - 40, 300);
+                const scale = maxWidth / 300;
+                
+                canvas.width = maxWidth;
+                canvas.height = maxWidth * 2; // 保持2:1比例
+                BLOCK_SIZE = maxWidth / COLS;
+                
+                // 调整预览canvas
+                const previewSize = Math.min(120, maxWidth * 0.4);
+                previewCanvas.width = previewSize;
+                previewCanvas.height = previewSize;
+                
+                drawBoard();
+                if (nextPiece) {
+                    drawPreview();
+                }
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            updateStats();
+        }
+
+        init();
     </script>
 </body>
 </html>
