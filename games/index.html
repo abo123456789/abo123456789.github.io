@@ -257,6 +257,124 @@
         .preview-tetris .block.green { background: #00f000; }
         .preview-tetris .block.red { background: #f00000; }
 
+        /* 2048预览样式 */
+        .preview-2048 {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+
+        .tiles-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            background: #bbada0;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .tile {
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            animation: tileFloat 2s ease-in-out infinite;
+        }
+
+        .tile-2 {
+            background: #eee4da;
+            color: #776e65;
+        }
+
+        .tile-4 {
+            background: #ede0c8;
+            color: #776e65;
+        }
+
+        .tile-8 {
+            background: #f2b179;
+            color: #f9f6f2;
+        }
+
+        .tile-16 {
+            background: #f59563;
+            color: #f9f6f2;
+        }
+
+        .tile-32 {
+            background: #f67c5f;
+            color: #f9f6f2;
+        }
+
+        .tile-64 {
+            background: #f65e3b;
+            color: #f9f6f2;
+        }
+
+        .tile-128 {
+            background: #edcf72;
+            color: #f9f6f2;
+            font-size: 0.95rem;
+        }
+
+        .tile-256 {
+            background: #edcc61;
+            color: #f9f6f2;
+            font-size: 0.95rem;
+        }
+
+        .tile-512 {
+            background: #edc850;
+            color: #f9f6f2;
+            font-size: 0.95rem;
+        }
+
+        .tile-1024 {
+            background: #edc53f;
+            color: #f9f6f2;
+            font-size: 0.75rem;
+        }
+
+        .tile-2048 {
+            background: #edc22e;
+            color: #f9f6f2;
+            font-size: 0.75rem;
+            box-shadow: 0 0 15px rgba(237, 194, 46, 0.6);
+        }
+
+        .tile-empty {
+            background: rgba(238, 228, 218, 0.35);
+        }
+
+        @keyframes tileFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-3px);
+            }
+        }
+
+        .tile:nth-child(1) { animation-delay: 0s; }
+        .tile:nth-child(2) { animation-delay: 0.1s; }
+        .tile:nth-child(3) { animation-delay: 0.2s; }
+        .tile:nth-child(4) { animation-delay: 0.3s; }
+        .tile:nth-child(5) { animation-delay: 0.4s; }
+        .tile:nth-child(6) { animation-delay: 0.5s; }
+        .tile:nth-child(7) { animation-delay: 0.6s; }
+        .tile:nth-child(8) { animation-delay: 0.7s; }
+        .tile:nth-child(9) { animation-delay: 0.8s; }
+        .tile:nth-child(10) { animation-delay: 0.9s; }
+        .tile:nth-child(11) { animation-delay: 1s; }
+        .tile:nth-child(12) { animation-delay: 1.1s; }
+
         .game-title {
             font-size: 24px;
             font-weight: bold;
@@ -373,6 +491,28 @@
             .preview-riddle .question-text {
                 font-size: 14px;
             }
+
+            .tiles-grid {
+                gap: 6px;
+                padding: 8px;
+            }
+
+            .tile {
+                width: 40px;
+                height: 40px;
+                font-size: 0.9rem;
+            }
+
+            .tile-128,
+            .tile-256,
+            .tile-512 {
+                font-size: 0.8rem;
+            }
+
+            .tile-1024,
+            .tile-2048 {
+                font-size: 0.65rem;
+            }
         }
 
         /* 为不同游戏设置不同的渐变色 */
@@ -399,6 +539,13 @@
 
         .game-card:nth-child(4) .game-icon {
             background: linear-gradient(135deg, #f093fb, #f5576c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .game-card:nth-child(5) .game-icon {
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -531,6 +678,30 @@
                     经典的俄罗斯方块游戏，考验你的反应力和空间想象力。消除方块，挑战高分！
                 </div>
                 <div class="game-tag">休闲</div>
+            </a>
+
+            <a href="2048.html" class="game-card">
+                <div class="game-preview preview-2048">
+                    <div class="tiles-grid">
+                        <div class="tile tile-2">2</div>
+                        <div class="tile tile-4">4</div>
+                        <div class="tile tile-8">8</div>
+                        <div class="tile tile-16">16</div>
+                        <div class="tile tile-32">32</div>
+                        <div class="tile tile-64">64</div>
+                        <div class="tile tile-128">128</div>
+                        <div class="tile tile-256">256</div>
+                        <div class="tile tile-512">512</div>
+                        <div class="tile tile-1024">1024</div>
+                        <div class="tile tile-2048">2048</div>
+                        <div class="tile tile-empty"></div>
+                    </div>
+                </div>
+                <div class="game-title">2048</div>
+                <div class="game-description">
+                    经典数字合成游戏，滑动方块合并相同数字。挑战你的策略思维，达成2048！
+                </div>
+                <div class="game-tag">益智</div>
             </a>
         </div>
 
