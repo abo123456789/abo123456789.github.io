@@ -589,132 +589,130 @@
         /* iPad 和平板优化 */
         @media (min-width: 768px) and (max-width: 1024px) {
             body {
-                padding: 10px;
+                padding: 5px;
                 align-items: flex-start;
                 overflow-y: auto;
             }
 
             .game-container {
                 flex-direction: row;
-                gap: 20px;
+                gap: 15px;
                 width: 100%;
-                max-width: 1000px;
+                max-width: 100%;
                 margin: 0 auto;
             }
 
             .board-wrapper {
                 flex: 1;
-                padding: 25px;
-                max-width: 500px;
+                padding: 15px;
+                max-width: 65%;
             }
 
             #goBoard {
                 width: 100% !important;
                 height: auto !important;
-                max-width: 450px;
             }
 
             .control-panel {
-                flex: 0 0 340px;
-                max-width: 340px;
-                padding: 20px;
-                max-height: calc(100vh - 80px);
-                overflow-y: auto;
+                flex: 0 0 280px;
+                max-width: 280px;
+                padding: 15px;
+                max-height: calc(100vh - 60px);
             }
 
             .game-title {
-                font-size: 1.5rem;
-                margin-bottom: 15px;
+                font-size: 1.3rem;
+                margin-bottom: 12px;
             }
 
             .mode-selector {
-                padding: 12px;
-                margin-bottom: 15px;
+                padding: 10px;
+                margin-bottom: 12px;
             }
 
             .mode-selector h4 {
-                font-size: 0.9rem;
-                margin-bottom: 8px;
+                font-size: 0.85rem;
+                margin-bottom: 6px;
             }
 
             .mode-btn, .diff-btn {
-                padding: 8px;
-                font-size: 0.8rem;
+                padding: 7px;
+                font-size: 0.75rem;
             }
 
             .player-section {
-                padding: 12px;
-                margin-bottom: 12px;
-                gap: 10px;
+                padding: 10px;
+                margin-bottom: 10px;
+                gap: 8px;
             }
 
             .stone-display {
-                width: 35px;
-                height: 35px;
+                width: 30px;
+                height: 30px;
             }
 
             .player-name {
-                font-size: 1rem;
+                font-size: 0.95rem;
             }
 
             .player-captures {
-                font-size: 0.8rem;
+                font-size: 0.75rem;
             }
 
             .stats-grid {
-                gap: 10px;
-                margin-bottom: 15px;
+                gap: 8px;
+                margin-bottom: 12px;
             }
 
             .stat-card {
-                padding: 12px;
+                padding: 10px;
             }
 
             .stat-label {
-                font-size: 0.8rem;
+                font-size: 0.75rem;
             }
 
             .stat-value {
-                font-size: 1.3rem;
+                font-size: 1.2rem;
             }
 
             .button-group {
-                gap: 10px;
+                gap: 8px;
             }
 
             .game-btn {
-                padding: 12px;
-                font-size: 0.95rem;
+                padding: 10px;
+                font-size: 0.85rem;
             }
 
             .message-box {
-                padding: 12px;
-                font-size: 0.9rem;
-                margin-top: 15px;
+                padding: 10px;
+                font-size: 0.85rem;
+                margin-top: 12px;
             }
 
             .rules-section {
-                padding: 12px;
-                font-size: 0.8rem;
-                margin-top: 15px;
+                padding: 10px;
+                font-size: 0.75rem;
+                margin-top: 12px;
             }
 
             .rules-section h4 {
-                font-size: 0.95rem;
-                margin-bottom: 8px;
+                font-size: 0.85rem;
+                margin-bottom: 6px;
             }
 
             .rules-section ul {
-                margin-left: 15px;
+                margin-left: 12px;
             }
 
             .rules-section li {
-                margin-bottom: 3px;
+                margin-bottom: 2px;
             }
 
             .back-button {
-                padding: 10px 20px;
-                font-size: 0.9rem;
+                padding: 8px 16px;
+                font-size: 0.85rem;
             }
         }
 
@@ -1213,7 +1211,7 @@
             const canvasSize = canvas.width;
             MARGIN = canvasSize * 0.08; // 8%的边距
             CELL_SIZE = (canvasSize - 2 * MARGIN) / (BOARD_SIZE - 1);
-            STONE_RADIUS = CELL_SIZE * 0.45; // 增大棋子，从0.43改为0.45
+            STONE_RADIUS = CELL_SIZE * 0.47; // 增大棋子，从0.45改为0.47
         }
 
         // 绘制棋盘
@@ -1227,7 +1225,7 @@
 
             // 网格线
             ctx.strokeStyle = '#8b4513';
-            ctx.lineWidth = 2; // 增粗线条，从1.5改为2
+            ctx.lineWidth = 2.5; // 增粗线条
 
             for (let i = 0; i < BOARD_SIZE; i++) {
                 // 垂直线
@@ -1251,7 +1249,7 @@
             ];
 
             ctx.fillStyle = '#8b4513';
-            const starRadius = CELL_SIZE * 0.15; // 增大星位点
+            const starRadius = CELL_SIZE * 0.16; // 增大星位点
             starPoints.forEach(([x, y]) => {
                 ctx.beginPath();
                 ctx.arc(MARGIN + x * CELL_SIZE, MARGIN + y * CELL_SIZE, starRadius, 0, Math.PI * 2);
@@ -2040,24 +2038,32 @@
                 const container = document.querySelector('.board-wrapper');
                 if (!container) return;
                 
-                const containerWidth = container.clientWidth - 60;
-                const containerHeight = window.innerHeight - 150;
+                const containerWidth = container.clientWidth - 40;
+                const containerHeight = window.innerHeight - 100;
                 
                 // 根据屏幕尺寸调整棋盘大小
                 let maxSize = 600;
                 
-                // iPad 和平板适配
+                // iPad 和平板适配 - 大幅增加棋盘尺寸
                 if (window.innerWidth >= 768 && window.innerWidth <= 1024) {
-                    maxSize = Math.min(containerWidth, containerHeight - 50, 550);
+                    // 使用更大的比例，充分利用屏幕空间
+                    const availableWidth = window.innerWidth * 0.65 - 30; // 65%的屏幕宽度
+                    const availableHeight = window.innerHeight - 80;
+                    maxSize = Math.min(availableWidth, availableHeight, 700); // 增加最大尺寸到700
                 }
                 // 手机适配 - 增大棋盘尺寸
                 else if (window.innerWidth < 768) {
-                    // 手机上使用更大比例的屏幕宽度
                     maxSize = Math.min(containerWidth, window.innerWidth - 30, window.innerHeight - 150);
                 }
+                // 桌面端
+                else {
+                    maxSize = 600;
+                }
+                
                 // 横屏适配
                 if (window.matchMedia('(orientation: landscape)').matches && window.innerHeight < 900) {
-                    maxSize = Math.min(containerWidth, containerHeight - 50);
+                    const availableHeight = window.innerHeight - 80;
+                    maxSize = Math.min(containerWidth, availableHeight);
                 }
                 
                 const size = Math.min(maxSize, containerWidth);
