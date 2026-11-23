@@ -552,16 +552,16 @@
         /* 手机小屏幕 */
         @media (max-width: 767px) {
             body {
-                padding: 10px;
+                padding: 5px;
             }
 
             .game-container {
                 flex-direction: column;
-                gap: 20px;
+                gap: 15px;
             }
 
             .board-container {
-                padding: 20px;
+                padding: 15px;
                 width: 100%;
             }
 
@@ -573,44 +573,59 @@
 
             .info-panel {
                 width: 100%;
-                padding: 25px;
+                padding: 20px;
             }
 
             .game-title {
-                font-size: 1.7rem;
-                margin-bottom: 20px;
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+
+            .mode-selector {
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+
+            .mode-selector h4 {
+                font-size: 0.9rem;
             }
 
             .player-info {
-                padding: 12px;
-                gap: 12px;
+                padding: 10px;
+                gap: 10px;
             }
 
             .player-piece {
-                width: 35px;
-                height: 35px;
+                width: 32px;
+                height: 32px;
             }
 
             .player-name {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
 
             .game-stats {
-                padding: 15px;
+                padding: 12px;
             }
 
             .stat-item {
-                padding: 8px 0;
+                padding: 6px 0;
+                font-size: 0.9rem;
             }
 
             .game-button {
-                padding: 13px;
+                padding: 12px;
                 font-size: 0.95rem;
             }
 
             .message {
-                padding: 12px;
-                font-size: 1rem;
+                padding: 10px;
+                font-size: 0.95rem;
+            }
+
+            .back-button {
+                padding: 8px 16px;
+                font-size: 0.85rem;
             }
         }
 
@@ -921,9 +936,9 @@
         // ============ 游戏逻辑 ============
         const canvas = document.getElementById('gameBoard');
         const ctx = canvas.getContext('2d');
-        const GRID_SIZE = 15;
+        const GRID_SIZE = 11; // 从15改为11，格子更大
         let CELL_SIZE = canvas.width / (GRID_SIZE + 1);
-        let PIECE_RADIUS = CELL_SIZE * 0.42; // 增大棋子
+        let PIECE_RADIUS = CELL_SIZE * 0.45; // 增大棋子，从0.42改为0.45
         let MARGIN = CELL_SIZE;
 
         let board = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(0));
@@ -942,7 +957,7 @@
             const canvasSize = canvas.width;
             MARGIN = canvasSize / (GRID_SIZE + 1);
             CELL_SIZE = MARGIN;
-            PIECE_RADIUS = CELL_SIZE * 0.42;
+            PIECE_RADIUS = CELL_SIZE * 0.45; // 更大的棋子
         }
 
         // 绘制棋盘
@@ -954,7 +969,7 @@
 
             // 绘制网格线
             ctx.strokeStyle = '#8b4513';
-            ctx.lineWidth = 2.5; // 增粗线条
+            ctx.lineWidth = 3; // 进一步增粗线条，从2.5改为3
 
             for (let i = 0; i < GRID_SIZE; i++) {
                 // 垂直线
@@ -970,12 +985,14 @@
                 ctx.stroke();
             }
 
-            // 绘制星位
+            // 绘制星位（11路盘的星位）
             const stars = [
-                [3, 3], [3, 11], [7, 7], [11, 3], [11, 11]
+                [2, 2], [2, 8],
+                [5, 5],
+                [8, 2], [8, 8]
             ];
             ctx.fillStyle = '#8b4513';
-            const starRadius = CELL_SIZE * 0.12;
+            const starRadius = CELL_SIZE * 0.15; // 增大星位点
             stars.forEach(([x, y]) => {
                 ctx.beginPath();
                 ctx.arc(CELL_SIZE * (x + 1), CELL_SIZE * (y + 1), starRadius, 0, Math.PI * 2);
@@ -1547,19 +1564,20 @@
                 const container = document.querySelector('.board-container');
                 if (!container) return;
                 
-                const containerWidth = container.clientWidth - 50;
-                const containerHeight = window.innerHeight - 100;
+                const containerWidth = container.clientWidth - 40;
+                const containerHeight = window.innerHeight - 150;
                 
                 // 根据屏幕尺寸调整棋盘大小
-                let maxSize = 650; // 增大默认尺寸
+                let maxSize = 650;
                 
                 // iPad 和平板适配
                 if (window.innerWidth >= 768 && window.innerWidth <= 1024) {
                     maxSize = Math.min(containerWidth, containerHeight - 50, 550);
                 }
-                // 手机适配
+                // 手机适配 - 增大棋盘尺寸，充分利用屏幕
                 else if (window.innerWidth < 768) {
-                    maxSize = Math.min(containerWidth, window.innerWidth - 40);
+                    // 手机上使用更大比例的屏幕宽度
+                    maxSize = Math.min(containerWidth, window.innerWidth - 30, window.innerHeight - 150);
                 }
                 // 横屏适配
                 if (window.matchMedia('(orientation: landscape)').matches && window.innerHeight < 900) {

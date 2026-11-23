@@ -721,16 +721,16 @@
         /* 手机小屏幕 */
         @media (max-width: 767px) {
             body {
-                padding: 10px;
+                padding: 5px;
             }
 
             .game-container {
                 flex-direction: column;
-                gap: 20px;
+                gap: 15px;
             }
 
             .board-wrapper {
-                padding: 20px;
+                padding: 15px;
                 width: 100%;
             }
 
@@ -748,24 +748,33 @@
             .control-panel {
                 width: 100%;
                 min-width: auto;
-                padding: 25px;
+                padding: 20px;
             }
 
             .game-title {
-                font-size: 1.8rem;
+                font-size: 1.5rem;
+            }
+
+            .mode-selector {
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+
+            .mode-selector h4 {
+                font-size: 0.9rem;
             }
 
             .player-section {
-                padding: 15px;
+                padding: 12px;
             }
 
             .stone-display {
-                width: 40px;
-                height: 40px;
+                width: 35px;
+                height: 35px;
             }
 
             .player-name {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
 
             .player-captures {
@@ -773,11 +782,11 @@
             }
 
             .stats-grid {
-                gap: 12px;
+                gap: 10px;
             }
 
             .stat-card {
-                padding: 15px;
+                padding: 12px;
             }
 
             .stat-label {
@@ -785,21 +794,31 @@
             }
 
             .stat-value {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
             }
 
             .game-btn {
-                padding: 14px;
-                font-size: 1rem;
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+
+            .message-box {
+                padding: 12px;
+                font-size: 0.9rem;
             }
 
             .rules-section {
-                padding: 15px;
+                padding: 12px;
                 font-size: 0.85rem;
             }
 
             .rules-section h4 {
-                font-size: 1rem;
+                font-size: 0.95rem;
+            }
+
+            .back-button {
+                padding: 8px 16px;
+                font-size: 0.85rem;
             }
         }
 
@@ -2021,19 +2040,20 @@
                 const container = document.querySelector('.board-wrapper');
                 if (!container) return;
                 
-                const containerWidth = container.clientWidth - 60; // 减少padding占用
-                const containerHeight = window.innerHeight - 100;
+                const containerWidth = container.clientWidth - 60;
+                const containerHeight = window.innerHeight - 150;
                 
                 // 根据屏幕尺寸调整棋盘大小
-                let maxSize = 600; // 增大默认尺寸
+                let maxSize = 600;
                 
                 // iPad 和平板适配
                 if (window.innerWidth >= 768 && window.innerWidth <= 1024) {
                     maxSize = Math.min(containerWidth, containerHeight - 50, 550);
                 }
-                // 手机适配
+                // 手机适配 - 增大棋盘尺寸
                 else if (window.innerWidth < 768) {
-                    maxSize = Math.min(containerWidth, window.innerWidth - 40);
+                    // 手机上使用更大比例的屏幕宽度
+                    maxSize = Math.min(containerWidth, window.innerWidth - 30, window.innerHeight - 150);
                 }
                 // 横屏适配
                 if (window.matchMedia('(orientation: landscape)').matches && window.innerHeight < 900) {
