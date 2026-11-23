@@ -292,30 +292,265 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .back-button {
+        /* 胜利/失败弹窗样式 */
+        .game-result-modal {
+            display: none;
             position: fixed;
-            top: 20px;
-            left: 20px;
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 25px;
-            font-weight: bold;
-            box-shadow: 0 5px 15px rgba(67, 233, 123, 0.4);
-            transition: all 0.3s;
-            z-index: 1000;
-            display: flex;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            justify-content: center;
             align-items: center;
-            gap: 8px;
+            animation: fadeInModal 0.3s ease-out;
         }
 
-        .back-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(67, 233, 123, 0.5);
+        .game-result-modal.show {
+            display: flex;
         }
 
-        @media (max-width: 768px) {
+        @keyframes fadeInModal {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .result-content {
+            background: white;
+            padding: 50px 60px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            max-width: 90%;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.5) rotate(-10deg);
+                opacity: 0;
+            }
+            70% {
+                transform: scale(1.1) rotate(5deg);
+            }
+            100% {
+                transform: scale(1) rotate(0);
+                opacity: 1;
+            }
+        }
+
+        .result-icon {
+            font-size: 100px;
+            margin-bottom: 20px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .result-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .result-title.victory {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-title.defeat {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-details {
+            font-size: 1.3rem;
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .result-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .result-btn {
+            padding: 15px 35px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-btn.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .result-btn.secondary {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .info-panel {
+            background: linear-gradient(145deg, #ffffff, #f5f5f5);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            min-width: 280px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: #667eea #f5f5f5;
+        }
+
+        .info-panel::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .info-panel::-webkit-scrollbar-track {
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+
+        .info-panel::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+
+        .info-panel::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        /* iPad 和平板优化 */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            body {
+                padding: 10px;
+                align-items: flex-start;
+                overflow-y: auto;
+            }
+
+            .game-container {
+                flex-direction: row;
+                gap: 20px;
+                width: 100%;
+                max-width: 1000px;
+                margin: 0 auto;
+            }
+
+            .board-container {
+                flex: 1;
+                padding: 20px;
+                max-width: 550px;
+            }
+
+            #gameBoard {
+                width: 100% !important;
+                height: auto !important;
+            }
+
+            .info-panel {
+                flex: 0 0 300px;
+                max-width: 300px;
+                padding: 20px;
+                max-height: calc(100vh - 80px);
+            }
+
+            .game-title {
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+
+            .mode-selector {
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+
+            .mode-selector h4 {
+                font-size: 0.9rem;
+                margin-bottom: 8px;
+            }
+
+            .mode-btn, .diff-btn {
+                padding: 8px;
+                font-size: 0.8rem;
+            }
+
+            .player-info {
+                padding: 10px;
+                margin-bottom: 10px;
+                gap: 10px;
+            }
+
+            .player-piece {
+                width: 30px;
+                height: 30px;
+            }
+
+            .player-name {
+                font-size: 1rem;
+            }
+
+            .game-stats {
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+
+            .stat-item {
+                padding: 8px 0;
+                font-size: 0.9rem;
+            }
+
+            .button-group {
+                gap: 10px;
+            }
+
+            .game-button {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+
+            .message {
+                padding: 12px;
+                font-size: 0.95rem;
+                margin-top: 15px;
+            }
+
+            .back-button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* 手机小屏幕 */
+        @media (max-width: 767px) {
             body {
                 padding: 10px;
             }
@@ -379,6 +614,31 @@
             }
         }
 
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(67, 233, 123, 0.4);
+            transition: all 0.3s;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(67, 233, 123, 0.5);
+        }
+
+
+
         @media (max-width: 480px) {
             body {
                 padding: 5px;
@@ -389,11 +649,16 @@
             }
 
             .info-panel {
-                padding: 20px;
+                padding: 15px;
             }
 
             .game-title {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
+                margin-bottom: 15px;
+            }
+
+            .mode-selector {
+                padding: 10px;
             }
 
             .player-info {
@@ -409,15 +674,83 @@
                 font-size: 1rem;
             }
 
+            .game-stats {
+                padding: 12px;
+            }
+
+            .stat-item {
+                padding: 6px 0;
+                font-size: 0.85rem;
+            }
+
             .game-button {
                 padding: 12px;
                 font-size: 0.9rem;
+            }
+
+            .message {
+                padding: 10px;
+                font-size: 0.95rem;
+            }
+
+            .back-button {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* 横屏适配 */
+        @media (orientation: landscape) and (max-height: 900px) {
+            body {
+                align-items: flex-start;
+                padding: 10px;
+            }
+
+            .game-container {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+
+            .board-container {
+                flex: 1;
+                max-width: 55%;
+            }
+
+            #gameBoard {
+                max-height: calc(100vh - 100px);
+                width: auto !important;
+            }
+
+            .info-panel {
+                flex: 0 0 300px;
+                max-height: calc(100vh - 80px);
+                overflow-y: auto;
+            }
+
+            .back-button {
+                position: absolute;
+                top: 10px;
+                left: 10px;
             }
         }
     </style>
 </head>
 <body>
     <a href="index.html" class="back-button">🏠 返回游戏主页</a>
+    
+    <!-- 游戏结果弹窗 -->
+    <div class="game-result-modal" id="resultModal">
+        <div class="result-content">
+            <div class="result-icon" id="resultIcon">🎉</div>
+            <div class="result-title" id="resultTitle">胜利</div>
+            <div class="result-details" id="resultDetails"></div>
+            <div class="result-buttons">
+                <button class="result-btn primary" onclick="closeResultModal(); restartGame();">再来一局</button>
+                <button class="result-btn secondary" onclick="closeResultModal();">继续研究</button>
+            </div>
+        </div>
+    </div>
+
     <div class="game-container">
         <div class="board-container">
             <canvas id="gameBoard" width="600" height="600"></canvas>
@@ -478,11 +811,120 @@
     </div>
 
     <script>
+        // ============ 音效系统 ============
+        const AudioSystem = {
+            audioContext: null,
+            
+            init() {
+                this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            },
+
+            playStoneSound() {
+                if (!this.audioContext) this.init();
+                
+                const oscillator = this.audioContext.createOscillator();
+                const gainNode = this.audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(this.audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(800, this.audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(100, this.audioContext.currentTime + 0.05);
+                
+                gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.1);
+                
+                oscillator.start(this.audioContext.currentTime);
+                oscillator.stop(this.audioContext.currentTime + 0.1);
+            },
+
+            playVictorySound() {
+                if (!this.audioContext) this.init();
+                
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                const startTime = this.audioContext.currentTime;
+                
+                notes.forEach((freq, index) => {
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(freq, startTime + index * 0.15);
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0, startTime + index * 0.15);
+                    gainNode.gain.linearRampToValueAtTime(0.4, startTime + index * 0.15 + 0.02);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + index * 0.15 + 0.3);
+                    
+                    oscillator.start(startTime + index * 0.15);
+                    oscillator.stop(startTime + index * 0.15 + 0.3);
+                });
+            },
+
+            playDefeatSound() {
+                if (!this.audioContext) this.init();
+                
+                const notes = [493.88, 440.00, 392.00, 349.23];
+                const startTime = this.audioContext.currentTime;
+                
+                notes.forEach((freq, index) => {
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(freq, startTime + index * 0.2);
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0, startTime + index * 0.2);
+                    gainNode.gain.linearRampToValueAtTime(0.3, startTime + index * 0.2 + 0.02);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + index * 0.2 + 0.4);
+                    
+                    oscillator.start(startTime + index * 0.2);
+                    oscillator.stop(startTime + index * 0.2 + 0.4);
+                });
+            }
+        };
+
+        AudioSystem.init();
+
+        function showResultModal(result, details) {
+            const modal = document.getElementById('resultModal');
+            const icon = document.getElementById('resultIcon');
+            const title = document.getElementById('resultTitle');
+            const detailsElem = document.getElementById('resultDetails');
+            
+            if (result === 'victory') {
+                icon.textContent = '🎉';
+                title.textContent = '恭喜胜利！';
+                title.className = 'result-title victory';
+                AudioSystem.playVictorySound();
+            } else {
+                icon.textContent = '😢';
+                title.textContent = '遗憾落败';
+                title.className = 'result-title defeat';
+                AudioSystem.playDefeatSound();
+            }
+            
+            detailsElem.innerHTML = details;
+            modal.classList.add('show');
+        }
+
+        function closeResultModal() {
+            const modal = document.getElementById('resultModal');
+            modal.classList.remove('show');
+        }
+
+        // ============ 游戏逻辑 ============
         const canvas = document.getElementById('gameBoard');
         const ctx = canvas.getContext('2d');
         const GRID_SIZE = 15;
         let CELL_SIZE = canvas.width / (GRID_SIZE + 1);
-        let PIECE_RADIUS = CELL_SIZE * 0.4;
+        let PIECE_RADIUS = CELL_SIZE * 0.42; // 增大棋子
+        let MARGIN = CELL_SIZE;
 
         let board = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(0));
         let currentPlayer = 1; // 1: 黑方, 2: 白方
@@ -495,14 +937,24 @@
         let aiDifficulty = 'medium'; // 'easy', 'medium', 'hard'
         let isAIThinking = false;
 
+        // 更新绘制参数
+        function updateDrawingParams() {
+            const canvasSize = canvas.width;
+            MARGIN = canvasSize / (GRID_SIZE + 1);
+            CELL_SIZE = MARGIN;
+            PIECE_RADIUS = CELL_SIZE * 0.42;
+        }
+
         // 绘制棋盘
         function drawBoard() {
+            updateDrawingParams();
+            
             ctx.fillStyle = '#daa520';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             // 绘制网格线
             ctx.strokeStyle = '#8b4513';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 2.5; // 增粗线条
 
             for (let i = 0; i < GRID_SIZE; i++) {
                 // 垂直线
@@ -523,9 +975,10 @@
                 [3, 3], [3, 11], [7, 7], [11, 3], [11, 11]
             ];
             ctx.fillStyle = '#8b4513';
+            const starRadius = CELL_SIZE * 0.12;
             stars.forEach(([x, y]) => {
                 ctx.beginPath();
-                ctx.arc(CELL_SIZE * (x + 1), CELL_SIZE * (y + 1), 5, 0, Math.PI * 2);
+                ctx.arc(CELL_SIZE * (x + 1), CELL_SIZE * (y + 1), starRadius, 0, Math.PI * 2);
                 ctx.fill();
             });
         }
@@ -626,9 +1079,14 @@
             const rect = canvas.getBoundingClientRect();
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            // 计算缩放比例
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
             return {
-                x: clientX - rect.left,
-                y: clientY - rect.top
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY
             };
         }
 
@@ -637,6 +1095,7 @@
             if (gameOver || isAIThinking) return;
             if (gameMode === 'pve' && currentPlayer === 2) return; // 人机模式下不允许玩家操作AI
 
+            updateDrawingParams();
             const x = Math.round(clickX / CELL_SIZE) - 1;
             const y = Math.round(clickY / CELL_SIZE) - 1;
 
@@ -652,12 +1111,14 @@
             moveCount++;
             document.getElementById('moveCount').textContent = moveCount;
 
+            // 播放落子音效
+            AudioSystem.playStoneSound();
+
             drawPiece(x, y, currentPlayer);
 
             if (checkWin(x, y, currentPlayer)) {
                 gameOver = true;
                 const winner = currentPlayer === 1 ? '黑方' : '白方';
-                showMessage(`🎉 ${winner}获胜！`, true);
                 
                 if (currentPlayer === 1) {
                     blackWins++;
@@ -666,6 +1127,18 @@
                     whiteWins++;
                     document.getElementById('whiteWins').textContent = whiteWins;
                 }
+                
+                // 显示结果弹窗
+                const result = gameMode === 'pve' && currentPlayer === 1 ? 'victory' : (gameMode === 'pve' ? 'defeat' : 'victory');
+                const details = `
+                    <div style="font-size: 1.5rem; color: #667eea; margin: 20px 0;">
+                        ${winner}获胜！
+                    </div>
+                    <div style="color: #666;">总手数：${moveCount}</div>
+                    <div style="color: #666;">黑方胜：${blackWins} | 白方胜：${whiteWins}</div>
+                `;
+                showResultModal(result, details);
+                showMessage(`🎉 ${winner}获胜！`, true);
                 return;
             }
 
@@ -1072,18 +1545,49 @@
             // 响应式调整canvas大小
             function resizeCanvas() {
                 const container = document.querySelector('.board-container');
-                const maxWidth = Math.min(container.clientWidth - 40, 600);
-                canvas.width = maxWidth;
-                canvas.height = maxWidth;
-                CELL_SIZE = canvas.width / (GRID_SIZE + 1);
-                PIECE_RADIUS = CELL_SIZE * 0.4;
+                if (!container) return;
+                
+                const containerWidth = container.clientWidth - 50;
+                const containerHeight = window.innerHeight - 100;
+                
+                // 根据屏幕尺寸调整棋盘大小
+                let maxSize = 650; // 增大默认尺寸
+                
+                // iPad 和平板适配
+                if (window.innerWidth >= 768 && window.innerWidth <= 1024) {
+                    maxSize = Math.min(containerWidth, containerHeight - 50, 550);
+                }
+                // 手机适配
+                else if (window.innerWidth < 768) {
+                    maxSize = Math.min(containerWidth, window.innerWidth - 40);
+                }
+                // 横屏适配
+                if (window.matchMedia('(orientation: landscape)').matches && window.innerHeight < 900) {
+                    maxSize = Math.min(containerWidth, containerHeight - 50);
+                }
+                
+                const size = Math.min(maxSize, containerWidth);
+                canvas.width = size;
+                canvas.height = size;
+                
+                updateDrawingParams();
                 redraw();
             }
 
-            window.addEventListener('resize', resizeCanvas);
-            resizeCanvas();
-            updatePlayerInfo();
-            document.getElementById('undoBtn').disabled = true;
+            // 监听窗口大小变化和方向变化
+            window.addEventListener('resize', () => {
+                setTimeout(resizeCanvas, 100);
+            });
+            window.addEventListener('orientationchange', () => {
+                setTimeout(resizeCanvas, 300);
+            });
+            
+            // 确保DOM加载完成后再调整
+            setTimeout(() => {
+                resizeCanvas();
+                updatePlayerInfo();
+                document.getElementById('undoBtn').disabled = true;
+            }, 100);
         }
 
         init();
