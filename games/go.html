@@ -81,6 +81,28 @@
             box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
             min-width: 320px;
             max-width: 400px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: #667eea #f5f5f5;
+        }
+
+        .control-panel::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .control-panel::-webkit-scrollbar-track {
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+
+        .control-panel::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+
+        .control-panel::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
         }
 
         .game-title {
@@ -355,6 +377,144 @@
             }
         }
 
+        /* 胜利/失败弹窗样式 */
+        .game-result-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .game-result-modal.show {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .result-content {
+            background: white;
+            padding: 50px 60px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            max-width: 90%;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.5) rotate(-10deg);
+                opacity: 0;
+            }
+            70% {
+                transform: scale(1.1) rotate(5deg);
+            }
+            100% {
+                transform: scale(1) rotate(0);
+                opacity: 1;
+            }
+        }
+
+        .result-icon {
+            font-size: 100px;
+            margin-bottom: 20px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .result-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-title.victory {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-title.defeat {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-details {
+            font-size: 1.3rem;
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .result-score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 15px 0;
+        }
+
+        .result-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .result-btn {
+            padding: 15px 35px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-btn.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .result-btn.secondary {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
         .rules-section {
             background: #f8f9fa;
             padding: 20px;
@@ -369,6 +529,30 @@
             color: #2c3e50;
             margin-bottom: 10px;
             font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .rules-section h4::after {
+            content: '▼';
+            font-size: 0.8rem;
+            transition: transform 0.3s;
+        }
+
+        .rules-section.collapsed h4::after {
+            transform: rotate(-90deg);
+        }
+
+        .rules-content {
+            max-height: 500px;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .rules-section.collapsed .rules-content {
+            max-height: 0;
         }
 
         .rules-section ul {
@@ -402,7 +586,140 @@
             box-shadow: 0 8px 20px rgba(67, 233, 123, 0.5);
         }
 
-        @media (max-width: 768px) {
+        /* iPad 和平板优化 */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            body {
+                padding: 10px;
+                align-items: flex-start;
+                overflow-y: auto;
+            }
+
+            .game-container {
+                flex-direction: row;
+                gap: 20px;
+                width: 100%;
+                max-width: 1000px;
+                margin: 0 auto;
+            }
+
+            .board-wrapper {
+                flex: 1;
+                padding: 25px;
+                max-width: 500px;
+            }
+
+            #goBoard {
+                width: 100% !important;
+                height: auto !important;
+                max-width: 450px;
+            }
+
+            .control-panel {
+                flex: 0 0 340px;
+                max-width: 340px;
+                padding: 20px;
+                max-height: calc(100vh - 80px);
+                overflow-y: auto;
+            }
+
+            .game-title {
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+
+            .mode-selector {
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+
+            .mode-selector h4 {
+                font-size: 0.9rem;
+                margin-bottom: 8px;
+            }
+
+            .mode-btn, .diff-btn {
+                padding: 8px;
+                font-size: 0.8rem;
+            }
+
+            .player-section {
+                padding: 12px;
+                margin-bottom: 12px;
+                gap: 10px;
+            }
+
+            .stone-display {
+                width: 35px;
+                height: 35px;
+            }
+
+            .player-name {
+                font-size: 1rem;
+            }
+
+            .player-captures {
+                font-size: 0.8rem;
+            }
+
+            .stats-grid {
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+
+            .stat-card {
+                padding: 12px;
+            }
+
+            .stat-label {
+                font-size: 0.8rem;
+            }
+
+            .stat-value {
+                font-size: 1.3rem;
+            }
+
+            .button-group {
+                gap: 10px;
+            }
+
+            .game-btn {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+
+            .message-box {
+                padding: 12px;
+                font-size: 0.9rem;
+                margin-top: 15px;
+            }
+
+            .rules-section {
+                padding: 12px;
+                font-size: 0.8rem;
+                margin-top: 15px;
+            }
+
+            .rules-section h4 {
+                font-size: 0.95rem;
+                margin-bottom: 8px;
+            }
+
+            .rules-section ul {
+                margin-left: 15px;
+            }
+
+            .rules-section li {
+                margin-bottom: 3px;
+            }
+
+            .back-button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* 手机小屏幕 */
+        @media (max-width: 767px) {
             body {
                 padding: 10px;
             }
@@ -496,46 +813,130 @@
             }
 
             .control-panel {
-                padding: 20px;
+                padding: 15px;
             }
 
             .game-title {
-                font-size: 1.5rem;
-                margin-bottom: 20px;
+                font-size: 1.3rem;
+                margin-bottom: 15px;
+            }
+
+            .mode-selector {
+                padding: 12px;
+            }
+
+            .mode-selector h4 {
+                font-size: 0.9rem;
             }
 
             .player-section {
                 gap: 10px;
-                padding: 12px;
+                padding: 10px;
             }
 
             .stone-display {
-                width: 35px;
-                height: 35px;
+                width: 30px;
+                height: 30px;
             }
 
             .player-name {
-                font-size: 1rem;
+                font-size: 0.95rem;
+            }
+
+            .player-captures {
+                font-size: 0.75rem;
+            }
+
+            .stat-card {
+                padding: 10px;
+            }
+
+            .stat-label {
+                font-size: 0.75rem;
             }
 
             .stat-value {
-                font-size: 1.3rem;
+                font-size: 1.2rem;
             }
 
             .game-btn {
-                padding: 12px;
-                font-size: 0.95rem;
+                padding: 10px;
+                font-size: 0.9rem;
             }
 
             .message-box {
-                padding: 15px;
-                font-size: 0.95rem;
+                padding: 12px;
+                font-size: 0.85rem;
+            }
+
+            .rules-section {
+                padding: 12px;
+                font-size: 0.8rem;
+            }
+
+            .rules-section h4 {
+                font-size: 0.9rem;
+            }
+
+            .back-button {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* 横屏适配（如iPad横屏） */
+        @media (orientation: landscape) and (max-height: 900px) {
+            body {
+                align-items: flex-start;
+                padding: 10px;
+            }
+
+            .game-container {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+
+            .board-wrapper {
+                flex: 1;
+                max-width: 55%;
+            }
+
+            #goBoard {
+                max-height: calc(100vh - 100px);
+                width: auto !important;
+            }
+
+            .control-panel {
+                flex: 0 0 340px;
+                max-height: calc(100vh - 80px);
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .back-button {
+                position: absolute;
+                top: 10px;
+                left: 10px;
             }
         }
     </style>
 </head>
 <body>
     <a href="index.html" class="back-button">🏠 返回游戏主页</a>
+    
+    <!-- 游戏结果弹窗 -->
+    <div class="game-result-modal" id="resultModal">
+        <div class="result-content">
+            <div class="result-icon" id="resultIcon">🎉</div>
+            <div class="result-title" id="resultTitle">胜利</div>
+            <div class="result-details" id="resultDetails"></div>
+            <div class="result-buttons">
+                <button class="result-btn primary" onclick="closeResultModal(); restartGame();">再来一局</button>
+                <button class="result-btn secondary" onclick="closeResultModal();">继续研究</button>
+            </div>
+        </div>
+    </div>
+
     <div class="game-container">
         <div class="board-wrapper">
             <canvas id="goBoard" width="570" height="570"></canvas>
@@ -604,26 +1005,177 @@
 
             <div class="message-box" id="messageBox"></div>
 
-            <div class="rules-section">
-                <h4>📖 游戏规则</h4>
-                <ul>
-                    <li>黑方先行，双方轮流落子</li>
-                    <li>气尽的棋子会被提掉</li>
-                    <li>禁止全局同形（打劫需隔手）</li>
-                    <li>双方连续虚手则游戏结束</li>
-                    <li>点击"计算胜负"查看结果</li>
-                </ul>
+            <div class="rules-section" id="rulesSection">
+                <h4 onclick="toggleRules()">📖 游戏规则</h4>
+                <div class="rules-content">
+                    <ul>
+                        <li>13×13路棋盘，更适合快速对弈</li>
+                        <li>黑方先行，双方轮流落子</li>
+                        <li>气尽的棋子会被提掉</li>
+                        <li>禁止全局同形（打劫需隔手）</li>
+                        <li>双方连续虚手则游戏结束</li>
+                        <li>点击"计算胜负"查看结果</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        // ============ 音效系统 ============
+        const AudioSystem = {
+            // 创建音频上下文
+            audioContext: null,
+            
+            init() {
+                // 使用Web Audio API创建音频上下文
+                this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            },
+
+            // 播放落子音效
+            playStoneSound() {
+                if (!this.audioContext) this.init();
+                
+                const oscillator = this.audioContext.createOscillator();
+                const gainNode = this.audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(this.audioContext.destination);
+                
+                // 清脆的"啪"声
+                oscillator.frequency.setValueAtTime(800, this.audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(100, this.audioContext.currentTime + 0.05);
+                
+                gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.1);
+                
+                oscillator.start(this.audioContext.currentTime);
+                oscillator.stop(this.audioContext.currentTime + 0.1);
+            },
+
+            // 播放胜利音效
+            playVictorySound() {
+                if (!this.audioContext) this.init();
+                
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                const startTime = this.audioContext.currentTime;
+                
+                notes.forEach((freq, index) => {
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(freq, startTime + index * 0.15);
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0, startTime + index * 0.15);
+                    gainNode.gain.linearRampToValueAtTime(0.4, startTime + index * 0.15 + 0.02);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + index * 0.15 + 0.3);
+                    
+                    oscillator.start(startTime + index * 0.15);
+                    oscillator.stop(startTime + index * 0.15 + 0.3);
+                });
+            },
+
+            // 播放失败音效
+            playDefeatSound() {
+                if (!this.audioContext) this.init();
+                
+                const notes = [493.88, 440.00, 392.00, 349.23]; // B4, A4, G4, F4 (下降音阶)
+                const startTime = this.audioContext.currentTime;
+                
+                notes.forEach((freq, index) => {
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(freq, startTime + index * 0.2);
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0, startTime + index * 0.2);
+                    gainNode.gain.linearRampToValueAtTime(0.3, startTime + index * 0.2 + 0.02);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + index * 0.2 + 0.4);
+                    
+                    oscillator.start(startTime + index * 0.2);
+                    oscillator.stop(startTime + index * 0.2 + 0.4);
+                });
+            },
+
+            // 播放平局音效
+            playDrawSound() {
+                if (!this.audioContext) this.init();
+                
+                const freq = 440; // A4
+                const startTime = this.audioContext.currentTime;
+                
+                for (let i = 0; i < 3; i++) {
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(freq, startTime + i * 0.3);
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0, startTime + i * 0.3);
+                    gainNode.gain.linearRampToValueAtTime(0.2, startTime + i * 0.3 + 0.02);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + i * 0.3 + 0.25);
+                    
+                    oscillator.start(startTime + i * 0.3);
+                    oscillator.stop(startTime + i * 0.3 + 0.25);
+                }
+            }
+        };
+
+        // 初始化音效系统
+        AudioSystem.init();
+
+        // 显示游戏结果弹窗
+        function showResultModal(result, details) {
+            const modal = document.getElementById('resultModal');
+            const icon = document.getElementById('resultIcon');
+            const title = document.getElementById('resultTitle');
+            const detailsElem = document.getElementById('resultDetails');
+            
+            if (result === 'victory') {
+                icon.textContent = '🎉';
+                title.textContent = '恭喜胜利！';
+                title.className = 'result-title victory';
+                AudioSystem.playVictorySound();
+            } else if (result === 'defeat') {
+                icon.textContent = '😢';
+                title.textContent = '遗憾落败';
+                title.className = 'result-title defeat';
+                AudioSystem.playDefeatSound();
+            } else {
+                icon.textContent = '🤝';
+                title.textContent = '平局';
+                title.className = 'result-title';
+                AudioSystem.playDrawSound();
+            }
+            
+            detailsElem.innerHTML = details;
+            modal.classList.add('show');
+        }
+
+        // 关闭游戏结果弹窗
+        function closeResultModal() {
+            const modal = document.getElementById('resultModal');
+            modal.classList.remove('show');
+        }
+
+        // ============ 原有游戏逻辑 ============
         const canvas = document.getElementById('goBoard');
         const ctx = canvas.getContext('2d');
-        const BOARD_SIZE = 19;
-        const CELL_SIZE = 30;
-        const STONE_RADIUS = 13;
-        const MARGIN = CELL_SIZE;
+        const BOARD_SIZE = 13; // 改为13×13棋盘，更适合移动设备
+        let CELL_SIZE = 30;
+        let STONE_RADIUS = 13;
+        let MARGIN = 30;
 
         let board = Array(BOARD_SIZE).fill(null).map(() => Array(BOARD_SIZE).fill(0));
         let currentPlayer = 1; // 1: 黑, 2: 白
@@ -637,15 +1189,26 @@
         let aiDifficulty = 'medium'; // 'easy', 'medium', 'hard'
         let isAIThinking = false;
 
+        // 更新绘制参数
+        function updateDrawingParams() {
+            const canvasSize = canvas.width;
+            MARGIN = canvasSize * 0.08; // 8%的边距
+            CELL_SIZE = (canvasSize - 2 * MARGIN) / (BOARD_SIZE - 1);
+            STONE_RADIUS = CELL_SIZE * 0.45; // 增大棋子，从0.43改为0.45
+        }
+
         // 绘制棋盘
         function drawBoard() {
+            // 更新绘制参数
+            updateDrawingParams();
+            
             // 背景
             ctx.fillStyle = '#daa520';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             // 网格线
             ctx.strokeStyle = '#8b4513';
-            ctx.lineWidth = 1.5;
+            ctx.lineWidth = 2; // 增粗线条，从1.5改为2
 
             for (let i = 0; i < BOARD_SIZE; i++) {
                 // 垂直线
@@ -661,17 +1224,18 @@
                 ctx.stroke();
             }
 
-            // 星位
+            // 星位（13路盘的星位）
             const starPoints = [
-                [3, 3], [3, 9], [3, 15],
-                [9, 3], [9, 9], [9, 15],
-                [15, 3], [15, 9], [15, 15]
+                [3, 3], [3, 9],
+                [6, 6],
+                [9, 3], [9, 9]
             ];
 
             ctx.fillStyle = '#8b4513';
+            const starRadius = CELL_SIZE * 0.15; // 增大星位点
             starPoints.forEach(([x, y]) => {
                 ctx.beginPath();
-                ctx.arc(MARGIN + x * CELL_SIZE, MARGIN + y * CELL_SIZE, 4, 0, Math.PI * 2);
+                ctx.arc(MARGIN + x * CELL_SIZE, MARGIN + y * CELL_SIZE, starRadius, 0, Math.PI * 2);
                 ctx.fill();
             });
         }
@@ -721,7 +1285,7 @@
             if (isLast) {
                 ctx.fillStyle = player === 1 ? '#ffffff' : '#ff0000';
                 ctx.beginPath();
-                ctx.arc(centerX, centerY, 4, 0, Math.PI * 2);
+                ctx.arc(centerX, centerY, STONE_RADIUS * 0.3, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
@@ -830,9 +1394,14 @@
             const rect = canvas.getBoundingClientRect();
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            // 计算canvas内的相对坐标
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
             return {
-                x: clientX - rect.left,
-                y: clientY - rect.top
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY
             };
         }
 
@@ -841,6 +1410,9 @@
             if (isAIThinking) return;
             if (gameMode === 'pve' && currentPlayer === 2) return; // 人机模式下不允许玩家操作AI
 
+            // 确保使用最新的绘制参数
+            updateDrawingParams();
+            
             const x = Math.round((clickX - MARGIN) / CELL_SIZE);
             const y = Math.round((clickY - MARGIN) / CELL_SIZE);
 
@@ -882,6 +1454,9 @@
                 }
                 return false;
             }
+
+            // 播放落子音效
+            AudioSystem.playStoneSound();
 
             // 记录历史
             moveHistory.push({
@@ -1374,6 +1949,35 @@
             const winner = blackTerritory > whiteTerritory ? '黑方' : '白方';
             const diff = Math.abs(blackTerritory - whiteTerritory).toFixed(1);
 
+            // 判断玩家胜负
+            let result;
+            if (gameMode === 'pve') {
+                // 人机模式：玩家是黑方
+                result = blackTerritory > whiteTerritory ? 'victory' : 'defeat';
+            } else {
+                // 双人模式：显示获胜方
+                result = blackTerritory > whiteTerritory ? 'blackWin' : 'whiteWin';
+            }
+
+            // 准备详细信息
+            const details = `
+                <div class="result-score">黑方：${blackTerritory} 目</div>
+                <div class="result-score">白方：${whiteTerritory.toFixed(1)} 目（含贴目7.5）</div>
+                <div class="result-score" style="color: #667eea; font-size: 1.8rem; margin-top: 20px;">
+                    ${winner}胜 ${diff} 目
+                </div>
+            `;
+
+            // 显示结果弹窗
+            if (gameMode === 'pve') {
+                showResultModal(result, details);
+            } else {
+                // 双人模式显示获胜方
+                const pvpResult = blackTerritory > whiteTerritory ? 'victory' : (blackTerritory < whiteTerritory ? 'defeat' : 'draw');
+                showResultModal(pvpResult, details);
+            }
+
+            // 同时在消息框显示
             showMessage(
                 `黑方: ${blackTerritory}目 | 白方: ${whiteTerritory.toFixed(1)}目\n${winner}胜 ${diff}目`,
                 'success'
@@ -1415,19 +2019,64 @@
             // 响应式调整canvas大小
             function resizeCanvas() {
                 const container = document.querySelector('.board-wrapper');
-                const maxWidth = Math.min(container.clientWidth - 40, 570);
-                canvas.width = maxWidth;
-                canvas.height = maxWidth;
+                if (!container) return;
+                
+                const containerWidth = container.clientWidth - 60; // 减少padding占用
+                const containerHeight = window.innerHeight - 100;
+                
+                // 根据屏幕尺寸调整棋盘大小
+                let maxSize = 600; // 增大默认尺寸
+                
+                // iPad 和平板适配
+                if (window.innerWidth >= 768 && window.innerWidth <= 1024) {
+                    maxSize = Math.min(containerWidth, containerHeight - 50, 550);
+                }
+                // 手机适配
+                else if (window.innerWidth < 768) {
+                    maxSize = Math.min(containerWidth, window.innerWidth - 40);
+                }
+                // 横屏适配
+                if (window.matchMedia('(orientation: landscape)').matches && window.innerHeight < 900) {
+                    maxSize = Math.min(containerWidth, containerHeight - 50);
+                }
+                
+                const size = Math.min(maxSize, containerWidth);
+                canvas.width = size;
+                canvas.height = size;
+                
+                // 更新绘制参数并重绘
+                updateDrawingParams();
                 redraw();
             }
 
-            window.addEventListener('resize', resizeCanvas);
-            resizeCanvas();
-            updatePlayerDisplay();
-            document.getElementById('undoBtn').disabled = true;
+            // 监听窗口大小变化和方向变化
+            window.addEventListener('resize', () => {
+                setTimeout(resizeCanvas, 100);
+            });
+            window.addEventListener('orientationchange', () => {
+                setTimeout(resizeCanvas, 300);
+            });
+            
+            // 确保DOM加载完成后再调整
+            setTimeout(() => {
+                resizeCanvas();
+                updatePlayerDisplay();
+                document.getElementById('undoBtn').disabled = true;
+            }, 100);
         }
 
         init();
+
+        // 切换规则显示
+        function toggleRules() {
+            const rulesSection = document.getElementById('rulesSection');
+            rulesSection.classList.toggle('collapsed');
+        }
+
+        // iPad上默认收起规则
+        if (window.innerWidth >= 768 && window.innerWidth <= 1024) {
+            document.getElementById('rulesSection').classList.add('collapsed');
+        }
     </script>
 </body>
 </html>
