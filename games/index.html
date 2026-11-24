@@ -567,6 +567,52 @@
             padding: 15px;
         }
 
+        /* 火柴游戏预览样式 */
+        .preview-matches {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .matches-preview {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .match-pile {
+            font-size: 32px;
+            letter-spacing: 5px;
+            animation: matchBurn 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(255, 107, 107, 0.6));
+        }
+
+        .match-pile:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .match-pile:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .match-pile:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes matchBurn {
+            0%, 100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 10px rgba(255, 107, 107, 0.6));
+            }
+            50% {
+                transform: scale(1.05);
+                filter: drop-shadow(0 0 15px rgba(255, 165, 0, 0.8));
+            }
+        }
+
         .sudoku-mini-grid {
             display: grid;
             grid-template-columns: repeat(9, 1fr);
@@ -618,6 +664,11 @@
 
             .sudoku-mini-cell {
                 font-size: 0.6rem;
+            }
+
+            .match-pile {
+                font-size: 24px;
+                letter-spacing: 3px;
             }
         }
     </style>
@@ -873,6 +924,21 @@
                     经典数独谜题，三种难度任你挑战。从简单到困难，锻炼逻辑思维能力！
                 </div>
                 <div class="game-tag">益智</div>
+            </a>
+
+            <a href="matches.html" class="game-card">
+                <div class="game-preview preview-matches">
+                    <div class="matches-preview">
+                        <div class="match-pile">🔥🔥🔥🔥🔥</div>
+                        <div class="match-pile">🔥🔥🔥</div>
+                        <div class="match-pile">🔥🔥🔥🔥</div>
+                    </div>
+                </div>
+                <div class="game-title">火柴游戏</div>
+                <div class="game-description">
+                    经典Nim游戏，策略对弈。每次从一堆中拿走1-4根火柴，拿到最后一根者输！
+                </div>
+                <div class="game-tag">策略</div>
             </a>
         </div>
 
